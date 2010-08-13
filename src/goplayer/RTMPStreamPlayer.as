@@ -28,6 +28,9 @@ package goplayer
     public function start() : void
     { engine.start() }
 
+    public function togglePaused() : void
+    { engine.togglePaused() }
+
     public function handleNetStreamCreated(stream : NetStream) : void
     { video.attachNetStream(stream) }
 

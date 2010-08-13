@@ -3,7 +3,9 @@ package goplayer
   import flash.display.Sprite
   import flash.display.StageDisplayState
   import flash.events.MouseEvent
+  import flash.events.KeyboardEvent
   import flash.external.ExternalInterface
+  import flash.ui.Keyboard
 
   public class Application extends Sprite
     implements MovieMetadataHandler
@@ -26,7 +28,6 @@ package goplayer
       drawBackground()
       
       doubleClickEnabled = true
-
       addEventListener(MouseEvent.DOUBLE_CLICK, handleDoubleClick)
     }
 
@@ -37,11 +38,19 @@ package goplayer
         : StageDisplayState.FULL_SCREEN
     }
 
+    private function handleKeyDown(event : KeyboardEvent) : void
+    {
+      if (event.keyCode == Keyboard.SPACE)
+        player.togglePaused()
+    }
+
     private function get fullscreen() : Boolean
     { return stage.displayState == StageDisplayState.FULL_SCREEN }
 
     public function start() : void
     {
+      stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown)
+
       debug("Fetching metadata for Streamio movie “" + movieID + "”...")
 
       api.fetchMovieMetadata(movieID, this)

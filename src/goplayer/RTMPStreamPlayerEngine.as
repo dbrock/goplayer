@@ -89,9 +89,16 @@ package goplayer
         debug("Will play buffered data (" + bufferLength + "s).")
       else if (code == "NetStream.Buffer.Empty")
         debug("Buffer empty; stopping playback.")
+      else if (code == "NetStream.Pause.Notify")
+        debug("Playback paused.")
+      else if (code == "NetStream.Unpause.Notify")
+        debug("Playback resumed.")
       else
         debug("Net stream status: " + code)
     }
+
+    public function togglePaused() : void
+    { stream.togglePause() }
 
     // -----------------------------------------------------
 
