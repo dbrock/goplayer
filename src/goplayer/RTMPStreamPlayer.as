@@ -31,6 +31,9 @@ package goplayer
     public function togglePaused() : void
     { engine.togglePaused() }
 
+    public function seek(delta : Number) : void
+    { engine.seek(delta) }
+
     public function handleNetStreamCreated(stream : NetStream) : void
     { video.attachNetStream(stream) }
 

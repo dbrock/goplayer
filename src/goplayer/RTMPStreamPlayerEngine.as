@@ -84,21 +84,26 @@ package goplayer
       else if (code == "NetStream.Play.Stop")
         debug("Data streaming stopped.")
       else if (code == "NetStream.Buffer.Full")
-        debug("Buffer full; starting playback.")
+        debug("Buffer filled; ready for playback.")
       else if (code == "NetStream.Buffer.Flush")
-        debug("Will play buffered data (" + bufferLength + "s).")
+        {}
       else if (code == "NetStream.Buffer.Empty")
         debug("Buffer empty; stopping playback.")
       else if (code == "NetStream.Pause.Notify")
         debug("Playback paused.")
       else if (code == "NetStream.Unpause.Notify")
         debug("Playback resumed.")
+      else if (code == "NetStream.Seek.Notify")
+        {}
       else
         debug("Net stream status: " + code)
     }
 
     public function togglePaused() : void
     { stream.togglePause() }
+
+    public function seek(delta : Number) : void
+    { stream.seek(playheadPosition + delta) }
 
     // -----------------------------------------------------
 

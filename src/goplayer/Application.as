@@ -42,6 +42,10 @@ package goplayer
     {
       if (event.keyCode == Keyboard.SPACE)
         player.togglePaused()
+      else if (event.keyCode == Keyboard.LEFT)
+        player.seek(-3)
+      else if (event.keyCode == Keyboard.RIGHT)
+        player.seek(+3)
     }
 
     private function get fullscreen() : Boolean
