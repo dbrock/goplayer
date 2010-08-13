@@ -46,6 +46,10 @@ package goplayer
         player.seek(-3)
       else if (event.keyCode == Keyboard.RIGHT)
         player.seek(+3)
+      else if (event.keyCode == Keyboard.UP)
+        player.changeVolume(+.1)
+      else if (event.keyCode == Keyboard.DOWN)
+        player.changeVolume(-.1)
     }
 
     private function get fullscreen() : Boolean

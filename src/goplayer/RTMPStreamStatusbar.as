@@ -7,34 +7,22 @@ package goplayer
     private const margins : Dimensions = new Dimensions(10, 5)
     private const label : Label = new Label
 
-    private var _bufferLength : Number = NaN
-    private var _bufferTime : Number = NaN
-    private var _playheadPosition : Number = NaN
-    private var _streamLength : Number = NaN
+    private var engine : RTMPStreamPlayerEngine
 
-    public function RTMPStreamStatusbar()
+    public function RTMPStreamStatusbar
+      (engine : RTMPStreamPlayerEngine)
     {
+      this.engine = engine
+
       addChild(label)
 
       label.x = margins.width
       label.y = margins.height
     }
 
-    public function set bufferLength(value : Number) : void
-    { _bufferLength = value, update() }
-
-    public function set bufferTime(value : Number) : void
-    { _bufferTime = value, update() }
-
-    public function set playheadPosition(value : Number) : void
-    { _playheadPosition = value, update() }
-
-    public function set streamLength(value : Number) : void
-    { _streamLength = value, update() }
-
-    private function update() : void
+    public function update() : void
     {
-      label.text = playheadString + "  " + bufferString
+      label.text = playheadString + "  " + bufferString + "  " + volumeString
       redraw()
     }
 
@@ -42,19 +30,22 @@ package goplayer
     { return "Playhead: " + playheadPositionString + "/" + streamLengthString }
 
     private function get playheadPositionString() : String
-    { return round(_playheadPosition) + "s" }
+    { return round(engine.playheadPosition) + "s" }
 
     private function get streamLengthString() : String
-    { return round(_streamLength) + "s" }
+    { return round(engine.streamLength) + "s" }
 
     private function get bufferString() : String
     { return "Buffer: " + bufferLengthString + "/" + bufferTimeString }
 
     private function get bufferLengthString() : String
-    { return round(_bufferLength) + "s" }
+    { return round(engine.bufferLength) + "s" }
 
     private function get bufferTimeString() : String
-    { return round(_bufferTime) + "s" }
+    { return round(engine.bufferTime) + "s" }
+
+    private function get volumeString() : String
+    { return "Volume: " + Math.round(engine.volume * 100) + "%" }
 
     private function round(value : Number) : String
     { return value.toFixed(1) }

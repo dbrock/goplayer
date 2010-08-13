@@ -2,11 +2,14 @@ package goplayer
 {
   import flash.events.AsyncErrorEvent
   import flash.events.NetStatusEvent
+  import flash.media.SoundTransform
   import flash.net.NetConnection
   import flash.net.NetStream
 
   public class RTMPStreamPlayerEngine
   {
+    private const DEFAULT_VOLUME : Number = .8
+
     private const connection : NetConnection = new NetConnection
  
     private var metadata : RTMPStreamMetadata
@@ -62,6 +65,8 @@ package goplayer
 
       view.handleNetStreamCreated(stream)
 
+      volume = DEFAULT_VOLUME
+
       stream.bufferTime = 5
       stream.play(metadata.name)
     }
@@ -86,7 +91,7 @@ package goplayer
       else if (code == "NetStream.Buffer.Full")
         debug("Buffer filled; ready for playback.")
       else if (code == "NetStream.Buffer.Flush")
-        {}
+        debug("Emptying buffer on purpose.")
       else if (code == "NetStream.Buffer.Empty")
         debug("Buffer empty; stopping playback.")
       else if (code == "NetStream.Pause.Notify")
@@ -94,7 +99,7 @@ package goplayer
       else if (code == "NetStream.Unpause.Notify")
         debug("Playback resumed.")
       else if (code == "NetStream.Seek.Notify")
-        {}
+        debug("Seeked.")
       else
         debug("Net stream status: " + code)
     }
@@ -105,18 +110,41 @@ package goplayer
     public function seek(delta : Number) : void
     { stream.seek(playheadPosition + delta) }
 
+    public function changeVolume(delta : Number) : void
+    { volume = volume + delta }
+
+    public function set volume(value : Number) : void
+    {
+      try
+        { stream.soundTransform = getSoundTransform(value) }
+      catch (error : Error)
+        {}
+    }
+
+    private function getSoundTransform(volume : Number) : SoundTransform
+    {
+      const result : SoundTransform = new SoundTransform
+
+      result.volume = clamp(volume, 0, 1)
+
+      return result
+    }
+
     // -----------------------------------------------------
 
     public function get playheadPosition() : Number
-    { return stream ? stream.time : NaN }
+    { return stream ? stream.time : 0 }
 
     public function get bufferTime() : Number
-    { return stream ? stream.bufferTime : NaN }
+    { return stream ? stream.bufferTime : 0 }
 
     public function get bufferLength() : Number
-    { return stream ? stream.bufferLength : NaN }
+    { return stream ? stream.bufferLength : 0 }
 
-    public function get duration() : Number
+    public function get volume() : Number
+    { return stream ? stream.soundTransform.volume : DEFAULT_VOLUME }
+
+    public function get streamLength() : Number
     { return hotMetadata ? hotMetadata.duration : metadata.duration }
 
     public function get dimensions() : Dimensions

@@ -8,14 +8,15 @@ package goplayer
 
   public class RTMPStreamPlayer extends Sprite
   {
-    private const statusbar : RTMPStreamStatusbar = new RTMPStreamStatusbar
     private const video : Video = new Video
 
+    private var statusbar : RTMPStreamStatusbar
     private var engine : RTMPStreamPlayerEngine
 
     public function RTMPStreamPlayer(metadata : RTMPStreamMetadata)
     {
       engine = new RTMPStreamPlayerEngine(metadata, this)
+      statusbar = new RTMPStreamStatusbar(engine)
 
       addChild(video)
       addChild(statusbar)
@@ -34,6 +35,9 @@ package goplayer
     public function seek(delta : Number) : void
     { engine.seek(delta) }
 
+    public function changeVolume(delta : Number) : void
+    { engine.changeVolume(delta) }
+
     public function handleNetStreamCreated(stream : NetStream) : void
     { video.attachNetStream(stream) }
 
@@ -42,10 +46,7 @@ package goplayer
       video.width = engine.dimensions.width
       video.height = engine.dimensions.height
 
-      statusbar.bufferLength = engine.bufferLength
-      statusbar.bufferTime = engine.bufferTime
-      statusbar.playheadPosition = engine.playheadPosition
-      statusbar.streamLength = engine.duration
+      statusbar.update()
 
       statusbar.x = video.width - statusbar.width
       statusbar.y = video.height - statusbar.height
