@@ -61,6 +61,9 @@ package goplayer
 
     private function handleKeyDown(event : KeyboardEvent) : void
     {
+      if (!player)
+        return
+
       if (event.keyCode == Keyboard.SPACE)
         player.togglePaused()
       else if (event.keyCode == Keyboard.LEFT)

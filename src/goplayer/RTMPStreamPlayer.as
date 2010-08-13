@@ -175,6 +175,9 @@ package goplayer
 
     public function set paused(value : Boolean) : void
     {
+      if (!stream)
+        return
+
       if (value)
         stream.pause(), _paused = true
       else
