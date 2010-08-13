@@ -2,6 +2,7 @@ package goplayer
 {
   import flash.display.Sprite
   import flash.events.Event
+  import flash.geom.Rectangle
   import flash.media.Video
   import flash.net.NetStream
 
@@ -42,6 +43,10 @@ package goplayer
 
       statusbar.x = video.width - statusbar.width
       statusbar.y = video.height - statusbar.height
+
+      if (stage)
+        stage.fullScreenSourceRect
+          = new Rectangle(0, 0, video.width, video.height)
     }
   }
 }

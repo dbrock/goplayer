@@ -1,6 +1,8 @@
 package goplayer
 {
   import flash.display.Sprite
+  import flash.display.StageDisplayState
+  import flash.events.MouseEvent
   import flash.external.ExternalInterface
 
   public class Application extends Sprite
@@ -22,7 +24,21 @@ package goplayer
       this.movieID = movieID
 
       drawBackground()
+      
+      doubleClickEnabled = true
+
+      addEventListener(MouseEvent.DOUBLE_CLICK, handleDoubleClick)
     }
+
+    private function handleDoubleClick(event : MouseEvent) : void
+    {
+      stage.displayState = fullscreen
+        ? StageDisplayState.NORMAL
+        : StageDisplayState.FULL_SCREEN
+    }
+
+    private function get fullscreen() : Boolean
+    { return stage.displayState == StageDisplayState.FULL_SCREEN }
 
     public function start() : void
     {
@@ -44,6 +60,8 @@ package goplayer
     {
       player = new RTMPStreamPlayer(metadata)
       player.start()
+
+      player.mouseEnabled = false
 
       addChild(player)
     }

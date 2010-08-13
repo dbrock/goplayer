@@ -86,7 +86,7 @@ package goplayer
       else if (code == "NetStream.Buffer.Full")
         debug("Buffer full; starting playback.")
       else if (code == "NetStream.Buffer.Flush")
-        debug("Will play buffered data (" + stream.bufferLength + "s).")
+        debug("Will play buffered data (" + bufferLength + "s).")
       else if (code == "NetStream.Buffer.Empty")
         debug("Buffer empty; stopping playback.")
       else
