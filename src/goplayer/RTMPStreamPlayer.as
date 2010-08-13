@@ -7,17 +7,20 @@ package goplayer
   import flash.net.NetConnection
   import flash.net.NetStream
 
+  import org.asspec.util.sequences.ArraySequenceContainer
+  import org.asspec.util.sequences.SequenceContainer
+
   public class RTMPStreamPlayer
   {
     private const DEFAULT_VOLUME : Number = .8
     private const connection : NetConnection = new NetConnection
+    private const listeners : SequenceContainer = new ArraySequenceContainer
  
     private var metadata : RTMPStreamMetadata
 
-    public var listener : RTMPStreamPlayerListener
-
     private var stream : NetStream = null
     private var hotMetadata : Object = null
+    private var _paused : Boolean = false
 
     public function RTMPStreamPlayer(metadata : RTMPStreamMetadata)
     {
@@ -29,6 +32,9 @@ package goplayer
         (AsyncErrorEvent.ASYNC_ERROR, handleAsyncError)
       connection.client = {}
     }
+
+    public function addListener(listener : RTMPStreamPlayerListener) : void
+    { listeners.add(listener) }
 
     public function start() : void
     {
@@ -67,7 +73,8 @@ package goplayer
       stream.bufferTime = 5
       stream.play(metadata.name)
 
-      listener.handleRTMPStreamEstablished()
+      for each (var listener : RTMPStreamPlayerListener in listeners)
+        listener.handleRTMPStreamEstablished()
     }
 
     public function attachVideo(video : Video) : void
@@ -106,11 +113,31 @@ package goplayer
         debug("Net stream status: " + code)
     }
 
+    public function pause() : void
+    { paused = true }
+
+    public function resume() : void
+    { paused = false }
+
     public function togglePaused() : void
-    { stream.togglePause() }
+    { paused = !paused }
+
+    public function get paused() : Boolean
+    { return _paused }
+
+    public function set paused(value : Boolean) : void
+    {
+      if (value)
+        stream.pause(), _paused = true
+      else
+        stream.resume(), _paused = false
+    }
 
     public function seek(delta : Number) : void
     { stream.seek(playheadPosition + delta) }
+
+    public function seekTo(position : Number) : void
+    { stream.seek(position) }
 
     public function changeVolume(delta : Number) : void
     { volume = volume + delta }

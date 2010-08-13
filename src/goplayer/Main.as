@@ -16,7 +16,7 @@ package goplayer
       debugLogger = new InternalLogger(debugLayer)
 
       const application : Application
-        = new Application(stageDimensions, api, movieID)
+        = new Application(stageDimensions, api, movieID, autoplay)
 
       addChild(application)
       addChild(debugLayer)
@@ -30,7 +30,10 @@ package goplayer
     { return new StreamioAPI(new StandardHTTPFetcher) }
 
     private function get movieID() : String
-    { return loaderInfo.parameters.StreamioMovieID }
+    { return loaderInfo.parameters.streamioMovieID }
+
+    private function get autoplay() : Boolean
+    { return "autoplay" in loaderInfo.parameters }
 
     private function get stageDimensions() : Dimensions
     { return new Dimensions(stage.stageWidth, stage.stageHeight) }

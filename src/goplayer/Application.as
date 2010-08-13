@@ -13,22 +13,33 @@ package goplayer
     private var dimensions : Dimensions
     private var api : StreamioAPI
     private var movieID : String
+    private var autoplay : Boolean
 
+    private var ready : Boolean = false
+    private var metadata : MovieMetadata = null
     private var player : RTMPStreamPlayer = null
 
     public function Application
       (dimensions : Dimensions,
        api : StreamioAPI,
-       movieID : String)
+       movieID : String,
+       autoplay : Boolean)
     {
       this.dimensions = dimensions
       this.api = api
       this.movieID = movieID
+      this.autoplay = autoplay
 
-      drawBackground()
+      redraw()
       
-      doubleClickEnabled = true
+      addEventListener(MouseEvent.CLICK, handleClick)
       addEventListener(MouseEvent.DOUBLE_CLICK, handleDoubleClick)
+    }
+
+    private function handleClick(event : MouseEvent) : void
+    {
+      if (ready)
+        ready = false, play()
     }
 
     private function handleDoubleClick(event : MouseEvent) : void
@@ -66,24 +77,36 @@ package goplayer
 
     public function handleMovieMetadata(metadata : MovieMetadata) : void
     {
-      debug("Streamio movie “" + metadata.title + "” found; " +
-            "playing last RTMP stream.")
+      this.metadata = metadata
 
+      debug("Streamio movie “" + metadata.title + "” found.")
+
+      if (autoplay)
+        play()
+      else
+        ready = true, debug("Click to start playback.")
+    }
+
+    private function play() : void
+    {
       // XXX: Select stream intelligently.
+      debug("Playing last RTMP stream.")
       playRTMPStream(metadata.rtmpStreams.last)
+      doubleClickEnabled = true
     }
 
     private function playRTMPStream(metadata : RTMPStreamMetadata) : void
     {
-      player = new RTMPStreamPlayer(metadata)      
+      player = new RTMPStreamPlayer(metadata)
 
       addChild(new RTMPStreamPlayerView(player))
 
       player.start()
     }
 
-    private function drawBackground() : void
+    private function redraw() : void
     {
+      graphics.clear()
       graphics.beginFill(0x000000)
       graphics.drawRect(0, 0, dimensions.width, dimensions.height)
       graphics.endFill()

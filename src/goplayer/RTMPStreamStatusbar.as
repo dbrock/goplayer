@@ -25,6 +25,7 @@ package goplayer
         = "Playhead: "
         + formatDuration(player.playheadPosition) + "/"
         + formatDuration(player.streamLength)
+        + (player.paused ? " (paused)" : "")
         + "  "
         + "Buffer: "
         + formatDuration(player.bufferLength) + "/"
