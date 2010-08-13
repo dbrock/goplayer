@@ -7,12 +7,11 @@ package goplayer
     private const margins : Dimensions = new Dimensions(10, 5)
     private const label : Label = new Label
 
-    private var engine : RTMPStreamPlayerEngine
+    private var player : RTMPStreamPlayer
 
-    public function RTMPStreamStatusbar
-      (engine : RTMPStreamPlayerEngine)
+    public function RTMPStreamStatusbar(player : RTMPStreamPlayer)
     {
-      this.engine = engine
+      this.player = player
 
       addChild(label)
 
@@ -22,33 +21,22 @@ package goplayer
 
     public function update() : void
     {
-      label.text = playheadString + "  " + bufferString + "  " + volumeString
+      label.text
+        = "Playhead: "
+        + formatDuration(player.playheadPosition) + "/"
+        + formatDuration(player.streamLength)
+        + "  "
+        + "Buffer: "
+        + formatDuration(player.bufferLength) + "/"
+        + formatDuration(player.bufferTime)
+        + "  "
+        + "Volume: " + Math.round(player.volume * 100) + "%"
+
       redraw()
     }
 
-    private function get playheadString() : String
-    { return "Playhead: " + playheadPositionString + "/" + streamLengthString }
-
-    private function get playheadPositionString() : String
-    { return round(engine.playheadPosition) + "s" }
-
-    private function get streamLengthString() : String
-    { return round(engine.streamLength) + "s" }
-
-    private function get bufferString() : String
-    { return "Buffer: " + bufferLengthString + "/" + bufferTimeString }
-
-    private function get bufferLengthString() : String
-    { return round(engine.bufferLength) + "s" }
-
-    private function get bufferTimeString() : String
-    { return round(engine.bufferTime) + "s" }
-
-    private function get volumeString() : String
-    { return "Volume: " + Math.round(engine.volume * 100) + "%" }
-
-    private function round(value : Number) : String
-    { return value.toFixed(1) }
+    private function formatDuration(value : Number) : String
+    { return value.toFixed(1) + "s" }
 
     private function redraw() : void
     {

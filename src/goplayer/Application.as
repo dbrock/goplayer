@@ -75,12 +75,11 @@ package goplayer
 
     private function playRTMPStream(metadata : RTMPStreamMetadata) : void
     {
-      player = new RTMPStreamPlayer(metadata)
+      player = new RTMPStreamPlayer(metadata)      
+
+      addChild(new RTMPStreamPlayerView(player))
+
       player.start()
-
-      player.mouseEnabled = false
-
-      addChild(player)
     }
 
     private function drawBackground() : void
