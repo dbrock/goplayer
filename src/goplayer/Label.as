@@ -11,7 +11,7 @@ package goplayer
     public function Label()
     {
       format.color = 0xffffff
-      format.size = 16
+      format.size = 14
       format.font = "Consolas"
       format.leading = 0
 

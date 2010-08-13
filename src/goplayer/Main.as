@@ -16,7 +16,7 @@ package goplayer
       debugLogger = new InternalLogger(debugLayer)
 
       const application : Application
-        = new Application(stageDimensions, api, movieID, autoplay)
+        = new Application(stageDimensions, api, movieID, autoplay, loop)
 
       addChild(application)
       addChild(debugLayer)
@@ -34,6 +34,9 @@ package goplayer
 
     private function get autoplay() : Boolean
     { return "autoplay" in loaderInfo.parameters }
+
+    private function get loop() : Boolean
+    { return "loop" in loaderInfo.parameters }
 
     private function get stageDimensions() : Dimensions
     { return new Dimensions(stage.stageWidth, stage.stageHeight) }

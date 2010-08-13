@@ -8,12 +8,13 @@ package goplayer
   import flash.ui.Keyboard
 
   public class Application extends Sprite
-    implements MovieMetadataHandler
+    implements MovieMetadataHandler, RTMPStreamPlayerListener
   {
     private var dimensions : Dimensions
     private var api : StreamioAPI
     private var movieID : String
     private var autoplay : Boolean
+    private var loop : Boolean
 
     private var ready : Boolean = false
     private var metadata : MovieMetadata = null
@@ -23,17 +24,26 @@ package goplayer
       (dimensions : Dimensions,
        api : StreamioAPI,
        movieID : String,
-       autoplay : Boolean)
+       autoplay : Boolean,
+       loop : Boolean)
     {
       this.dimensions = dimensions
       this.api = api
       this.movieID = movieID
       this.autoplay = autoplay
+      this.loop = loop
 
-      redraw()
+      drawBackground()
       
       addEventListener(MouseEvent.CLICK, handleClick)
       addEventListener(MouseEvent.DOUBLE_CLICK, handleDoubleClick)
+    }
+
+    private function drawBackground() : void
+    {
+      graphics.beginFill(0x000000)
+      graphics.drawRect(0, 0, dimensions.width, dimensions.height)
+      graphics.endFill()
     }
 
     private function handleClick(event : MouseEvent) : void
@@ -89,27 +99,34 @@ package goplayer
 
     private function play() : void
     {
-      // XXX: Select stream intelligently.
       debug("Playing last RTMP stream.")
+
+      // XXX: Select stream intelligently.
       playRTMPStream(metadata.rtmpStreams.last)
+
       doubleClickEnabled = true
     }
 
     private function playRTMPStream(metadata : RTMPStreamMetadata) : void
     {
       player = new RTMPStreamPlayer(metadata)
+      player.addListener(this)
 
       addChild(new RTMPStreamPlayerView(player))
 
       player.start()
     }
 
-    private function redraw() : void
+    public function handleRTMPStreamCreated() : void
+    {}
+
+    public function handleRTMPStreamUpdated() : void
+    {}
+
+    public function handleRTMPStreamFinishedPlaying() : void
     {
-      graphics.clear()
-      graphics.beginFill(0x000000)
-      graphics.drawRect(0, 0, dimensions.width, dimensions.height)
-      graphics.endFill()
+      if (loop)
+        debug("Looping."), player.rewind()
     }
   }
 }

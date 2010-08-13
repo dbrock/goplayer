@@ -2,10 +2,12 @@ package goplayer
 {
   import flash.events.AsyncErrorEvent
   import flash.events.NetStatusEvent
+  import flash.events.TimerEvent
   import flash.media.SoundTransform
   import flash.media.Video
   import flash.net.NetConnection
   import flash.net.NetStream
+  import flash.utils.Timer
 
   import org.asspec.util.sequences.ArraySequenceContainer
   import org.asspec.util.sequences.SequenceContainer
@@ -15,12 +17,14 @@ package goplayer
     private const DEFAULT_VOLUME : Number = .8
     private const connection : NetConnection = new NetConnection
     private const listeners : SequenceContainer = new ArraySequenceContainer
+    private const timer : Timer = new Timer(30)
  
     private var metadata : RTMPStreamMetadata
 
     private var stream : NetStream = null
     private var hotMetadata : Object = null
     private var _paused : Boolean = false
+    private var streaming : Boolean = false
 
     public function RTMPStreamPlayer(metadata : RTMPStreamMetadata)
     {
@@ -31,6 +35,15 @@ package goplayer
       connection.addEventListener
         (AsyncErrorEvent.ASYNC_ERROR, handleAsyncError)
       connection.client = {}
+      
+      timer.addEventListener(TimerEvent.TIMER, withoutArguments(update))
+      timer.start()
+    }
+
+    private function update() : void
+    {
+      for each (var listener : RTMPStreamPlayerListener in listeners)
+        listener.handleRTMPStreamUpdated()
     }
 
     public function addListener(listener : RTMPStreamPlayerListener) : void
@@ -74,7 +87,7 @@ package goplayer
       stream.play(metadata.name)
 
       for each (var listener : RTMPStreamPlayerListener in listeners)
-        listener.handleRTMPStreamEstablished()
+        listener.handleRTMPStreamCreated()
     }
 
     public function attachVideo(video : Video) : void
@@ -94,15 +107,15 @@ package goplayer
       if (code == "NetStream.Play.Reset")
         {}
       else if (code == "NetStream.Play.Start")
-        debug("Data streaming started; filling buffer.")
+        handleStreamingStarted()
       else if (code == "NetStream.Play.Stop")
-        debug("Data streaming stopped.")
+        handleStreamingStopped()
       else if (code == "NetStream.Buffer.Full")
         debug("Buffer filled; ready for playback.")
       else if (code == "NetStream.Buffer.Flush")
-        {}
+        debug("Flushing buffer.")
       else if (code == "NetStream.Buffer.Empty")
-        debug("Buffer empty; stopping playback.")
+        handleBufferEmpty()
       else if (code == "NetStream.Pause.Notify")
         debug("Playback paused.")
       else if (code == "NetStream.Unpause.Notify")
@@ -112,6 +125,41 @@ package goplayer
       else
         debug("Net stream status: " + code)
     }
+
+    private function handleStreamingStarted() : void
+    { debug("Data streaming started; filling buffer.") }
+
+    private function handleStreamingStopped() : void
+    {
+      debug("Data streaming stopped.")
+      handleMaybeFinishedPlaying()
+    }
+
+    private function handleBufferEmpty() : void
+    {
+      debug("Buffer empty; stopping playback.")
+      handleMaybeFinishedPlaying()
+    }
+
+    private function handleMaybeFinishedPlaying() : void
+    {
+      if (finishedPlaying)
+        handleFinishedPlaying()
+    }
+
+    private function handleFinishedPlaying() : void
+    {
+      debug("Finished playing.")
+
+      for each (var listener : RTMPStreamPlayerListener in listeners)
+        listener.handleRTMPStreamFinishedPlaying()
+    }
+
+    private function get finishedPlaying() : Boolean
+    { return timeRemaining < 1 }
+
+    private function get timeRemaining() : Number
+    { return streamLength - playheadPosition }
 
     public function pause() : void
     { paused = true }
@@ -138,6 +186,9 @@ package goplayer
 
     public function seekTo(position : Number) : void
     { stream.seek(position) }
+
+    public function rewind() : void
+    { seekTo(0) }
 
     public function changeVolume(delta : Number) : void
     { volume = volume + delta }

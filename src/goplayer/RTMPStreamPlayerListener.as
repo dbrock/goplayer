@@ -1,5 +1,9 @@
 package goplayer
 {
   public interface RTMPStreamPlayerListener
-  { function handleRTMPStreamEstablished() : void }
+  {
+    function handleRTMPStreamCreated() : void
+    function handleRTMPStreamUpdated() : void
+    function handleRTMPStreamFinishedPlaying() : void
+  }
 }
