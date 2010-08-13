@@ -61,9 +61,9 @@ package goplayer
     {
       stream = new NetStream(connection)
       stream.addEventListener
-        (NetStatusEvent.NET_STATUS, handleNetStreamStatus);
+        (NetStatusEvent.NET_STATUS, handleNetStreamStatus)
       stream.addEventListener
-        (AsyncErrorEvent.ASYNC_ERROR, handleAsyncError);
+        (AsyncErrorEvent.ASYNC_ERROR, handleAsyncError)
       stream.client = {}
 
       video.attachNetStream(stream)
