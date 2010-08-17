@@ -31,8 +31,6 @@ package goplayer
 
     public function start() : void
     {
-      debug("Connecting to <" + metadata.url + ">...")
-      
       try
         { connection.connect(metadata.url) }
       catch (error : Error)

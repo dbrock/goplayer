@@ -29,7 +29,10 @@ package goplayer
     { _listener = value }
 
     public function connect(url : URL) : void
-    { connection.connect(url.toString()) }
+    {
+      debug("Connecting to <" + url + ">...")      
+      connection.connect(url.toString())
+    }
 
     public function getNetStream() : FlashNetStream
     { return new StandardFlashNetStream(connection, video) }
