@@ -8,8 +8,6 @@ if [ x$ASSPEC_SRC = x ] ; then
   exit -1
 fi
 
-# Loop because asautotest sometimes crashes.
-while true ; do
-  asautotest src/goplayer.as src "$ASSPEC_SRC" \
-    --static-typing -o bin/goplayer.swf
-done
+asautotest src/goplayer.as -o bin/goplayer.swf -- \
+  src/goplayer_spec.as --test --asspec-adapter-source --- \
+  -I "$ASSPEC_SRC" --static-typing
