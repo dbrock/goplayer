@@ -53,7 +53,8 @@ package goplayer
         _listener.handleConnectionClosed()
 
       if (code == CONNECTION_ESTABLISHED)
-        debug("Connection established.")
+        debug("Connection established " +
+              "(server version " + event.info.data.version + ").")
       else if (code == CONNECTION_FAILED)
         debug("Connection failed.")
       else if (code == CONNECTION_CLOSED)

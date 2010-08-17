@@ -123,8 +123,6 @@ package goplayer
       = "NetStream.Play.Start"
     private static const STREAMING_STOPPED : String
       = "NetStream.Play.Stop"
-    private static const PLAYLIST_RESET : String
-      = "NetStream.Play.Reset"
     private static const BUFFER_FILLED : String
       = "NetStream.Buffer.Full"
     private static const BUFFER_EMPTIED : String
