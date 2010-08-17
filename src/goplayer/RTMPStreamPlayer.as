@@ -1,22 +1,14 @@
 package goplayer
 {
-  import flash.events.TimerEvent
-  import flash.media.Video
-  import flash.utils.Timer
-
-  import org.asspec.util.sequences.ArraySequenceContainer
-  import org.asspec.util.sequences.SequenceContainer
-
   public class RTMPStreamPlayer
     implements FlashNetConnectionListener, FlashNetStreamListener
   {
     private const DEFAULT_VOLUME : Number = .8
-    private const listeners : SequenceContainer
-      = new ArraySequenceContainer
-    private const timer : Timer = new Timer(30)
- 
+
     private var metadata : RTMPStreamMetadata
     private var connection : FlashNetConnection
+
+    private var _listener : RTMPStreamPlayerListener = null
 
     private var stream : FlashNetStream = null
     private var hotMetadata : Object = null
@@ -32,19 +24,10 @@ package goplayer
       this.connection = connection
 
       connection.listener = this
-
-      timer.addEventListener(TimerEvent.TIMER, withoutArguments(update))
-      timer.start()
     }
 
-    private function update() : void
-    {
-      for each (var listener : RTMPStreamPlayerListener in listeners)
-        listener.handleRTMPStreamUpdated()
-    }
-
-    public function addListener(listener : RTMPStreamPlayerListener) : void
-    { listeners.add(listener) }
+    public function set listener(value : RTMPStreamPlayerListener) : void
+    { _listener = value }
 
     public function start() : void
     {
@@ -82,9 +65,6 @@ package goplayer
 
       if (paused)
         stream.paused = true
-
-      for each (var listener : RTMPStreamPlayerListener in listeners)
-        listener.handleRTMPStreamCreated()
     }
 
     public function handleNetStreamMetadata(data : Object) : void
@@ -144,9 +124,7 @@ package goplayer
     private function handleFinishedPlaying() : void
     {
       debug("Finished playing.")
-
-      for each (var listener : RTMPStreamPlayerListener in listeners)
-        listener.handleRTMPStreamFinishedPlaying()
+      _listener.handleRTMPStreamFinishedPlaying()
     }
 
     private function get finishedPlaying() : Boolean

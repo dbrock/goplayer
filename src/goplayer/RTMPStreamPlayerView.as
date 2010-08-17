@@ -1,13 +1,16 @@
 package goplayer
 {
   import flash.display.Sprite
+  import flash.events.TimerEvent
   import flash.geom.Rectangle
   import flash.media.Video
   import flash.net.NetStream
+  import flash.utils.Timer
 
   public class RTMPStreamPlayerView extends Sprite
-    implements RTMPStreamPlayerListener
   {
+    private const timer : Timer = new Timer(30)
+
     private var player : RTMPStreamPlayer
     private var video : Video
 
@@ -19,8 +22,6 @@ package goplayer
       this.player = player
       this.video = video
 
-      player.addListener(this)
-
       statusbar = new RTMPStreamStatusbar(player)
 
       addChild(video)
@@ -29,19 +30,16 @@ package goplayer
       mouseEnabled = false
       mouseChildren = false
 
+      timer.addEventListener(TimerEvent.TIMER, handleTimerEvent)
+      timer.start()
+
       update()
     }
 
-    public function handleRTMPStreamCreated() : void
-    {}
-
-    public function handleRTMPStreamUpdated() : void
+    private function handleTimerEvent(event : TimerEvent) : void
     { update() }
 
-    public function handleRTMPStreamFinishedPlaying() : void
-    {}
-
-    private function update() : void
+    public function update() : void
     {
       video.width = player.dimensions.width
       video.height = player.dimensions.height
