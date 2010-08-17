@@ -5,7 +5,7 @@ package goplayer
 
   public class MainSuite extends AbstractSuite implements SizedTest
   {
-    public function get size() : uint { return 4 }
+    public function get size() : uint { return 8 }
 
     override protected function populate() : void
     {

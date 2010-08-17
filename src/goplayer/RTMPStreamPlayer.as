@@ -38,19 +38,20 @@ package goplayer
       connector.tryNextPort()
     }
 
-    public function handleNetConnectionFailed() : void
+    public function handleConnectionFailed() : void
     {
-      debug("Connection failed.")
-
       if (connector.hasMoreIdeas)
         connector.tryNextPort()
       else
         debug("Tried all alternative ports; giving up.")
     }
 
+    public function handleConnectionClosed() : void
+    {}
+
     // -----------------------------------------------------
 
-    public function handleNetConnectionEstablished() : void
+    public function handleConnectionEstablished() : void
     {
       stream = connection.getNetStream()
       stream.listener = this
@@ -64,53 +65,14 @@ package goplayer
         stream.paused = true
     }
 
-    public function handleNetConnectionClosed() : void
-    { debug("Connection closed.") }
-
     public function handleNetStreamMetadata(data : Object) : void
     { hotMetadata = data }
 
-    public function handleNetStreamAsyncError(message : String) : void
-    { debug("Asynchronuous stream error: " + message) }
+    public function handleStreamingStopped() : void
+    { handleMaybeFinishedPlaying() }
 
-    public function handleNetStreamStatus(code : String) : void
-    {
-      if (code == "NetStream.Play.Reset")
-        {}
-      else if (code == "NetStream.Play.Start")
-        handleStreamingStarted()
-      else if (code == "NetStream.Play.Stop")
-        handleStreamingStopped()
-      else if (code == "NetStream.Buffer.Full")
-        debug("Buffer filled; ready for playback.")
-      else if (code == "NetStream.Buffer.Flush")
-        debug("Flushing buffer.")
-      else if (code == "NetStream.Buffer.Empty")
-        handleBufferEmpty()
-      else if (code == "NetStream.Pause.Notify")
-        debug("Playback paused.")
-      else if (code == "NetStream.Unpause.Notify")
-        debug("Playback resumed.")
-      else if (code == "NetStream.Seek.Notify")
-        debug("Seeked.")
-      else
-        debug("Net stream status: " + code)
-    }
-
-    private function handleStreamingStarted() : void
-    { debug("Data streaming started; filling buffer.") }
-
-    private function handleStreamingStopped() : void
-    {
-      debug("Data streaming stopped.")
-      handleMaybeFinishedPlaying()
-    }
-
-    private function handleBufferEmpty() : void
-    {
-      debug("Buffer empty; stopping playback.")
-      handleMaybeFinishedPlaying()
-    }
+    public function handleBufferEmptied() : void
+    { handleMaybeFinishedPlaying() }
 
     private function handleMaybeFinishedPlaying() : void
     {

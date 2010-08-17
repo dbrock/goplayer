@@ -35,7 +35,7 @@ package goplayer
       try
         { connection.connect(url.toString()) }
       catch (error : Error)
-        { _listener.handleNetConnectionFailed() }
+        { _listener.handleConnectionFailed() }
     }
 
     public function getNetStream() : FlashNetStream
@@ -45,15 +45,22 @@ package goplayer
     {
       const code : String = event.info.code
 
-      if (code == NetConnectionStatus.CONNECTION_ESTABLISHED)
-        _listener.handleNetConnectionEstablished()
-      else if (code == NetConnectionStatus.CONNECTION_FAILED)
-        _listener.handleNetConnectionFailed()
-      else if (code == NetConnectionStatus.CONNECTION_CLOSED)
-        _listener.handleNetConnectionClosed()
-      else if (code == NetConnectionStatus.NETWORK_CHANGED)
+      if (code == CONNECTION_ESTABLISHED)
+        _listener.handleConnectionEstablished()
+      else if (code == CONNECTION_FAILED)
+        _listener.handleConnectionFailed()
+      else if (code == CONNECTION_CLOSED)
+        _listener.handleConnectionClosed()
+
+      if (code == CONNECTION_ESTABLISHED)
+        debug("Connection established.")
+      else if (code == CONNECTION_FAILED)
+        debug("Connection failed.")
+      else if (code == CONNECTION_CLOSED)
+        debug("Connection closed.")
+      else if (code == NETWORK_CHANGED)
         debug("Detected change in network conditions.")
-      else if (code == NetConnectionStatus.IDLE_TIME_OUT)
+      else if (code == IDLE_TIME_OUT)
         debug("Closing idle connection.")
       else
         debug("Net connection status: " + code)
@@ -61,5 +68,16 @@ package goplayer
 
     private function handleAsyncError(event : AsyncErrorEvent) : void
     { debug("Asynchronuous connection error: " + event.error.message) }
+
+    private static const CONNECTION_ESTABLISHED : String
+      = "NetConnection.Connect.Success"
+    private static const CONNECTION_FAILED : String
+      = "NetConnection.Connect.Failed"
+    private static const CONNECTION_CLOSED : String
+      = "NetConnection.Connect.Closed"
+    private static const NETWORK_CHANGED : String
+      = "NetConnection.Connect.NetworkChange"
+    private static const IDLE_TIME_OUT : String
+      = "NetConnection.Connect.IdleTimeOut"
   }
 }

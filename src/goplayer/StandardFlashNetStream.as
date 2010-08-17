@@ -29,10 +29,34 @@ package goplayer
 
     private function handleNetStreamStatus
       (event : NetStatusEvent) : void
-    { _listener.handleNetStreamStatus(event.info.code) }
+    {
+      const code : String = event.info.code
+
+      if (code == STREAMING_STOPPED)
+        _listener.handleStreamingStopped()
+      else if (code == BUFFER_EMPTIED)
+        _listener.handleBufferEmptied()
+
+      if (code == STREAMING_STARTED)
+        debug("Data streaming started; filling buffer.")
+      else if (code == STREAMING_STOPPED)
+        debug("Data streaming stopped.")
+      else if (code == BUFFER_FILLED)
+        debug("Buffer filled; ready for playback.")
+      else if (code == BUFFER_EMPTIED)
+        debug("Buffer empty; stopping playback.")
+      else if (code == PAUSED)
+        debug("Playback paused.")
+      else if (code == RESUMED)
+        debug("Playback resumed.")
+      else if (code == SEEKED)
+        debug("Seeking complete.")
+      else
+        debug("Net stream status: " + code)
+    }
 
     private function handleAsyncError(event : AsyncErrorEvent) : void
-    { _listener.handleNetStreamAsyncError(event.error.message) }
+    { debug("Asynchronuous stream error: " + event.error.message) }
 
     private function handleNetStreamMetadata(data : Object) : void
     { _listener.handleNetStreamMetadata(data) }
@@ -94,5 +118,22 @@ package goplayer
 
       return result
     }
+
+    private static const STREAMING_STARTED : String
+      = "NetStream.Play.Start"
+    private static const STREAMING_STOPPED : String
+      = "NetStream.Play.Stop"
+    private static const PLAYLIST_RESET : String
+      = "NetStream.Play.Reset"
+    private static const BUFFER_FILLED : String
+      = "NetStream.Buffer.Full"
+    private static const BUFFER_EMPTIED : String
+      = "NetStream.Buffer.Empty"
+    private static const PAUSED : String
+      = "NetStream.Pause.Notify"
+    private static const RESUMED : String
+      = "NetStream.Unpause.Notify"
+    private static const SEEKED : String
+      = "NetStream.Seek.Notify"
   }
 }

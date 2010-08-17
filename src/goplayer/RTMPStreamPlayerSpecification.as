@@ -21,16 +21,16 @@ package goplayer
         it_should_connect_to("rtmp://foo/bar")
 
         when("the connection fails", function () : void {
-          player.handleNetConnectionFailed()
+          player.handleConnectionFailed()
           it_should_connect_to("rtmp://foo:80/bar")
 
           when("the connection fails again", function () : void {
-            player.handleNetConnectionFailed()
+            player.handleConnectionFailed()
             it_should_connect_to("rtmp://foo:443/bar")
 
             when("the connection fails again", function () : void {
               connectionAttempted = false
-              player.handleNetConnectionFailed()
+              player.handleConnectionFailed()
 
               it("should not try to connect again", function () : void {
                 specify(connectionAttempted).should.not.hold })

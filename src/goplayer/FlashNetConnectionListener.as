@@ -2,8 +2,8 @@ package goplayer
 {
   public interface FlashNetConnectionListener
   {
-    function handleNetConnectionEstablished() : void
-    function handleNetConnectionFailed() : void
-    function handleNetConnectionClosed() : void
+    function handleConnectionEstablished() : void
+    function handleConnectionFailed() : void
+    function handleConnectionClosed() : void
   }
 }
