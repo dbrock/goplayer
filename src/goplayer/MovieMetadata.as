@@ -6,7 +6,7 @@ package goplayer
   {
     function get title() : String
     function get rtmpStreams() : Sequence
-    function get duration() : Number
+    function get duration() : Duration
 
     function dump() : void
   }

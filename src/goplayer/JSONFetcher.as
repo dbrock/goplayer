@@ -1,5 +1,5 @@
 package goplayer
 {
   public interface JSONFetcher
-  { function fetchJSON(url : String, handler : JSONHandler) : void }
+  { function fetchJSON(url : URL, handler : JSONHandler) : void }
 }

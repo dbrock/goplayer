@@ -61,19 +61,18 @@ package goplayer
 
     private function handleKeyDown(event : KeyboardEvent) : void
     {
-      if (!player)
-        return
+      if (!player) return
 
       if (event.keyCode == Keyboard.SPACE)
         player.togglePaused()
       else if (event.keyCode == Keyboard.LEFT)
-        player.seek(-3)
+        player.seekBy(Duration.seconds(-3))
       else if (event.keyCode == Keyboard.RIGHT)
-        player.seek(+3)
+        player.seekBy(Duration.seconds(+3))
       else if (event.keyCode == Keyboard.UP)
-        player.changeVolume(+.1)
+        player.changeVolumeBy(+.1)
       else if (event.keyCode == Keyboard.DOWN)
-        player.changeVolume(-.1)
+        player.changeVolumeBy(-.1)
     }
 
     private function get fullscreen() : Boolean
@@ -112,7 +111,7 @@ package goplayer
 
     private function playRTMPStream(metadata : RTMPStreamMetadata) : void
     {
-      player = new RTMPStreamPlayer(metadata)
+      player = new RTMPStreamPlayer(metadata, new StandardFlashNetConnection)
       player.addListener(this)
 
       addChild(new RTMPStreamPlayerView(player))

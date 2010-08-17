@@ -10,8 +10,8 @@ package goplayer
       (json : Object, movieMetadata : StreamioMovieMetadata)
     { this.json = json, this.movieMetadata = movieMetadata }
 
-    public function get url() : String
-    { return "rtmp://" + json.rtmp_uri }
+    public function get url() : URL
+    { return URL.parse("rtmp://" + json.rtmp_uri) }
 
     public function get name() : String
     { return json.rtmp_stream_uri }
@@ -19,7 +19,7 @@ package goplayer
     public function get dimensions() : Dimensions
     { return new Dimensions(json.width, json.height) }
 
-    public function get duration() : Number
+    public function get duration() : Duration
     { return movieMetadata.duration }
 
     public function dump() : void

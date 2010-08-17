@@ -12,8 +12,8 @@ package goplayer
     public function get title() : String
     { return json.title }
 
-    public function get duration() : Number
-    { return json.duration }
+    public function get duration() : Duration
+    { return Duration.seconds(json.duration) }
 
     public function get rtmpStreams() : Sequence
     {

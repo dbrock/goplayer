@@ -18,6 +18,6 @@ package goplayer
     { return "movies/" + id + "/public_show.json" }
 
     private function fetch(url : String, handler : JSONHandler) : void
-    { fetcher.fetchJSON(baseURL + url, handler) }
+    { fetcher.fetchJSON(URL.parse(baseURL + url), handler) }
   }
 }

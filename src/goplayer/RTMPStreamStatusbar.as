@@ -23,21 +23,18 @@ package goplayer
     {
       label.text
         = "Playhead: "
-        + formatDuration(player.playheadPosition) + "/"
-        + formatDuration(player.streamLength)
+        + player.playheadPosition + "/"
+        + player.streamLength
         + (player.paused ? " (paused)" : "")
         + "  "
         + "Buffer: "
-        + formatDuration(player.bufferLength) + "/"
-        + formatDuration(player.bufferTime)
+        + player.bufferLength + "/"
+        + player.bufferTime
         + "  "
         + "Volume: " + Math.round(player.volume * 100) + "%"
 
       redraw()
     }
-
-    private function formatDuration(value : Number) : String
-    { return value.toFixed(1) + "s" }
 
     private function redraw() : void
     {

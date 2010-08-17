@@ -1,5 +1,5 @@
 package goplayer
 {
   public interface HTTPFetcher
-  { function fetch(url : String, handler : HTTPResponseHandler) : void }
+  { function fetch(url : URL, handler : HTTPResponseHandler) : void }
 }

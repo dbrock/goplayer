@@ -1,41 +1,38 @@
 package goplayer
 {
-  import flash.events.AsyncErrorEvent
-  import flash.events.NetStatusEvent
   import flash.events.TimerEvent
-  import flash.media.SoundTransform
   import flash.media.Video
-  import flash.net.NetConnection
-  import flash.net.NetStream
   import flash.utils.Timer
 
   import org.asspec.util.sequences.ArraySequenceContainer
   import org.asspec.util.sequences.SequenceContainer
 
   public class RTMPStreamPlayer
+    implements FlashNetConnectionListener, FlashNetStreamListener
   {
     private const DEFAULT_VOLUME : Number = .8
-    private const connection : NetConnection = new NetConnection
-    private const listeners : SequenceContainer = new ArraySequenceContainer
+    private const listeners : SequenceContainer
+      = new ArraySequenceContainer
     private const timer : Timer = new Timer(30)
  
     private var metadata : RTMPStreamMetadata
+    private var connection : FlashNetConnection
 
-    private var stream : NetStream = null
+    private var stream : FlashNetStream = null
     private var hotMetadata : Object = null
-    private var _paused : Boolean = false
-    private var streaming : Boolean = false
 
-    public function RTMPStreamPlayer(metadata : RTMPStreamMetadata)
+    private var _volume : Number = DEFAULT_VOLUME
+    private var _paused : Boolean = false
+
+    public function RTMPStreamPlayer
+      (metadata : RTMPStreamMetadata,
+       connection : FlashNetConnection)
     {
       this.metadata = metadata
+      this.connection = connection
 
-      connection.addEventListener
-        (NetStatusEvent.NET_STATUS, handleNetConnectionStatus)
-      connection.addEventListener
-        (AsyncErrorEvent.ASYNC_ERROR, handleAsyncError)
-      connection.client = {}
-      
+      connection.listener = this
+
       timer.addEventListener(TimerEvent.TIMER, withoutArguments(update))
       timer.start()
     }
@@ -59,53 +56,51 @@ package goplayer
         { debug("Failed to connect: " + error.message) }
     }
 
-    private function handleNetConnectionStatus
-      (event : NetStatusEvent) : void
+    public function handleNetConnectionStatus(code : String) : void
     {
-      if (event.info.code == "NetConnection.Connect.Success")
+      if (code == "NetConnection.Connect.Success")
         handleConnectionSuccessful()
-      else if (event.info.code == "NetConnection.Connect.Closed")
+      else if (code == "NetConnection.Connect.Closed")
         debug("Connection closed.")
-      else if (event.info.code == "NetConnection.Connect.NetworkChange")
+      else if (code == "NetConnection.Connect.NetworkChange")
         debug("Detected change in network conditions.")
-      else if (event.info.code == "NetConnection.Connect.IdleTimeOut")
+      else if (code == "NetConnection.Connect.IdleTimeOut")
         debug("Closing idle connection.")
       else
-        debug("Net connection status: " + event.info.code)
+        debug("Net connection status: " + code)
     }
 
     private function handleConnectionSuccessful() : void
     {
-      stream = new NetStream(connection)
-      stream.addEventListener
-        (NetStatusEvent.NET_STATUS, handleNetStreamStatus)
-      stream.addEventListener
-        (AsyncErrorEvent.ASYNC_ERROR, handleAsyncError)
-      stream.client = { onMetaData: handleNetStreamMetadata }
+      stream = connection.getNetStream()
+      stream.listener = this
 
-      volume = DEFAULT_VOLUME
+      stream.bufferTime = Duration.seconds(5)
+      stream.volume = volume
 
-      stream.bufferTime = 5
       stream.play(metadata.name)
+
+      if (paused)
+        stream.paused = true
 
       for each (var listener : RTMPStreamPlayerListener in listeners)
         listener.handleRTMPStreamCreated()
     }
 
     public function attachVideo(video : Video) : void
-    { video.attachNetStream(stream) }
+    { stream.attachVideo(video) }
 
-    private function handleNetStreamMetadata(data : Object) : void
+    public function handleNetStreamMetadata(data : Object) : void
     { hotMetadata = data }
 
-    private function handleAsyncError(event : AsyncErrorEvent) : void
-    { debug("Asynchronuous error: " + event.error.message) }
+    public function handleNetConnectionAsyncError(message : String) : void
+    { debug("Asynchronuous connection error: " + message) }
 
-    private function handleNetStreamStatus
-      (event : NetStatusEvent) : void
+    public function handleNetStreamAsyncError(message : String) : void
+    { debug("Asynchronuous stream error: " + message) }
+
+    public function handleNetStreamStatus(code : String) : void
     {
-      const code : String = event.info.code
-
       if (code == "NetStream.Play.Reset")
         {}
       else if (code == "NetStream.Play.Start")
@@ -158,89 +153,71 @@ package goplayer
     }
 
     private function get finishedPlaying() : Boolean
-    { return timeRemaining < 1 }
+    { return timeRemaining.seconds < 1 }
 
-    private function get timeRemaining() : Number
-    { return streamLength - playheadPosition }
+    private function get timeRemaining() : Duration
+    { return streamLength.minus(playheadPosition) }
 
-    public function pause() : void
-    { paused = true }
-
-    public function resume() : void
-    { paused = false }
-
-    public function togglePaused() : void
-    { paused = !paused }
+    // -----------------------------------------------------
 
     public function get paused() : Boolean
     { return _paused }
 
     public function set paused(value : Boolean) : void
     {
-      if (!stream)
-        return
+      _paused = value
 
-      if (value)
-        stream.pause(), _paused = true
-      else
-        stream.resume(), _paused = false
+      if (stream)
+        stream.paused = value
     }
 
-    public function seek(delta : Number) : void
-    { stream.seek(playheadPosition + delta) }
-
-    public function seekTo(position : Number) : void
-    { stream.seek(position) }
-
-    public function rewind() : void
-    { seekTo(0) }
-
-    public function changeVolume(delta : Number) : void
-    { volume = volume + delta }
-
-    public function set volume(value : Number) : void
-    {
-      try
-        { stream.soundTransform = getSoundTransform(value) }
-      catch (error : Error)
-        {}
-    }
-
-    private function getSoundTransform(volume : Number) : SoundTransform
-    {
-      const result : SoundTransform = new SoundTransform
-
-      result.volume = clamp(volume, 0, 1)
-
-      return result
-    }
+    public function togglePaused() : void
+    { paused = !paused }
 
     // -----------------------------------------------------
 
-    public function get playheadPosition() : Number
-    { return stream ? stream.time : 0 }
+    public function get playheadPosition() : Duration
+    { return stream ? stream.playheadPosition : Duration.ZERO }
 
-    public function get bufferTime() : Number
-    { return stream ? stream.bufferTime : 0 }
+    public function set playheadPosition(value : Duration) : void
+    { stream.playheadPosition = value }
 
-    public function get bufferLength() : Number
-    { return stream ? stream.bufferLength : 0 }
+    public function seekBy(delta : Duration) : void
+    { playheadPosition = playheadPosition.plus(delta) }
+
+    public function rewind() : void
+    { playheadPosition = Duration.ZERO }
+
+    // -----------------------------------------------------
 
     public function get volume() : Number
-    { return stream ? $volume : DEFAULT_VOLUME }
+    { return _volume }
 
-    private function get $volume() : Number
+    public function set volume(value : Number) : void
     {
-      try
-        { return stream.soundTransform.volume }
-      catch (error : Error)
-        { return DEFAULT_VOLUME }
+      _volume = value
 
-      throw new Error
+      if (stream)
+        stream.volume = value
     }
 
-    public function get streamLength() : Number
-    { return hotMetadata ? hotMetadata.duration : metadata.duration }
+    public function changeVolumeBy(delta : Number) : void
+    { volume = volume + delta }
+
+    // -----------------------------------------------------
+
+    public function get bufferTime() : Duration
+    { return stream ? stream.bufferTime : Duration.ZERO }
+
+    public function get bufferLength() : Duration
+    { return stream ? stream.bufferLength : Duration.ZERO }
+
+    public function get streamLength() : Duration
+    {
+      return hotMetadata
+        ? Duration.seconds(hotMetadata.duration)
+        : metadata.duration
+    }
 
     public function get dimensions() : Dimensions
     {

@@ -2,10 +2,10 @@ package goplayer
 {
   public interface RTMPStreamMetadata
   {
-    function get url() : String
+    function get url() : URL
     function get name() : String
     function get dimensions() : Dimensions
-    function get duration() : Number
+    function get duration() : Duration
 
     function dump() : void
   }

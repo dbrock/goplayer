@@ -43,7 +43,7 @@ package goplayer
     {
       video.width = player.dimensions.width
       video.height = player.dimensions.height
-      video.visible = player.playheadPosition > 0.1
+      video.visible = player.playheadPosition.seconds > 0.1
 
       statusbar.update()
 

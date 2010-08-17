@@ -8,6 +8,6 @@ package goplayer
     public function get size() : uint { return 0 }
 
     override protected function populate() : void
-    {}
+    { add(URLSpecification) }
   }
 }
