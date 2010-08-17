@@ -103,7 +103,7 @@ package goplayer
       debug("Playing last RTMP stream.")
 
       // XXX: Select stream intelligently.
-      playRTMPStream(metadata.rtmpStreams.last)
+      playRTMPStream(metadata.rtmpStreams[metadata.rtmpStreams.length - 1])
 
       doubleClickEnabled = true
     }

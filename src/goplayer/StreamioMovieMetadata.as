@@ -1,7 +1,5 @@
 package goplayer
 {
-  import org.asspec.util.sequences.Sequence
-
   public class StreamioMovieMetadata implements MovieMetadata
   {
     private var json : Object
@@ -15,13 +13,14 @@ package goplayer
     public function get duration() : Duration
     { return Duration.seconds(json.duration) }
 
-    public function get rtmpStreams() : Sequence
+    public function get rtmpStreams() : Array
     {
-      const self : StreamioMovieMetadata = this
+      const result : Array = []
 
-      return Sequence.fromArray(json.transcodings).map(
-        function (transcoding : Object) : Object
-        { return new StreamioRTMPStreamMetadata(transcoding, self) })
+      for each (var transcoding : Object in json.transcodings)
+        result.push(new StreamioRTMPStreamMetadata(transcoding, this))
+
+      return result
     }
 
     public function dump() : void
