@@ -19,8 +19,7 @@ package goplayer
 
     public function execute() : void
     {
-      loader.addEventListener
-        (Event.COMPLETE, handleContentLoaded)
+      loader.addEventListener(Event.COMPLETE, handleContentLoaded)
       loader.load(new URLRequest(url))
     }
     

@@ -68,6 +68,8 @@ package goplayer
         debug("Connection closed.")
       else if (event.info.code == "NetConnection.Connect.NetworkChange")
         debug("Detected change in network conditions.")
+      else if (event.info.code == "NetConnection.Connect.IdleTimeOut")
+        debug("Closing idle connection.")
       else
         debug("Net connection status: " + event.info.code)
     }
@@ -225,7 +227,17 @@ package goplayer
     { return stream ? stream.bufferLength : 0 }
 
     public function get volume() : Number
-    { return stream ? stream.soundTransform.volume : DEFAULT_VOLUME }
+    { return stream ? $volume : DEFAULT_VOLUME }
+
+    private function get $volume() : Number
+    {
+      try
+        { return stream.soundTransform.volume }
+      catch (error : Error)
+        { return DEFAULT_VOLUME }
+
+      throw new Error
+    }
 
     public function get streamLength() : Number
     { return hotMetadata ? hotMetadata.duration : metadata.duration }

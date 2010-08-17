@@ -32,7 +32,7 @@ package goplayer
       this.movieID = movieID
       this.autoplay = autoplay
       this.loop = loop
-
+      
       drawBackground()
       
       addEventListener(MouseEvent.CLICK, handleClick)
