@@ -10,6 +10,7 @@ package goplayer
 
     private var _listener : RTMPStreamPlayerListener = null
 
+    private var connector : RTMPConnector = null
     private var stream : FlashNetStream = null
     private var hotMetadata : Object = null
 
@@ -29,29 +30,27 @@ package goplayer
     public function set listener(value : RTMPStreamPlayerListener) : void
     { _listener = value }
 
+    // -----------------------------------------------------
+
     public function start() : void
     {
-      try
-        { connection.connect(metadata.url) }
-      catch (error : Error)
-        { debug("Failed to connect: " + error.message) }
+      connector = new RTMPConnector(connection, metadata.url)
+      connector.tryNextPort()
     }
 
-    public function handleNetConnectionStatus(code : String) : void
+    public function handleNetConnectionFailed() : void
     {
-      if (code == "NetConnection.Connect.Success")
-        handleConnectionSuccessful()
-      else if (code == "NetConnection.Connect.Closed")
-        debug("Connection closed.")
-      else if (code == "NetConnection.Connect.NetworkChange")
-        debug("Detected change in network conditions.")
-      else if (code == "NetConnection.Connect.IdleTimeOut")
-        debug("Closing idle connection.")
+      debug("Connection failed.")
+
+      if (connector.hasMoreIdeas)
+        connector.tryNextPort()
       else
-        debug("Net connection status: " + code)
+        debug("Tried all alternative ports; giving up.")
     }
 
-    private function handleConnectionSuccessful() : void
+    // -----------------------------------------------------
+
+    public function handleNetConnectionEstablished() : void
     {
       stream = connection.getNetStream()
       stream.listener = this
@@ -65,11 +64,11 @@ package goplayer
         stream.paused = true
     }
 
+    public function handleNetConnectionClosed() : void
+    { debug("Connection closed.") }
+
     public function handleNetStreamMetadata(data : Object) : void
     { hotMetadata = data }
-
-    public function handleNetConnectionAsyncError(message : String) : void
-    { debug("Asynchronuous connection error: " + message) }
 
     public function handleNetStreamAsyncError(message : String) : void
     { debug("Asynchronuous stream error: " + message) }

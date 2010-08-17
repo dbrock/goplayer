@@ -5,7 +5,5 @@ package goplayer
     function get title() : String
     function get rtmpStreams() : Array
     function get duration() : Duration
-
-    function dump() : void
   }
 }

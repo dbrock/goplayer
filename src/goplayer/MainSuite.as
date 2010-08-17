@@ -5,9 +5,12 @@ package goplayer
 
   public class MainSuite extends AbstractSuite implements SizedTest
   {
-    public function get size() : uint { return 0 }
+    public function get size() : uint { return 4 }
 
     override protected function populate() : void
-    { add(URLSpecification) }
+    {
+      add(URLSpecification)
+      add(RTMPStreamPlayerSpecification)
+    }
   }
 }
