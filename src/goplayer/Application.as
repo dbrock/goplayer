@@ -2,9 +2,10 @@ package goplayer
 {
   import flash.display.Sprite
   import flash.display.StageDisplayState
-  import flash.events.MouseEvent
   import flash.events.KeyboardEvent
+  import flash.events.MouseEvent
   import flash.external.ExternalInterface
+  import flash.media.Video
   import flash.ui.Keyboard
 
   public class Application extends Sprite
@@ -111,10 +112,14 @@ package goplayer
 
     private function playRTMPStream(metadata : RTMPStreamMetadata) : void
     {
-      player = new RTMPStreamPlayer(metadata, new StandardFlashNetConnection)
+      const video : Video = new Video
+      const connection : FlashNetConnection
+        = new StandardFlashNetConnection(video)
+
+      player = new RTMPStreamPlayer(metadata, connection)
       player.addListener(this)
 
-      addChild(new RTMPStreamPlayerView(player))
+      addChild(new RTMPStreamPlayerView(player, video))
 
       player.start()
     }

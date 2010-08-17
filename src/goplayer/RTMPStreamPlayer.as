@@ -87,9 +87,6 @@ package goplayer
         listener.handleRTMPStreamCreated()
     }
 
-    public function attachVideo(video : Video) : void
-    { stream.attachVideo(video) }
-
     public function handleNetStreamMetadata(data : Object) : void
     { hotMetadata = data }
 

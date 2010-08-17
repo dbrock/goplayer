@@ -14,9 +14,11 @@ package goplayer
     private var _listener : FlashNetStreamListener
 
     public function StandardFlashNetStream
-      (connection : NetConnection)
+      (connection : NetConnection, video : Video)
     {
       stream = new NetStream(connection)
+
+      video.attachNetStream(stream)
 
       stream.addEventListener
         (NetStatusEvent.NET_STATUS, handleNetStreamStatus)
@@ -39,9 +41,6 @@ package goplayer
 
     public function set listener(value : FlashNetStreamListener) : void
     { _listener = value }
-
-    public function attachVideo(video : Video) : void
-    { video.attachNetStream(stream) }
 
     public function play(name : String) : void
     { stream.play(name) }

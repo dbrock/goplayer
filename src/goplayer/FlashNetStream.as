@@ -6,7 +6,6 @@ package goplayer
   {
     function set listener(value : FlashNetStreamListener) : void
 
-    function attachVideo(video : Video) : void
     function play(name : String) : void
 
     function set paused(value : Boolean) : void

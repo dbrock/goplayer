@@ -8,14 +8,16 @@ package goplayer
   public class RTMPStreamPlayerView extends Sprite
     implements RTMPStreamPlayerListener
   {
-    private const video : Video = new Video
-
     private var player : RTMPStreamPlayer
+    private var video : Video
+
     private var statusbar : RTMPStreamStatusbar
 
-    public function RTMPStreamPlayerView(player : RTMPStreamPlayer)
+    public function RTMPStreamPlayerView
+      (player : RTMPStreamPlayer, video : Video)
     {
       this.player = player
+      this.video = video
 
       player.addListener(this)
 
@@ -31,7 +33,7 @@ package goplayer
     }
 
     public function handleRTMPStreamCreated() : void
-    { player.attachVideo(video) }
+    {}
 
     public function handleRTMPStreamUpdated() : void
     { update() }

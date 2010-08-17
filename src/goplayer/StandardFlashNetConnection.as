@@ -2,6 +2,7 @@ package goplayer
 {
   import flash.events.AsyncErrorEvent
   import flash.events.NetStatusEvent
+  import flash.media.Video
   import flash.net.NetConnection
   import flash.net.NetStream
 
@@ -9,10 +10,14 @@ package goplayer
   {
     private const connection : NetConnection = new NetConnection
 
+    private var video : Video
+
     private var _listener : FlashNetConnectionListener
 
-    public function StandardFlashNetConnection()
+    public function StandardFlashNetConnection(video : Video)
     {
+      this.video = video
+
       connection.addEventListener
         (NetStatusEvent.NET_STATUS, handleNetConnectionStatus)
       connection.addEventListener
@@ -27,7 +32,7 @@ package goplayer
     { connection.connect(url.toString()) }
 
     public function getNetStream() : FlashNetStream
-    { return new StandardFlashNetStream(connection) }
+    { return new StandardFlashNetStream(connection, video) }
 
     private function handleNetConnectionStatus(event : NetStatusEvent) : void
     { _listener.handleNetConnectionStatus(event.info.code) }
