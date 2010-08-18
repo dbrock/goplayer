@@ -36,10 +36,12 @@ package goplayer
     {
       const code : String = event.info.code
 
-      if (code == STREAMING_STOPPED)
-        _listener.handleStreamingStopped()
+      if (code == BUFFER_FILLED)
+        _listener.handleBufferFilled()
       else if (code == BUFFER_EMPTIED)
         _listener.handleBufferEmptied()
+      else if (code == STREAMING_STOPPED)
+        _listener.handleStreamingStopped()
 
       if (code == STREAMING_STARTED)
         debug("Data streaming started; filling buffer.")
@@ -55,8 +57,22 @@ package goplayer
         debug("Playback resumed.")
       else if (code == SEEKED)
         debug("Seeking complete.")
+      else if (code == SWITCHED_STREAM)
+        debug("Switched to " + bitrate + " stream.")
+      else if (code == BUFFER_FLUSH || code == PLAYLIST_RESET)
+        null
       else
         debug("Net stream status: " + code)
+    }
+
+    private function inspect(object : Object) : String
+    {
+      var entries : Array = []
+
+      for (var name : String in object)
+        entries.push(name + ": " + object[name])
+
+      return "{ " + entries.join(", ") + " }"
     }
 
     private function handleAsyncError(event : AsyncErrorEvent) : void
@@ -98,6 +114,12 @@ package goplayer
     public function set playheadPosition(position : Duration) : void
     { stream.seek(position.seconds) }
 
+    public function get bandwidth() : Bitrate
+    { return Bitrate.kbps(stream.maxBandwidth) }
+
+    public function get bitrate() : Bitrate
+    { return Bitrate.kbps(stream.currentStreamBitRate) }
+
     public function get bufferLength() : Duration
     { return Duration.seconds(stream.bufferLength) }
 
@@ -105,7 +127,10 @@ package goplayer
     { return Duration.seconds(stream.bufferTime) }
 
     public function set bufferTime(value : Duration) : void
-    { stream.bufferTime = value.seconds }
+    {
+      debug("Setting buffer size to " + value + ".")
+      stream.bufferTime = value.seconds
+    }
 
     public function get volume() : Number
     {
@@ -134,6 +159,8 @@ package goplayer
       return result
     }
 
+    private static const PLAYLIST_RESET : String
+      = "NetStream.Play.Reset"
     private static const STREAMING_STARTED : String
       = "NetStream.Play.Start"
     private static const STREAMING_STOPPED : String
@@ -142,11 +169,15 @@ package goplayer
       = "NetStream.Buffer.Full"
     private static const BUFFER_EMPTIED : String
       = "NetStream.Buffer.Empty"
+    private static const BUFFER_FLUSH : String
+      = "NetStream.Buffer.Flush"
     private static const PAUSED : String
       = "NetStream.Pause.Notify"
     private static const RESUMED : String
       = "NetStream.Unpause.Notify"
     private static const SEEKED : String
       = "NetStream.Seek.Notify"
+    private static const SWITCHED_STREAM  : String
+      = "NetStream.Play.Transition"
   }
 }

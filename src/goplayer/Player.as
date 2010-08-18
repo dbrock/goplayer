@@ -5,6 +5,10 @@ package goplayer
   {
     private const DEFAULT_VOLUME : Number = .8
 
+    private const START_BUFFER : Duration = Duration.seconds(.1)
+    private const SMALL_BUFFER : Duration = Duration.seconds(3)
+    private const LARGE_BUFFER : Duration = Duration.seconds(60)
+
     private var _movie : Movie
     private var connection : FlashNetConnection
 
@@ -59,7 +63,7 @@ package goplayer
       stream = connection.getNetStream()
       stream.listener = this
 
-      stream.bufferTime = Duration.seconds(5)
+      stream.bufferTime = START_BUFFER
       stream.volume = volume
 
       stream.play(movie.rtmpStreams)
@@ -71,13 +75,24 @@ package goplayer
     public function handleNetStreamMetadata(data : Object) : void
     { metadata = data }
 
-    public function handleStreamingStopped() : void
-    { handleMaybeFinishedPlaying() }
+    public function handleBufferFilled() : void
+    { useLargeBuffer() }
 
     public function handleBufferEmptied() : void
-    { handleMaybeFinishedPlaying() }
+    {
+      if (finishedPlaying)
+        handleFinishedPlaying()
+      else
+        useSmallBuffer()
+    }
 
-    private function handleMaybeFinishedPlaying() : void
+    private function useSmallBuffer() : void
+    { stream.bufferTime = SMALL_BUFFER }
+
+    private function useLargeBuffer() : void
+    { stream.bufferTime = LARGE_BUFFER }
+
+    public function handleStreamingStopped() : void
     {
       if (finishedPlaying)
         handleFinishedPlaying()
@@ -157,6 +172,23 @@ package goplayer
       return metadata
         ? Duration.seconds(metadata.duration)
         : movie.duration
+    }
+
+    public function get bitrate() : Bitrate
+    { return stream ? stream.bitrate : Bitrate.ZERO }
+
+    public function get bandwidth() : Bitrate
+    { return stream ? stream.bandwidth : Bitrate.ZERO }
+
+    public function get highQualityDimensions() : Dimensions
+    {
+      var result : Dimensions = Dimensions.ZERO
+
+      for each (var stream : RTMPStream in movie.rtmpStreams)
+        if (stream.dimensions.isGreaterThan(result))
+          result = stream.dimensions
+
+      return result
     }
   }
 }

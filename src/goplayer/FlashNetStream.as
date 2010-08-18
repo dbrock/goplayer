@@ -13,6 +13,9 @@ package goplayer
     function get playheadPosition() : Duration
     function set playheadPosition(value : Duration) : void
 
+    function get bitrate() : Bitrate
+    function get bandwidth() : Bitrate
+
     function get bufferLength() : Duration
 
     function get bufferTime() : Duration

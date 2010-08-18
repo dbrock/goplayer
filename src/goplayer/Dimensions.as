@@ -41,6 +41,9 @@ package goplayer
         return new Dimensions(height * innerAspectRatio, height)
     }
 
+    public function isGreaterThan(other : Dimensions) : Boolean
+    { return width > other.width && height > other.height }
+
     public function toString() : String
     { return width + "×" + height }
 

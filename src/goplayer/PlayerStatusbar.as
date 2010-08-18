@@ -31,6 +31,10 @@ package goplayer
         + player.bufferLength + "/"
         + player.bufferTime
         + "  "
+        + "Bitrate: "
+        + player.bandwidth + "/"
+        + player.bitrate
+        + "  "
         + "Volume: " + Math.round(player.volume * 100) + "%"
 
       redraw()

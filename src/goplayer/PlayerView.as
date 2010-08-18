@@ -1,6 +1,8 @@
 package goplayer
 {
   import flash.display.Sprite
+  import flash.events.Event
+  import flash.events.FullScreenEvent
   import flash.events.TimerEvent
   import flash.geom.Point
   import flash.geom.Rectangle
@@ -20,6 +22,7 @@ package goplayer
     private var statusbar : PlayerStatusbar
 
     private var _dimensions : Dimensions = Dimensions.ZERO
+    private var fullscreen : Boolean = false
 
     public function PlayerView
       (player : Player, video : Video)
@@ -43,14 +46,25 @@ package goplayer
       timer.addEventListener(TimerEvent.TIMER, handleTimerEvent)
       timer.start()
 
+      addEventListener(Event.ADDED_TO_STAGE, handleAddedToStage)
+
       update()
     }
+
+    private function handleAddedToStage(event : Event) : void
+    {
+      stage.addEventListener
+        (FullScreenEvent.FULL_SCREEN, handleFullScreenEvent)
+    }
+
+    public function set dimensions(value : Dimensions) : void
+    { _dimensions = value }
 
     private function handleTimerEvent(event : TimerEvent) : void
     { update() }
 
-    public function set dimensions(value : Dimensions) : void
-    { _dimensions = value }
+    private function handleFullScreenEvent(event : FullScreenEvent) : void
+    { fullscreen = event.fullScreen, update() }
 
     public function update() : void
     {
@@ -76,10 +90,18 @@ package goplayer
     }
 
     private function get videoPosition() : Position
-    { return _dimensions.minus(videoDimensions).halved.asPosition }
+    {
+      return fullscreen
+        ? Position.ZERO
+        : _dimensions.minus(videoDimensions).halved.asPosition
+    }
 
     private function get videoDimensions() : Dimensions
-    { return _dimensions.getInnerDimensions(player.aspectRatio) }
+    {
+      return fullscreen
+        ? player.highQualityDimensions
+        : _dimensions.getInnerDimensions(player.aspectRatio)
+    }
 
     private function get videoVisible() : Boolean
     { return player.playheadPosition.seconds > 0.1 }
