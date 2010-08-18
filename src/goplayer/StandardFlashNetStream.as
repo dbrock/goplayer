@@ -65,16 +65,6 @@ package goplayer
         _listener.handleStreamingStopped()
     }
 
-    private function inspect(object : Object) : String
-    {
-      var entries : Array = []
-
-      for (var name : String in object)
-        entries.push(name + ": " + object[name])
-
-      return "{ " + entries.join(", ") + " }"
-    }
-
     private function handleAsyncError(event : AsyncErrorEvent) : void
     { debug("Asynchronuous stream error: " + event.error.message) }
 

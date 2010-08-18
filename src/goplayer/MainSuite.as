@@ -5,13 +5,12 @@ package goplayer
 
   public class MainSuite extends AbstractSuite implements SizedTest
   {
-    public function get size() : uint { return 10 }
+    public function get size() : uint { return 6 }
 
     override protected function populate() : void
     {
       add(DimensionsSpecification)
       add(URLSpecification)
-      add(PlayerSpecification)
     }
   }
 }

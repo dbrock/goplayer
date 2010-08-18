@@ -37,7 +37,10 @@ package goplayer
       try
         { connection.connect(url.toString()) }
       catch (error : Error)
-        { _listener.handleConnectionFailed() }
+        {
+          debug("Connection failed: " + error.message)
+          _listener.handleConnectionFailed()
+        }
     }
 
     public function getNetStream() : FlashNetStream
@@ -67,7 +70,11 @@ package goplayer
       if (code == CONNECTION_ESTABLISHED)
         _listener.handleConnectionEstablished()
       else if (code == CONNECTION_FAILED)
-        _listener.handleConnectionFailed()
+        // When the connection fails, the listener is likely to make
+        // another attempt at connecting.  But NetConnection.connect
+        // cannot be called from within this event handler, so we
+        // prevent that from happening by trampolining here.
+        later(_listener.handleConnectionFailed)
       else if (code == CONNECTION_CLOSED)
         _listener.handleConnectionClosed()
     }

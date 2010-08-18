@@ -18,18 +18,27 @@ package goplayer
       this.path = path
     }
 
+    public function withScheme(newScheme : String) : URL
+    { return new URL(newScheme, host, port, path) }
+
+    public function get hasPort() : Boolean
+    { return port >= 0 }
+
     public function withPort(newPort : int) : URL
     { return new URL(scheme, host, newPort, path) }
+
+    public function get withoutPort() : URL
+    { return new URL(scheme, host, -1, path) }
 
     public function get asURLRequest() : URLRequest
     { return new URLRequest(toString()) }
 
     public function toString() : String
     {
-      if (port < 0)
-        return scheme + "://" + host + path
-      else
+      if (hasPort)
         return scheme + "://" + host + ":" + port + path
+      else
+        return scheme + "://" + host + path
     }
 
     public static function parse(input : String) : URL

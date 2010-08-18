@@ -8,7 +8,7 @@ package goplayer
     { this.json = json }
 
     public function get url() : URL
-    { return URL.parse("rtmp://" + json.rtmp_base_uri) }
+    { return URL.parse("rtmp://" + json.rtmp_base_uri).withPort(443) }
 
     public function get name() : String
     { return json.rtmp_stream_uri }

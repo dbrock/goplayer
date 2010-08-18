@@ -15,7 +15,7 @@ package goplayer
     private var _movie : Movie
     private var connection : FlashNetConnection
 
-    private var connector : RTMPConnector = null
+    private var triedConnectingUsingDefaultPorts : Boolean = false
     private var stream : FlashNetStream = null
     private var metadata : Object = null
 
@@ -44,17 +44,22 @@ package goplayer
     // -----------------------------------------------------
 
     public function start() : void
-    {
-      connector = new RTMPConnector(connection, movie.rtmpURL)
-      connector.tryNextPort()
-    }
+    { connection.connect(movie.rtmpURL) }
 
     public function handleConnectionFailed() : void
     {
-      if (connector.hasMoreIdeas)
-        connector.tryNextPort()
+      if (movie.rtmpURL.hasPort && !triedConnectingUsingDefaultPorts)
+        connectUsingDefaultPorts()
       else
-        debug("Tried all alternative ports; giving up.")
+        debug("Could not connect using RTMP; giving up.")
+    }
+
+    private function connectUsingDefaultPorts() : void
+    {
+      debug("Trying to connect using default RTMP ports.")
+
+      triedConnectingUsingDefaultPorts = true
+      connection.connect(movie.rtmpURL.withoutPort)
     }
 
     public function handleConnectionClosed() : void
