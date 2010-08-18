@@ -87,8 +87,10 @@ package goplayer
 
     private function handleBufferingFinished() : void
     {
-      useLargeBuffer()
       _buffering = false
+
+      // Make sure to let playback resume first.
+      later(useLargeBuffer)
     }
 
     public function handleBufferEmptied() : void
@@ -104,6 +106,9 @@ package goplayer
       useSmallBuffer()
       _buffering = true
     }
+
+    private function useStartBuffer() : void
+    { stream.bufferTime = START_BUFFER }
 
     private function useSmallBuffer() : void
     { stream.bufferTime = SMALL_BUFFER }
@@ -156,7 +161,10 @@ package goplayer
     { return stream ? stream.playheadPosition : Duration.ZERO }
 
     public function set playheadPosition(value : Duration) : void
-    { stream.playheadPosition = value }
+    {
+      useStartBuffer()
+      stream.playheadPosition = value
+    }
 
     public function seekBy(delta : Duration) : void
     { playheadPosition = playheadPosition.plus(delta) }
