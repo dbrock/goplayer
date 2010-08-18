@@ -9,8 +9,10 @@ package goplayer
   public class Application extends Sprite
     implements MovieHandler, PlayerListener
   {
+    private const api : StreamioAPI
+      = new StreamioAPI(new StandardHTTPFetcher)
+
     private var dimensions : Dimensions
-    private var api : StreamioAPI
     private var movieID : String
     private var autoplay : Boolean
     private var loop : Boolean
@@ -21,13 +23,11 @@ package goplayer
 
     public function Application
       (dimensions : Dimensions,
-       api : StreamioAPI,
        movieID : String,
        autoplay : Boolean,
        loop : Boolean)
     {
       this.dimensions = dimensions
-      this.api = api
       this.movieID = movieID
       this.autoplay = autoplay
       this.loop = loop
@@ -95,7 +95,7 @@ package goplayer
       if (autoplay)
         play()
       else
-        ready = true, debug("Click to start playback.")
+        ready = true, debug("Click movie to start playback.")
     }
 
     private function play() : void
