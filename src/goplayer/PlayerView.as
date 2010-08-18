@@ -11,10 +11,15 @@ package goplayer
   import flash.utils.Timer
 
   public class PlayerView extends Sprite
+    implements PlayerBufferingListener
   {
     private const timer : Timer = new Timer(30)
     private const screenshot : ExternalImage = new ExternalImage
     private const videoContainer : Sprite = new Sprite
+    private const bufferingBackground : Background
+      = new Background(0x000000, 0.5)
+    private const bufferingIndicator : BufferingIndicator
+      = new BufferingIndicator
 
     private var player : Player
     private var video : Video
@@ -30,15 +35,22 @@ package goplayer
       this.player = player
       this.video = video
 
+      player.addBufferingListener(this)
+
       statusbar = new PlayerStatusbar(player)
 
-      screenshot.url = player.movie.imageURL
+      bufferingBackground.visible = false
+      bufferingIndicator.visible = false
 
       videoContainer.addChild(screenshot)
       videoContainer.addChild(video)
+      videoContainer.addChild(bufferingBackground)
+      videoContainer.addChild(bufferingIndicator)
       videoContainer.addChild(statusbar)
 
       addChild(videoContainer)
+
+      screenshot.url = player.movie.imageURL
 
       mouseEnabled = false
       mouseChildren = false
@@ -66,6 +78,18 @@ package goplayer
     private function handleFullScreenEvent(event : FullScreenEvent) : void
     { fullscreen = event.fullScreen, update() }
 
+    public function handleBufferingStarted() : void
+    {
+      bufferingBackground.visible = true
+      bufferingIndicator.visible = true
+    }
+
+    public function handleBufferingFinished() : void
+    {
+      bufferingBackground.visible = false
+      bufferingIndicator.visible = false
+    }
+
     public function update() : void
     {
       videoContainer.x = videoPosition.x
@@ -84,6 +108,15 @@ package goplayer
 
       statusbar.x = video.x + video.width - statusbar.width
       statusbar.y = video.y + video.height - statusbar.height
+
+      bufferingBackground.dimensions = videoDimensions
+
+      bufferingIndicator.x = videoDimensions.width / 2
+      bufferingIndicator.y = videoDimensions.height / 2
+
+      bufferingIndicator.size = videoDimensions.innerSquare.width / 3
+      bufferingIndicator.ratio = player.bufferFillRatio
+      bufferingIndicator.update()
 
       if (stage)
         stage.fullScreenSourceRect = fullScreenSourceRect

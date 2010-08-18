@@ -7,7 +7,7 @@ package goplayer
   import flash.ui.Keyboard
 
   public class Application extends Sprite
-    implements MovieHandler, PlayerListener
+    implements MovieHandler, PlayerFinishingListener
   {
     private const api : StreamioAPI
       = new StreamioAPI(new StandardHTTPFetcher)
@@ -95,7 +95,7 @@ package goplayer
       const kit : PlayerKit = new PlayerKit(movie)
 
       player = kit.player
-      player.listener = this
+      player.addFinishingListener(this)
 
       kit.view.dimensions = dimensions
 

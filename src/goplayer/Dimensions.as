@@ -32,6 +32,9 @@ package goplayer
     public function get aspectRatio() : Number
     { return width / height }
 
+    public function get innerSquare() : Dimensions
+    { return Dimensions.square(Math.min(width, height)) }
+
     public function getInnerDimensions
       (innerAspectRatio : Number) : Dimensions
     {
@@ -46,6 +49,9 @@ package goplayer
 
     public function toString() : String
     { return width + "×" + height }
+
+    public static function square(size : Number) : Dimensions
+    { return new Dimensions(size, size) }
 
     public static const ZERO : Dimensions = new Dimensions(0, 0)
   }

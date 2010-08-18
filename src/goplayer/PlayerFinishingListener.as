@@ -1,5 +1,5 @@
 package goplayer
 {
-  public interface PlayerListener
+  public interface PlayerFinishingListener
   { function handleMovieFinishedPlaying() : void }
 }

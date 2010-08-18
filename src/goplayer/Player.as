@@ -9,10 +9,11 @@ package goplayer
     private const SMALL_BUFFER : Duration = Duration.seconds(3)
     private const LARGE_BUFFER : Duration = Duration.seconds(60)
 
+    private const finishingListeners : Array = []
+    private const bufferingListeners : Array = []
+
     private var _movie : Movie
     private var connection : FlashNetConnection
-
-    private var _listener : PlayerListener = null
 
     private var connector : RTMPConnector = null
     private var stream : FlashNetStream = null
@@ -22,20 +23,23 @@ package goplayer
     private var _paused : Boolean = false
 
     public function Player
-      (movie : Movie,
-       connection : FlashNetConnection)
+      (movie : Movie, connection : FlashNetConnection)
     {
-      _movie = movie
-      this.connection = connection
+      _movie = movie, this.connection = connection
 
       connection.listener = this
     }
 
-    public function set listener(value : PlayerListener) : void
-    { _listener = value }
-
     public function get movie() : Movie
     { return _movie }
+
+    public function addFinishingListener
+      (value : PlayerFinishingListener) : void
+    { finishingListeners.push(value) }
+
+    public function addBufferingListener
+      (value : PlayerBufferingListener) : void
+    { bufferingListeners.push(value) }
 
     // -----------------------------------------------------
 
@@ -68,6 +72,8 @@ package goplayer
 
       stream.play(movie.rtmpStreams)
 
+      notifyBufferingStarted()
+
       if (paused)
         stream.paused = true
     }
@@ -76,14 +82,38 @@ package goplayer
     { metadata = data }
 
     public function handleBufferFilled() : void
-    { useLargeBuffer() }
+    { handleBufferingFinished() }
+
+    private function handleBufferingFinished() : void
+    {
+      useLargeBuffer()
+      notifyBufferingFinished()
+    }
+
+    private function notifyBufferingFinished() : void
+    {
+      for each (var listener : PlayerBufferingListener in bufferingListeners)
+        listener.handleBufferingFinished()
+    }
 
     public function handleBufferEmptied() : void
     {
       if (finishedPlaying)
         handleFinishedPlaying()
       else
-        useSmallBuffer()
+        handleBufferingStarted()
+    }
+
+    private function handleBufferingStarted() : void
+    {
+      useSmallBuffer()
+      notifyBufferingStarted()
+    }
+
+    private function notifyBufferingStarted() : void
+    {
+      for each (var listener : PlayerBufferingListener in bufferingListeners)
+        listener.handleBufferingStarted()
     }
 
     private function useSmallBuffer() : void
@@ -101,7 +131,9 @@ package goplayer
     private function handleFinishedPlaying() : void
     {
       debug("Finished playing.")
-      _listener.handleMovieFinishedPlaying()
+
+      for each (var listener : PlayerFinishingListener in finishingListeners)
+        listener.handleMovieFinishedPlaying()
     }
 
     private function get finishedPlaying() : Boolean
@@ -166,6 +198,9 @@ package goplayer
 
     public function get bufferLength() : Duration
     { return stream ? stream.bufferLength : Duration.ZERO }
+
+    public function get bufferFillRatio() : Number
+    { return Math.min(1, bufferLength.seconds / bufferTime.seconds) }
 
     public function get streamLength() : Duration
     {
