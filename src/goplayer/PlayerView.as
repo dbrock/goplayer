@@ -1,21 +1,17 @@
 package goplayer
 {
-  import flash.display.Bitmap
-  import flash.display.Loader
   import flash.display.Sprite
-  import flash.events.Event
   import flash.events.TimerEvent
   import flash.geom.Point
   import flash.geom.Rectangle
   import flash.media.Video
   import flash.net.NetStream
-  import flash.net.URLRequest
   import flash.utils.Timer
 
   public class PlayerView extends Sprite
   {
     private const timer : Timer = new Timer(30)
-    private const screenshot : Loader = new Loader
+    private const screenshot : ExternalImage = new ExternalImage
     private const videoContainer : Sprite = new Sprite
 
     private var player : Player
@@ -33,6 +29,8 @@ package goplayer
 
       statusbar = new PlayerStatusbar(player)
 
+      screenshot.url = player.movie.imageURL
+
       videoContainer.addChild(screenshot)
       videoContainer.addChild(video)
       videoContainer.addChild(statusbar)
@@ -42,20 +40,10 @@ package goplayer
       mouseEnabled = false
       mouseChildren = false
 
-      loadScreenshot()
-
       timer.addEventListener(TimerEvent.TIMER, handleTimerEvent)
       timer.start()
 
       update()
-    }
-
-    private function loadScreenshot() : void
-    {
-      screenshot.load(new URLRequest(player.movie.imageURL.toString()))
-      screenshot.contentLoaderInfo.addEventListener(Event.COMPLETE,
-        function (event : Event) : void
-        { Bitmap(screenshot.content).smoothing = true })
     }
 
     private function handleTimerEvent(event : TimerEvent) : void

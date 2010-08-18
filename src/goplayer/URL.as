@@ -1,5 +1,7 @@
 package goplayer
 {
+  import flash.net.URLRequest
+
   public class URL
   {
     private var scheme : String
@@ -18,6 +20,9 @@ package goplayer
 
     public function withPort(newPort : int) : URL
     { return new URL(scheme, host, newPort, path) }
+
+    public function get asURLRequest() : URLRequest
+    { return new URLRequest(toString()) }
 
     public function toString() : String
     {
