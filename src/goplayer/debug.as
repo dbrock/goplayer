@@ -1,5 +1,5 @@
 package goplayer
 {
-  public function debug(message : String) : void
-  { debugLogger.log(message) }
+  public function debug(message : Object) : void
+  { debugLogger.log(message.toString()) }
 }

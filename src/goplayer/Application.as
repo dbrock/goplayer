@@ -107,6 +107,8 @@ package goplayer
       player = kit.player
       player.listener = this
 
+      kit.view.dimensions = dimensions
+
       addChild(kit.view)
 
       player.start()

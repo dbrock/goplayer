@@ -14,6 +14,9 @@ package goplayer
     public function get duration() : Duration
     { return Duration.seconds(json.duration) }
 
+    public function get aspectRatio() : Number
+    { return json.aspect_ratio_multiplier }
+
     public function get rtmpURL() : URL
     {
       if (rtmpStreams.length == 0)

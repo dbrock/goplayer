@@ -140,6 +140,9 @@ package goplayer
 
     // -----------------------------------------------------
 
+    public function get aspectRatio() : Number
+    { return movie.aspectRatio }
+
     public function get bufferTime() : Duration
     { return stream ? stream.bufferTime : Duration.ZERO }
 
@@ -151,13 +154,6 @@ package goplayer
       return metadata
         ? Duration.seconds(metadata.duration)
         : movie.duration
-    }
-
-    public function get dimensions() : Dimensions
-    {
-      return metadata
-        ? new Dimensions(metadata.width, metadata.height)
-        : new Dimensions(0, 0)
     }
   }
 }
