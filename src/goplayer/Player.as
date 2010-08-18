@@ -10,7 +10,6 @@ package goplayer
     private const LARGE_BUFFER : Duration = Duration.seconds(60)
 
     private const finishingListeners : Array = []
-    private const bufferingListeners : Array = []
 
     private var _movie : Movie
     private var connection : FlashNetConnection
@@ -21,6 +20,7 @@ package goplayer
 
     private var _volume : Number = DEFAULT_VOLUME
     private var _paused : Boolean = false
+    private var _buffering : Boolean = false
 
     public function Player
       (movie : Movie, connection : FlashNetConnection)
@@ -36,10 +36,6 @@ package goplayer
     public function addFinishingListener
       (value : PlayerFinishingListener) : void
     { finishingListeners.push(value) }
-
-    public function addBufferingListener
-      (value : PlayerBufferingListener) : void
-    { bufferingListeners.push(value) }
 
     // -----------------------------------------------------
 
@@ -77,7 +73,7 @@ package goplayer
 
       stream.play(movie.rtmpStreams)
 
-      notifyBufferingStarted()
+      _buffering = true
 
       if (paused)
         stream.paused = true
@@ -92,13 +88,7 @@ package goplayer
     private function handleBufferingFinished() : void
     {
       useLargeBuffer()
-      notifyBufferingFinished()
-    }
-
-    private function notifyBufferingFinished() : void
-    {
-      for each (var listener : PlayerBufferingListener in bufferingListeners)
-        listener.handleBufferingFinished()
+      _buffering = false
     }
 
     public function handleBufferEmptied() : void
@@ -112,13 +102,7 @@ package goplayer
     private function handleBufferingStarted() : void
     {
       useSmallBuffer()
-      notifyBufferingStarted()
-    }
-
-    private function notifyBufferingStarted() : void
-    {
-      for each (var listener : PlayerBufferingListener in bufferingListeners)
-        listener.handleBufferingStarted()
+      _buffering = true
     }
 
     private function useSmallBuffer() : void
@@ -126,6 +110,9 @@ package goplayer
 
     private function useLargeBuffer() : void
     { stream.bufferTime = LARGE_BUFFER }
+
+    public function get buffering() : Boolean
+    { return _buffering }
 
     public function handleStreamingStopped() : void
     {
