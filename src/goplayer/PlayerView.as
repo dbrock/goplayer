@@ -1,16 +1,22 @@
 package goplayer
 {
+  import flash.display.Bitmap
+  import flash.display.Loader
   import flash.display.Sprite
+  import flash.events.Event
   import flash.events.TimerEvent
   import flash.geom.Point
   import flash.geom.Rectangle
   import flash.media.Video
   import flash.net.NetStream
+  import flash.net.URLRequest
   import flash.utils.Timer
 
   public class PlayerView extends Sprite
   {
     private const timer : Timer = new Timer(30)
+    private const screenshot : Loader = new Loader
+    private const videoContainer : Sprite = new Sprite
 
     private var player : Player
     private var video : Video
@@ -27,16 +33,29 @@ package goplayer
 
       statusbar = new PlayerStatusbar(player)
 
-      addChild(video)
-      addChild(statusbar)
+      videoContainer.addChild(screenshot)
+      videoContainer.addChild(video)
+      videoContainer.addChild(statusbar)
+
+      addChild(videoContainer)
 
       mouseEnabled = false
       mouseChildren = false
+
+      loadScreenshot()
 
       timer.addEventListener(TimerEvent.TIMER, handleTimerEvent)
       timer.start()
 
       update()
+    }
+
+    private function loadScreenshot() : void
+    {
+      screenshot.load(new URLRequest(player.movie.imageURL.toString()))
+      screenshot.contentLoaderInfo.addEventListener(Event.COMPLETE,
+        function (event : Event) : void
+        { Bitmap(screenshot.content).smoothing = true })
     }
 
     private function handleTimerEvent(event : TimerEvent) : void
@@ -47,10 +66,15 @@ package goplayer
 
     public function update() : void
     {
-      video.x = videoPosition.x
-      video.y = videoPosition.y
+      videoContainer.x = videoPosition.x
+      videoContainer.y = videoPosition.y
+
       video.width = videoDimensions.width
       video.height = videoDimensions.height
+
+      screenshot.width = videoDimensions.width
+      screenshot.height = videoDimensions.height
+
       video.visible = videoVisible
       video.smoothing = true
 

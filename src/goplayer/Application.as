@@ -92,16 +92,6 @@ package goplayer
 
       debug("Movie “" + movie.title + "” found.")
 
-      if (autoplay)
-        play()
-      else
-        ready = true, debug("Click movie to start playback.")
-    }
-
-    private function play() : void
-    {
-      debug("Playing movie.")
-
       const kit : PlayerKit = new PlayerKit(movie)
 
       player = kit.player
@@ -111,8 +101,16 @@ package goplayer
 
       addChild(kit.view)
 
-      player.start()
+      if (autoplay)
+        play()
+      else
+        ready = true, debug("Click movie to start playback.")
+    }
 
+    private function play() : void
+    {
+      debug("Playing movie.")
+      player.start()
       doubleClickEnabled = true
     }
 

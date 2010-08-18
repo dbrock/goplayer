@@ -69,6 +69,7 @@ class FakeMovie implements Movie
   public function get title() : String { return null }
   public function get duration() : Duration { return null }
   public function get aspectRatio() : Number { return NaN }
+  public function get imageURL() : URL { return null }
 
   public function get rtmpURL() : URL { return _url }
   public function get rtmpStreams() : Array { return null }

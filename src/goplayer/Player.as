@@ -5,7 +5,7 @@ package goplayer
   {
     private const DEFAULT_VOLUME : Number = .8
 
-    private var movie : Movie
+    private var _movie : Movie
     private var connection : FlashNetConnection
 
     private var _listener : PlayerListener = null
@@ -21,7 +21,7 @@ package goplayer
       (movie : Movie,
        connection : FlashNetConnection)
     {
-      this.movie = movie
+      _movie = movie
       this.connection = connection
 
       connection.listener = this
@@ -29,6 +29,9 @@ package goplayer
 
     public function set listener(value : PlayerListener) : void
     { _listener = value }
+
+    public function get movie() : Movie
+    { return _movie }
 
     // -----------------------------------------------------
 
