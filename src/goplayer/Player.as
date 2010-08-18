@@ -1,40 +1,40 @@
 package goplayer
 {
-  public class RTMPStreamPlayer
+  public class Player
     implements FlashNetConnectionListener, FlashNetStreamListener
   {
     private const DEFAULT_VOLUME : Number = .8
 
-    private var metadata : RTMPStreamMetadata
+    private var movie : Movie
     private var connection : FlashNetConnection
 
-    private var _listener : RTMPStreamPlayerListener = null
+    private var _listener : PlayerListener = null
 
     private var connector : RTMPConnector = null
     private var stream : FlashNetStream = null
-    private var hotMetadata : Object = null
+    private var metadata : Object = null
 
     private var _volume : Number = DEFAULT_VOLUME
     private var _paused : Boolean = false
 
-    public function RTMPStreamPlayer
-      (metadata : RTMPStreamMetadata,
+    public function Player
+      (movie : Movie,
        connection : FlashNetConnection)
     {
-      this.metadata = metadata
+      this.movie = movie
       this.connection = connection
 
       connection.listener = this
     }
 
-    public function set listener(value : RTMPStreamPlayerListener) : void
+    public function set listener(value : PlayerListener) : void
     { _listener = value }
 
     // -----------------------------------------------------
 
     public function start() : void
     {
-      connector = new RTMPConnector(connection, metadata.url)
+      connector = new RTMPConnector(connection, movie.rtmpURL)
       connector.tryNextPort()
     }
 
@@ -59,14 +59,14 @@ package goplayer
       stream.bufferTime = Duration.seconds(5)
       stream.volume = volume
 
-      stream.play(metadata.name)
+      stream.play(movie.rtmpStreams)
 
       if (paused)
         stream.paused = true
     }
 
     public function handleNetStreamMetadata(data : Object) : void
-    { hotMetadata = data }
+    { metadata = data }
 
     public function handleStreamingStopped() : void
     { handleMaybeFinishedPlaying() }
@@ -83,7 +83,7 @@ package goplayer
     private function handleFinishedPlaying() : void
     {
       debug("Finished playing.")
-      _listener.handleRTMPStreamFinishedPlaying()
+      _listener.handleMovieFinishedPlaying()
     }
 
     private function get finishedPlaying() : Boolean
@@ -148,16 +148,16 @@ package goplayer
 
     public function get streamLength() : Duration
     {
-      return hotMetadata
-        ? Duration.seconds(hotMetadata.duration)
-        : metadata.duration
+      return metadata
+        ? Duration.seconds(metadata.duration)
+        : movie.duration
     }
 
     public function get dimensions() : Dimensions
     {
-      return hotMetadata
-        ? new Dimensions(hotMetadata.width, hotMetadata.height)
-        : metadata.dimensions
+      return metadata
+        ? new Dimensions(metadata.width, metadata.height)
+        : new Dimensions(0, 0)
     }
   }
 }

@@ -1,5 +1,8 @@
 package goplayer
 {
+  import com.adobe.fms.DynamicStream
+  import com.adobe.fms.DynamicStreamItem
+
   import flash.events.AsyncErrorEvent
   import flash.events.NetStatusEvent
   import flash.media.SoundTransform
@@ -9,14 +12,15 @@ package goplayer
 
   public class StandardFlashNetStream implements FlashNetStream
   {
-    private var stream : NetStream
+    private var stream : DynamicStream
 
     private var _listener : FlashNetStreamListener
 
     public function StandardFlashNetStream
       (connection : NetConnection, video : Video)
     {
-      stream = new NetStream(connection)
+      // stream = new NetStream(connection)
+      stream = new DynamicStream(connection)
 
       video.attachNetStream(stream)
 
@@ -66,8 +70,19 @@ package goplayer
     public function set listener(value : FlashNetStreamListener) : void
     { _listener = value }
 
-    public function play(name : String) : void
-    { stream.play(name) }
+    public function play(streams : Array) : void
+    { stream.startPlay(getDynamicStreamItem(streams)) }
+
+    private function getDynamicStreamItem
+      (streams : Array) : DynamicStreamItem
+    {
+      const result : DynamicStreamItem = new DynamicStreamItem
+
+      for each (var stream : RTMPStream in streams)
+        result.addStream(stream.name, stream.bitrate)
+
+      return result
+    }
 
     public function set paused(value : Boolean) : void
     {

@@ -2,7 +2,7 @@ package goplayer
 {
   import org.asspec.specification.AbstractSpecification
 
-  public class RTMPStreamPlayerSpecification
+  public class PlayerSpecification
     extends AbstractSpecification
     implements FlashNetConnection
   {
@@ -11,10 +11,10 @@ package goplayer
 
     override protected function execute() : void
     {
-      const metadata : FakeRTMPStreamMetadata
-        = new FakeRTMPStreamMetadata(URL.parse("rtmp://foo/bar"))
-      const player : RTMPStreamPlayer
-        = new RTMPStreamPlayer(metadata, this)
+      const movie : FakeMovie
+        = new FakeMovie(URL.parse("rtmp://foo/bar"))
+      const player : Player
+        = new Player(movie, this)
       
       when("started", function () : void {
         player.start()
@@ -59,15 +59,16 @@ package goplayer
 
 import goplayer.*
 
-class FakeRTMPStreamMetadata implements RTMPStreamMetadata
+class FakeMovie implements Movie
 {
   private var _url : URL
 
-  public function FakeRTMPStreamMetadata(url : URL)
+  public function FakeMovie(url : URL)
   { _url = url }
 
-  public function get url() : URL { return _url }
-  public function get name() : String { return null }
+  public function get rtmpURL() : URL { return _url }
+  public function get rtmpStreams() : Array { return null }
+  public function get title() : String { return null }
   public function get dimensions() : Dimensions { return null }
   public function get duration() : Duration { return null }
 }

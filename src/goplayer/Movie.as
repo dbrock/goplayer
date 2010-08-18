@@ -1,8 +1,9 @@
 package goplayer
 {
-  public interface MovieMetadata
+  public interface Movie
   {
     function get title() : String
+    function get rtmpURL() : URL
     function get rtmpStreams() : Array
     function get duration() : Duration
   }

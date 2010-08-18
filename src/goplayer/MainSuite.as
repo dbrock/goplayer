@@ -10,7 +10,7 @@ package goplayer
     override protected function populate() : void
     {
       add(URLSpecification)
-      add(RTMPStreamPlayerSpecification)
+      add(PlayerSpecification)
     }
   }
 }

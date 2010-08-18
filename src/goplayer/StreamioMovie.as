@@ -1,10 +1,11 @@
 package goplayer
 {
-  public class StreamioMovieMetadata implements MovieMetadata
+  public class StreamioMovie
+    implements Movie
   {
     private var json : Object
 
-    public function StreamioMovieMetadata(json : Object)
+    public function StreamioMovie(json : Object)
     { this.json = json }
 
     public function get title() : String
@@ -13,19 +14,27 @@ package goplayer
     public function get duration() : Duration
     { return Duration.seconds(json.duration) }
 
+    public function get rtmpURL() : URL
+    {
+      if (rtmpStreams.length == 0)
+        return null
+      else
+        return StreamioRTMPStream(rtmpStreams[0]).url
+    }
+
     public function get rtmpStreams() : Array
     {
       const result : Array = []
 
       for each (var transcoding : Object in json.transcodings)
-        result.push(new StreamioRTMPStreamMetadata(transcoding, this))
+        result.push(new StreamioRTMPStream(transcoding))
 
       return result
     }
 
     public function dump() : void
     {
-      debug("Streamio movie metadata:")
+      debug("Streamio movie:")
 
       for (var property : String in json)
         debug("  " + property + ": " + json[property])

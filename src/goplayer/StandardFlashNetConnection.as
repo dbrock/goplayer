@@ -14,6 +14,8 @@ package goplayer
 
     private var _listener : FlashNetConnectionListener
 
+    private var serverVersion : Number = 0
+
     public function StandardFlashNetConnection(video : Video)
     {
       this.video = video
@@ -46,6 +48,9 @@ package goplayer
       const code : String = event.info.code
 
       if (code == CONNECTION_ESTABLISHED)
+        parseServerVersion(event.info.data.version)
+
+      if (code == CONNECTION_ESTABLISHED)
         _listener.handleConnectionEstablished()
       else if (code == CONNECTION_FAILED)
         _listener.handleConnectionFailed()
@@ -54,7 +59,7 @@ package goplayer
 
       if (code == CONNECTION_ESTABLISHED)
         debug("Connection established " +
-              "(server version " + event.info.data.version + ").")
+              "(server version " + serverVersion + ").")
       else if (code == CONNECTION_FAILED)
         debug("Connection failed.")
       else if (code == CONNECTION_CLOSED)
@@ -66,6 +71,9 @@ package goplayer
       else
         debug("Net connection status: " + code)
     }
+
+    private function parseServerVersion(input : String) : void
+    { serverVersion = parseFloat(input.replace(/^(\d+),(\d+).*/, "$1.$2")) }
 
     private function handleAsyncError(event : AsyncErrorEvent) : void
     { debug("Asynchronuous connection error: " + event.error.message) }

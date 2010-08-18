@@ -7,22 +7,22 @@ package goplayer
   import flash.net.NetStream
   import flash.utils.Timer
 
-  public class RTMPStreamPlayerView extends Sprite
+  public class PlayerView extends Sprite
   {
     private const timer : Timer = new Timer(30)
 
-    private var player : RTMPStreamPlayer
+    private var player : Player
     private var video : Video
 
-    private var statusbar : RTMPStreamStatusbar
+    private var statusbar : PlayerStatusbar
 
-    public function RTMPStreamPlayerView
-      (player : RTMPStreamPlayer, video : Video)
+    public function PlayerView
+      (player : Player, video : Video)
     {
       this.player = player
       this.video = video
 
-      statusbar = new RTMPStreamStatusbar(player)
+      statusbar = new PlayerStatusbar(player)
 
       addChild(video)
       addChild(statusbar)

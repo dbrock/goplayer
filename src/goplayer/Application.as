@@ -7,7 +7,7 @@ package goplayer
   import flash.ui.Keyboard
 
   public class Application extends Sprite
-    implements MovieMetadataHandler, RTMPStreamPlayerListener
+    implements MovieHandler, PlayerListener
   {
     private var dimensions : Dimensions
     private var api : StreamioAPI
@@ -16,8 +16,8 @@ package goplayer
     private var loop : Boolean
 
     private var ready : Boolean = false
-    private var metadata : MovieMetadata = null
-    private var player : RTMPStreamPlayer = null
+    private var movie : Movie = null
+    private var player : Player = null
 
     public function Application
       (dimensions : Dimensions,
@@ -81,16 +81,16 @@ package goplayer
     {
       stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown)
 
-      debug("Fetching metadata for Streamio movie “" + movieID + "”...")
+      debug("Looking up Streamio movie “" + movieID + "”...")
 
-      api.fetchMovieMetadata(movieID, this)
+      api.fetchMovie(movieID, this)
     }
 
-    public function handleMovieMetadata(metadata : MovieMetadata) : void
+    public function handleMovie(movie : Movie) : void
     {
-      this.metadata = metadata
+      this.movie = movie
 
-      debug("Streamio movie “" + metadata.title + "” found.")
+      debug("Movie “" + movie.title + "” found.")
 
       if (autoplay)
         play()
@@ -100,17 +100,9 @@ package goplayer
 
     private function play() : void
     {
-      debug("Playing last RTMP stream.")
+      debug("Playing movie.")
 
-      // XXX: Select stream intelligently.
-      playRTMPStream(metadata.rtmpStreams[metadata.rtmpStreams.length - 1])
-
-      doubleClickEnabled = true
-    }
-
-    private function playRTMPStream(metadata : RTMPStreamMetadata) : void
-    {
-      const kit : RTMPStreamPlayerKit = new RTMPStreamPlayerKit(metadata)
+      const kit : PlayerKit = new PlayerKit(movie)
 
       player = kit.player
       player.listener = this
@@ -118,9 +110,11 @@ package goplayer
       addChild(kit.view)
 
       player.start()
+
+      doubleClickEnabled = true
     }
 
-    public function handleRTMPStreamFinishedPlaying() : void
+    public function handleMovieFinishedPlaying() : void
     {
       if (loop)
         debug("Looping."), player.rewind()

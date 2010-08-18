@@ -10,9 +10,9 @@ package goplayer
     public function StreamioAPI(fetcher : JSONFetcher)
     { this.fetcher = fetcher }
 
-    public function fetchMovieMetadata
-      (id : String, handler : MovieMetadataHandler) : void
-    { fetch(getMovieURL(id), new StreamioMovieMetadataJSONParser(handler)) }
+    public function fetchMovie
+      (id : String, handler : MovieHandler) : void
+    { fetch(getMovieURL(id), new StreamioMovieJSONParser(handler)) }
 
     private function getMovieURL(id : String) : String
     { return "movies/" + id + "/public_show.json" }

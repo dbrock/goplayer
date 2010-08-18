@@ -2,14 +2,14 @@ package goplayer
 {
   import flash.display.Sprite
 
-  public class RTMPStreamStatusbar extends Sprite
+  public class PlayerStatusbar extends Sprite
   {
     private const margins : Dimensions = new Dimensions(10, 5)
     private const label : Label = new Label
 
-    private var player : RTMPStreamPlayer
+    private var player : Player
 
-    public function RTMPStreamStatusbar(player : RTMPStreamPlayer)
+    public function PlayerStatusbar(player : Player)
     {
       this.player = player
 
