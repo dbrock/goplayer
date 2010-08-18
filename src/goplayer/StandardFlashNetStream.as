@@ -36,13 +36,6 @@ package goplayer
     {
       const code : String = event.info.code
 
-      if (code == BUFFER_FILLED)
-        _listener.handleBufferFilled()
-      else if (code == BUFFER_EMPTIED)
-        _listener.handleBufferEmptied()
-      else if (code == STREAMING_STOPPED)
-        _listener.handleStreamingStopped()
-
       if (code == STREAMING_STARTED)
         debug("Data streaming started; filling buffer.")
       else if (code == STREAMING_STOPPED)
@@ -63,6 +56,13 @@ package goplayer
         null
       else
         debug("Net stream status: " + code)
+
+      if (code == BUFFER_FILLED)
+        _listener.handleBufferFilled()
+      else if (code == BUFFER_EMPTIED)
+        _listener.handleBufferEmptied()
+      else if (code == STREAMING_STOPPED)
+        _listener.handleStreamingStopped()
     }
 
     private function inspect(object : Object) : String

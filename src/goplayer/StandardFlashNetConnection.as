@@ -51,13 +51,6 @@ package goplayer
         parseServerVersion(event.info.data.version)
 
       if (code == CONNECTION_ESTABLISHED)
-        _listener.handleConnectionEstablished()
-      else if (code == CONNECTION_FAILED)
-        _listener.handleConnectionFailed()
-      else if (code == CONNECTION_CLOSED)
-        _listener.handleConnectionClosed()
-
-      if (code == CONNECTION_ESTABLISHED)
         debug("Connection established " +
               "(server version " + serverVersion + ").")
       else if (code == CONNECTION_FAILED)
@@ -70,6 +63,13 @@ package goplayer
         debug("Closing idle connection.")
       else
         debug("Net connection status: " + code)
+
+      if (code == CONNECTION_ESTABLISHED)
+        _listener.handleConnectionEstablished()
+      else if (code == CONNECTION_FAILED)
+        _listener.handleConnectionFailed()
+      else if (code == CONNECTION_CLOSED)
+        _listener.handleConnectionClosed()
     }
 
     private function parseServerVersion(input : String) : void
