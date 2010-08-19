@@ -57,7 +57,9 @@ package goplayer
       else
         debug("Net stream status: " + code)
 
-      if (code == BUFFER_FILLED)
+      if (code == STREAMING_STARTED)
+        _listener.handleStreamingStarted()
+      else if (code == BUFFER_FILLED)
         _listener.handleBufferFilled()
       else if (code == BUFFER_EMPTIED)
         _listener.handleBufferEmptied()

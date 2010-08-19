@@ -67,13 +67,9 @@ package goplayer
     {
       stream = connection.getNetStream()
       stream.listener = this
-
-      stream.bufferTime = START_BUFFER
       stream.volume = volume
 
       stream.play(movie.rtmpStreams)
-
-      _buffering = true
 
       if (paused)
         stream.paused = true
@@ -81,6 +77,12 @@ package goplayer
 
     public function handleNetStreamMetadata(data : Object) : void
     { metadata = data }
+
+    public function handleStreamingStarted() : void
+    {
+      useStartBuffer()
+      _buffering = true
+    }
 
     public function handleBufferFilled() : void
     { handleBufferingFinished() }
