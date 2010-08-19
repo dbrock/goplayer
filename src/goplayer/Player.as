@@ -15,6 +15,10 @@ package goplayer
     private var connection : FlashNetConnection
 
     private var triedConnectingUsingDefaultPorts : Boolean = false
+
+    private var measuredBandwidth : Bitrate = null
+    private var measuredLatency : Duration = null
+
     private var stream : FlashNetStream = null
     private var metadata : Object = null
 
@@ -64,17 +68,33 @@ package goplayer
     // -----------------------------------------------------
 
     public function handleConnectionEstablished() : void
+    { connection.determineBandwidth() }
+
+    public function handleBandwidthDetermined
+      (bandwidth : Bitrate, latency : Duration) : void
     {
+      measuredBandwidth = bandwidth
+      measuredLatency = latency
+
       stream = connection.getNetStream()
       stream.listener = this
       stream.volume = volume
 
-      stream.play(movie.rtmpStreams)
+      stream.play(bestStream, streams)
 
       if (paused)
         stream.paused = true
     }
 
+    private function get bestStream() : RTMPStream
+    { return new RTMPStreamPicker(streams, maxBitrate).bestStream }
+
+    private function get streams() : Array
+    { return movie.rtmpStreams }
+
+    private function get maxBitrate() : Bitrate
+    { return measuredBandwidth.scaledBy(.8) }
+    
     public function handleNetStreamMetadata(data : Object) : void
     { metadata = data }
 
@@ -211,10 +231,10 @@ package goplayer
         : movie.duration
     }
 
-    public function get bitrate() : Bitrate
+    public function get currentBitrate() : Bitrate
     { return stream ? stream.bitrate : Bitrate.ZERO }
 
-    public function get bandwidth() : Bitrate
+    public function get currentBandwidth() : Bitrate
     { return stream ? stream.bandwidth : Bitrate.ZERO }
 
     public function get highQualityDimensions() : Dimensions

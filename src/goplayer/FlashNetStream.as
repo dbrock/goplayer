@@ -6,7 +6,7 @@ package goplayer
   {
     function set listener(value : FlashNetStreamListener) : void
 
-    function play(streams : Array) : void
+    function play(stream : RTMPStream, streams : Array) : void
 
     function set paused(value : Boolean) : void
 

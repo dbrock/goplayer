@@ -10,6 +10,15 @@ package goplayer
     public function get kbps() : Number
     { return _kbps }
 
+    public function scaledBy(scalar : Number) : Bitrate
+    { return Bitrate.kbps(kbps * scalar) }
+
+    public function isLessThan(other : Bitrate) : Boolean
+    { return kbps < other.kbps }
+
+    public function isGreaterThan(other : Bitrate) : Boolean
+    { return kbps > other.kbps }
+
     public function toString() : String
     { return kbps.toFixed(1) + "kbps" }
 

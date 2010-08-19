@@ -22,6 +22,9 @@ package goplayer
     public static function seconds(value : Number) : Duration
     { return new Duration(value) }
 
+    public static function milliseconds(value : Number) : Duration
+    { return new Duration(value / 1000) }
+
     public static const ZERO : Duration = new Duration(0)
   }
 }

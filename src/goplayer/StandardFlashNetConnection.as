@@ -24,7 +24,7 @@ package goplayer
         (NetStatusEvent.NET_STATUS, handleNetConnectionStatus)
       connection.addEventListener
         (AsyncErrorEvent.ASYNC_ERROR, handleAsyncError)
-      connection.client = {}      
+      connection.client = { onBWCheck: onBWCheck, onBWDone: onBWDone }
     }
 
     public function set listener(value : FlashNetConnectionListener) : void
@@ -33,7 +33,7 @@ package goplayer
     public function connect(url : URL) : void
     {
       debug("Connecting to <" + url + ">...")
-      
+
       try
         { connection.connect(url.toString()) }
       catch (error : Error)
@@ -41,6 +41,27 @@ package goplayer
           debug("Connection failed: " + error.message)
           _listener.handleConnectionFailed()
         }
+    }
+
+    public function determineBandwidth() : void
+    {
+      debug("Performing bandwidth check...")
+      connection.call("checkBandwidth", null)
+    }
+
+    private function onBWCheck(... rest : Array) : Number
+    { return 0 }
+
+    private function onBWDone(... rest : Array) : void
+    {
+      if (rest.length == 0) return
+
+      const bandwidth : Bitrate = Bitrate.kbps(rest[0])
+      const latency : Duration = Duration.milliseconds(rest[3])
+
+      debug("Bandwidth: " + bandwidth + " (" + latency + " latency)")
+
+      _listener.handleBandwidthDetermined(bandwidth, latency)
     }
 
     public function getNetStream() : FlashNetStream

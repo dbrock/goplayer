@@ -78,16 +78,18 @@ package goplayer
     public function set listener(value : FlashNetStreamListener) : void
     { _listener = value }
 
-    public function play(streams : Array) : void
-    { stream.startPlay(getDynamicStreamItem(streams)) }
+    public function play(stream : RTMPStream, streams : Array) : void
+    { this.stream.startPlay(getDynamicStreamItem(stream, streams)) }
 
     private function getDynamicStreamItem
-      (streams : Array) : DynamicStreamItem
+      (stream : RTMPStream, streams : Array) : DynamicStreamItem
     {
       const result : DynamicStreamItem = new DynamicStreamItem
 
       for each (var stream : RTMPStream in streams)
-        result.addStream(stream.name, stream.bitrate)
+        result.addStream(stream.name, stream.bitrate.kbps)
+
+      result.startRate = stream.bitrate.kbps
 
       return result
     }

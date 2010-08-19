@@ -32,8 +32,8 @@ package goplayer
         + player.bufferTime
         + "  "
         + "Bitrate: "
-        + player.bandwidth + "/"
-        + player.bitrate
+        + player.currentBandwidth + "/"
+        + player.currentBitrate
         + "  "
         + "Volume: " + Math.round(player.volume * 100) + "%"
 
