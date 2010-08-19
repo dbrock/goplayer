@@ -59,7 +59,7 @@ package goplayer
       const bandwidth : Bitrate = Bitrate.kbps(rest[0])
       const latency : Duration = Duration.milliseconds(rest[3])
 
-      debug("Bandwidth: " + bandwidth + " (" + latency + " latency)")
+      debug("Available bandwidth: " + bandwidth + " (" + latency + " latency)")
 
       _listener.handleBandwidthDetermined(bandwidth, latency)
     }

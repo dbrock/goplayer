@@ -92,6 +92,13 @@ package goplayer
 
       debug("Movie “" + movie.title + "” found.")
 
+      const bitrates : Array = []
+
+      for each (var stream : RTMPStream in movie.rtmpStreams)
+        bitrates.push(stream.bitrate)
+
+      debug("Available streams: " + bitrates.join(", "))
+
       const kit : PlayerKit = new PlayerKit(movie)
 
       player = kit.player

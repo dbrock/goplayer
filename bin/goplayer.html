@@ -31,7 +31,7 @@
     span.innerHTML = span.innerHTML
       .replace(/(“.*?”)/g, "<span class='value'>$1</span>")
       .replace(/(&lt;.*?&gt;)/g, "<span class='value'>$1</span>")
-      .replace(/(\d+(?:\.\d+)?(?:s|kbps))/g, "<span class='value'>$1</span>")
+      .replace(/(\d+(?:\.\d+)?(?:s|.bps))/g, "<span class='value'>$1</span>")
 
     li.appendChild(span)
 

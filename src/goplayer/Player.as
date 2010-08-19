@@ -80,6 +80,8 @@ package goplayer
       stream.listener = this
       stream.volume = volume
 
+      debug("Playing " + bestStream.bitrate + " stream.")
+
       stream.play(bestStream, streams)
 
       if (paused)

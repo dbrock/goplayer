@@ -20,7 +20,12 @@ package goplayer
     { return kbps > other.kbps }
 
     public function toString() : String
-    { return kbps.toFixed(1) + "kbps" }
+    {
+      if (kbps > 1024)
+        return (kbps / 1024).toFixed(1) + "Mbps"
+      else
+        return Math.round(kbps) + "kbps"
+    }
 
     public static function kbps(value : Number) : Bitrate
     { return new Bitrate(value) }
