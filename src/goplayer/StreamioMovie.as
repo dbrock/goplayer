@@ -18,7 +18,14 @@ package goplayer
     { return json.aspect_ratio_multiplier }
 
     public function get imageURL() : URL
-    { return URL.parse("http://" + json.screenshot.normal) }
+    {
+      if (json.image)
+        return URL.parse("http://" + json.image.normal)
+      else if (json.screenshot)
+        return URL.parse("http://" + json.screenshot.normal)
+      else
+        return null
+    }
 
     public function get rtmpURL() : URL
     {

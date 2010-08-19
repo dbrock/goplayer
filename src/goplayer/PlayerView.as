@@ -44,7 +44,8 @@ package goplayer
 
       addChild(videoContainer)
 
-      screenshot.url = player.movie.imageURL
+      if (player.movie.imageURL)
+        screenshot.url = player.movie.imageURL
 
       mouseEnabled = false
       mouseChildren = false
