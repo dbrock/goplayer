@@ -27,30 +27,37 @@ package goplayer
         return null
     }
 
+    public function get httpURL() : URL
+    { return hasTranscodings ? bestTranscoding.httpURL : null }
+
     public function get rtmpURL() : URL
-    {
-      if (rtmpStreams.length == 0)
-        return null
-      else
-        return StreamioRTMPStream(rtmpStreams[0]).url
-    }
+    { return hasTranscodings ? bestTranscoding.rtmpURL : null }
 
     public function get rtmpStreams() : Array
+    { return transcodings }
+
+    private function get hasTranscodings() : Boolean
+    { return transcodings.length > 0 }
+
+    private function get bestTranscoding() : StreamioTranscoding
+    {
+      var result : StreamioTranscoding = transcodings[0]
+
+      for each (var transcoding : StreamioTranscoding in transcodings)
+        if (transcoding.bitrate.isGreaterThan(result.bitrate))
+          result = transcoding
+      
+      return result
+    }
+
+    private function get transcodings() : Array
     {
       const result : Array = []
 
       for each (var transcoding : Object in json.transcodings)
-        result.push(new StreamioRTMPStream(transcoding))
+        result.push(new StreamioTranscoding(transcoding))
 
       return result
-    }
-
-    public function dump() : void
-    {
-      debug("Streamio movie:")
-
-      for (var property : String in json)
-        debug("  " + property + ": " + json[property])
     }
   }
 }

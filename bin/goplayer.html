@@ -29,6 +29,7 @@
     span.appendChild(document.createTextNode(message))
 
     span.innerHTML = span.innerHTML
+      .replace(/\/(\w)/g, "/​$1")
       .replace(/(“.*?”)/g, "<span class='value'>$1</span>")
       .replace(/(&lt;.*?&gt;)/g, "<span class='value'>$1</span>")
       .replace(/(\d+(?:\.\d+)?(?:s|.bps))/g, "<span class='value'>$1</span>")
@@ -57,7 +58,8 @@
     margin: 0;
     padding: 1ex 1em; }
   #log li
-  { margin: .5ex 0; }
+  { margin: .5ex 0;
+    word-wrap: break-word; }
   #log li.first
   { margin-top: 1ex; }
   #log li span.time

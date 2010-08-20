@@ -14,7 +14,8 @@ package goplayer
     private var _movie : Movie
     private var connection : FlashNetConnection
 
-    private var triedConnectingUsingDefaultPorts : Boolean = false
+    private var triedStandardRTMP : Boolean = false
+    private var rtmpAvailable : Boolean = false
 
     private var measuredBandwidth : Bitrate = null
     private var measuredLatency : Duration = null
@@ -44,22 +45,47 @@ package goplayer
     // -----------------------------------------------------
 
     public function start() : void
-    { connection.connect(movie.rtmpURL) }
+    {
+      if (movie.rtmpURL)
+        connectUsingRTMP()
+      else
+        connectUsingHTTP()
+    }
 
     public function handleConnectionFailed() : void
     {
-      if (movie.rtmpURL.hasPort && !triedConnectingUsingDefaultPorts)
-        connectUsingDefaultPorts()
+      if (movie.rtmpURL.hasPort && !triedStandardRTMP)
+        handleCustomRTMPUnavailable()
       else
-        debug("Could not connect using RTMP; giving up.")
+        handleRTMPUnavailable()
     }
 
-    private function connectUsingDefaultPorts() : void
+    private function handleCustomRTMPUnavailable() : void
     {
       debug("Trying to connect using default RTMP ports.")
+      connectUsingStandardRTMP()
+    }
 
-      triedConnectingUsingDefaultPorts = true
+    private function handleRTMPUnavailable() : void
+    {
+      debug("Could not connect using RTMP; trying plain HTTP.")
+      connectUsingHTTP()
+    }
+
+    private function connectUsingRTMP() : void
+    { connection.connect(movie.rtmpURL) }
+
+    private function connectUsingStandardRTMP() : void
+    {
+      triedStandardRTMP = true
       connection.connect(movie.rtmpURL.withoutPort)
+    }
+
+    private function connectUsingHTTP() : void
+    {
+      rtmpAvailable = false
+      connection.dontConnect()
+      startPlaying()
     }
 
     public function handleConnectionClosed() : void
@@ -68,7 +94,10 @@ package goplayer
     // -----------------------------------------------------
 
     public function handleConnectionEstablished() : void
-    { connection.determineBandwidth() }
+    {
+      rtmpAvailable = true
+      connection.determineBandwidth()
+    }
 
     public function handleBandwidthDetermined
       (bandwidth : Bitrate, latency : Duration) : void
@@ -76,17 +105,31 @@ package goplayer
       measuredBandwidth = bandwidth
       measuredLatency = latency
 
+      startPlaying()
+    }
+
+    private function startPlaying() : void
+    {
       stream = connection.getNetStream()
       stream.listener = this
       stream.volume = volume
 
-      debug("Playing " + bestStream.bitrate + " stream.")
+      useStartBuffer()
 
-      stream.play(bestStream, streams)
+      if (rtmpAvailable)
+        playRTMPStream()
+      else
+        playHTTPStream()
 
       if (paused)
         stream.paused = true
     }
+
+    private function playRTMPStream() : void
+    { stream.playRTMP(bestStream, streams) }
+
+    private function playHTTPStream() : void
+    { stream.playHTTP(movie.httpURL) }
 
     private function get bestStream() : RTMPStream
     { return new RTMPStreamPicker(streams, maxBitrate).bestStream }
@@ -96,6 +139,8 @@ package goplayer
 
     private function get maxBitrate() : Bitrate
     { return measuredBandwidth.scaledBy(.8) }
+
+    // -----------------------------------------------------
     
     public function handleNetStreamMetadata(data : Object) : void
     { metadata = data }

@@ -78,8 +78,17 @@ package goplayer
     public function set listener(value : FlashNetStreamListener) : void
     { _listener = value }
 
-    public function play(stream : RTMPStream, streams : Array) : void
-    { this.stream.startPlay(getDynamicStreamItem(stream, streams)) }
+    public function playRTMP(stream : RTMPStream, streams : Array) : void
+    {
+      debug("Playing " + stream.bitrate + " RTMP stream: <" + stream.name + ">")
+      this.stream.startPlay(getDynamicStreamItem(stream, streams))
+    }
+
+    public function playHTTP(url : URL) : void
+    {
+      debug("Playing HTTP stream: <" + url + ">")
+      this.stream.play(url.toString())
+    }
 
     private function getDynamicStreamItem
       (stream : RTMPStream, streams : Array) : DynamicStreamItem
@@ -122,8 +131,32 @@ package goplayer
 
     public function set bufferTime(value : Duration) : void
     {
+      if (!value.equals(bufferTime))
+        $bufferTime = value
+    }
+
+    private var setBufferTimeToken : Object = null
+
+    private function set $bufferTime(value : Duration) : void
+    {
       debug("Setting buffer size to " + value + ".")
+
       stream.bufferTime = value.seconds
+
+      confirmBufferSizeChanged(value)
+    }
+
+    private function confirmBufferSizeChanged(value : Duration) : void
+    {
+      const token : Object = new Object
+
+      setBufferTimeToken = token
+
+      later(function () : void {
+        if (setBufferTimeToken == token)
+          if (!bufferTime.equals(value))
+            debug("Buffer size automatically reverted to " + bufferTime + ".")
+      })
     }
 
     public function get volume() : Number

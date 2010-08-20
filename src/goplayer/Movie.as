@@ -9,5 +9,7 @@ package goplayer
 
     function get rtmpURL() : URL
     function get rtmpStreams() : Array
+
+    function get httpURL() : URL
   }
 }

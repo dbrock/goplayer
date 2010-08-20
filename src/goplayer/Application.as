@@ -48,7 +48,13 @@ package goplayer
     private function handleClick(event : MouseEvent) : void
     {
       if (ready)
-        ready = false, play()
+        ready = false, handleStartRequested()
+    }
+
+    private function handleStartRequested() : void
+    {
+      debug("Playing movie.")
+      play()
     }
 
     private function handleDoubleClick(event : MouseEvent) : void
@@ -97,7 +103,10 @@ package goplayer
       for each (var stream : RTMPStream in movie.rtmpStreams)
         bitrates.push(stream.bitrate)
 
-      debug("Available streams: " + bitrates.join(", "))
+      if (bitrates.length == 0)
+        debug("No RTMP streams available.")
+      else
+        debug("Available RTMP streams: " + bitrates.join(", "))
 
       const kit : PlayerKit = new PlayerKit(movie)
 
@@ -116,7 +125,6 @@ package goplayer
 
     private function play() : void
     {
-      debug("Playing movie.")
       player.start()
       doubleClickEnabled = true
     }

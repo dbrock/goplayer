@@ -21,6 +21,9 @@ package goplayer
     public function withScheme(newScheme : String) : URL
     { return new URL(newScheme, host, port, path) }
 
+    public function withHost(newHost : String) : URL
+    { return new URL(scheme, newHost, port, path) }
+
     public function get hasPort() : Boolean
     { return port >= 0 }
 

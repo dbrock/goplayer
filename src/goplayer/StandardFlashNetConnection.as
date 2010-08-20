@@ -14,6 +14,7 @@ package goplayer
 
     private var _listener : FlashNetConnectionListener
 
+    private var dummy : Boolean = false
     private var serverVersion : Number = 0
 
     public function StandardFlashNetConnection(video : Video)
@@ -41,6 +42,12 @@ package goplayer
           debug("Connection failed: " + error.message)
           _listener.handleConnectionFailed()
         }
+    }
+
+    public function dontConnect() : void
+    {
+      dummy = true
+      connection.connect(null)
     }
 
     public function determineBandwidth() : void
@@ -71,10 +78,13 @@ package goplayer
     {
       const code : String = event.info.code
 
-      if (code == CONNECTION_ESTABLISHED)
-        parseServerVersion(event.info.data.version)
+      if (code == CONNECTION_ESTABLISHED && !dummy)
+        if (event.info.data && "version" in event.info.data)
+          parseServerVersion(event.info.data.version)
 
-      if (code == CONNECTION_ESTABLISHED)
+      if (dummy)
+        null
+      else if (code == CONNECTION_ESTABLISHED)
         debug("Connection established " +
               "(server version " + serverVersion + ").")
       else if (code == CONNECTION_FAILED)
@@ -88,7 +98,7 @@ package goplayer
       else
         debug("Net connection status: " + code)
 
-      if (code == CONNECTION_ESTABLISHED)
+      if (code == CONNECTION_ESTABLISHED && !dummy)
         _listener.handleConnectionEstablished()
       else if (code == CONNECTION_FAILED)
         // When the connection fails, the listener is likely to make
