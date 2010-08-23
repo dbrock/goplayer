@@ -93,7 +93,7 @@ package goplayer
       statusbar.y = video.y + video.height - statusbar.height
 
       overlay.dimensions = videoDimensions
-      overlay.visible = player.buffering || player.paused
+      overlay.visible = player.buffering
 
       bufferingIndicator.x = videoDimensions.width / 2
       bufferingIndicator.y = videoDimensions.height / 2
