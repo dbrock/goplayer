@@ -1,30 +1,36 @@
 package goplayer
 {
   import flash.display.Sprite
+  import flash.display.LoaderInfo
   import flash.events.Event
   import flash.events.KeyboardEvent
   import flash.ui.Keyboard
 
   public class Application extends Sprite
-    implements MovieHandler, PlayerFinishingListener
+    implements FlashContentLoaderListener, MovieHandler,
+      PlayerFinishingListener
   {
     private const api : StreamioAPI
       = new StreamioAPI(new StandardHTTPFetcher)
 
     private var movieID : String
+    private var skinURL : String
     private var autoplay : Boolean
     private var loop : Boolean
 
+    private var skin : Skin = null
     private var movie : Movie = null
     private var player : Player = null
-    private var view : DemoPlayerView = null
+    private var view : ResizableSprite = null
 
     public function Application
       (movieID : String,
+       skinURL : String,
        autoplay : Boolean,
        loop : Boolean)
     {
       this.movieID = movieID
+      this.skinURL = skinURL
       this.autoplay = autoplay
       this.loop = loop
     }
@@ -36,10 +42,29 @@ package goplayer
       stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown)
       stage.addEventListener(Event.RESIZE, handleStageResized)
 
-      lookupMovie()
+      if (skinURL)
+        loadSkin()
+      else
+        lookUpMovie()
     }
 
-    private function lookupMovie() : void
+    private function loadSkin() : void
+    {
+      debug("Loading skin <" + skinURL + ">...")
+      new FlashContentLoader().load(skinURL, this)
+    }
+
+    public function handleContentLoaded(info : LoaderInfo) : void
+    {
+      debug("Skin loaded successfully.")
+      skin = new Skin(info)
+      handleSkinLoaded()
+    }
+
+    private function handleSkinLoaded() : void
+    { lookUpMovie() }
+
+    private function lookUpMovie() : void
     {
       debug("Looking up Streamio movie “" + movieID + "”...")
 
@@ -108,7 +133,11 @@ package goplayer
       player = kit.player
       player.addFinishingListener(this)
 
-      view = new DemoPlayerView(kit.view, player)
+      if (skin)
+        view = new SkinPlayerView(skin, kit.video, player)
+      else
+        view = new DemoPlayerView(kit.video, player)
+
       view.dimensions = stageDimensions
 
       addChild(view)

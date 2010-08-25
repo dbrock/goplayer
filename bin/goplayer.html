@@ -1,84 +1,11 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<script>
-  function getTimestamp(date)
-  {
-    function pad(number, places)
-    { return (number / Math.pow(10, places)).toFixed(places).substring(2) }
-
-    return "<span class='time'>"
-      + pad(date.getHours(), 2) + ":"
-      + pad(date.getMinutes(), 2) + ":"
-      + "<span class='seconds'>" + pad(date.getSeconds(), 2) + "</span>."
-      + pad(date.getMilliseconds(), 3)
-      + "</span>"
-  }
-
-  var lastTime
-
-  function log(message) {
-    var li = document.createElement("li")
-    var span = document.createElement("span")
-
-    var currentTime = new Date
-
-    if (lastTime && currentTime - lastTime > 1000)
-      li.className = "first"
-
-    li.innerHTML = getTimestamp(currentTime)
-    span.appendChild(document.createTextNode(message))
-
-    var zeroWidthSpace = String.fromCharCode(0x200b) //"​"
-    var valueHTML = "<span class='value'>$1</span>"
-
-    span.innerHTML = span.innerHTML
-      .replace(/\/(\w)/g, "/" + zeroWidthSpace + "$1")
-      .replace(/(“.*?”)/g, valueHTML)
-      .replace(/(&lt;.*?&gt;)/g, valueHTML)
-      .replace(/(\d+×\d+)/g, valueHTML)
-      .replace(/(\d+(?:\.\d+)?(?:s|.bps))/g, valueHTML)
-
-    li.appendChild(span)
-
-    document.getElementById("log").appendChild(li)
-
-    lastTime = currentTime
-  }
-</script>
-<style>
-  body
-  { margin: 0; }
-  #player, #log-container
-  { float: left;
-    width: 800px;
-    height: 500px; }
-  #log-container
-  { font: 14px monospace;
-    color: white;
-    background: #333;
-    overflow: auto; }
-  #log
-  { list-style-type: none;
-    margin: 0;
-    padding: 1ex 1em; }
-  #log li
-  { margin: .5ex 0;
-    word-wrap: break-word; }
-  #log li.first
-  { margin-top: 1ex; }
-  #log li span.time
-  { font-size: 12px;
-    color: #808080;
-    margin-right: 1em; }
-  #log span.seconds
-  { color: #999; }
-  #log span.value
-  { color: #ddf; }
-</style>
+<script src="goplayer.js"></script>
+<link href="goplayer.css" rel="stylesheet">
 <object id="player" data="goplayer.swf"
         type="application/x-shockwave-flash">
   <param name="flashvars"
-         value="streamioMovieID=4c723e7bb35ea86cec000001&amp;autoplay">
+         value="streamioMovieID=4c723e7bb35ea86cec000001&amp;skinURL=../../goplayer-streamio-skin/goplayer-streamio-skin.swf">
   <param name="allowfullscreen" value="true">
   <param name="allowscriptaccess" value="true">
 </object>

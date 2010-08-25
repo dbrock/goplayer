@@ -12,7 +12,7 @@ package goplayer
       stage.align = StageAlign.TOP_LEFT
 
       const application : Application
-        = new Application(movieID, autoplay, loop)
+        = new Application(movieID, skinURL, autoplay, loop)
 
       addChild(application)
       setupLogger()
@@ -21,6 +21,9 @@ package goplayer
 
     private function get movieID() : String
     { return loaderInfo.parameters.streamioMovieID }
+
+    private function get skinURL() : String
+    { return loaderInfo.parameters.skinURL }
 
     private function get autoplay() : Boolean
     { return "autoplay" in loaderInfo.parameters }

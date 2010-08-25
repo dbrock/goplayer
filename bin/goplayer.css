@@ -1,0 +1,32 @@
+body
+{ margin: 0; }
+#player, #log-container
+{ float: left;
+  width: 800px;
+  height: 500px; }
+#log-container
+{ font: 14px monospace;
+  color: white;
+  background: #333;
+  overflow: auto; }
+#log
+{ list-style-type: none;
+  margin: 0;
+  padding: 1ex 1em; }
+#log li
+{ margin: .5ex 0;
+  word-wrap: break-word; }
+#log li.first
+{ margin-top: 1ex; }
+#log li span.time
+{ font-size: 12px;
+  color: #808080;
+  margin-right: 1em; }
+#log span.seconds
+{ color: #999; }
+#log span.value
+{ color: #ddf; }
+#log span.error
+{ background: #422;
+  color: #e88;
+  padding: .2ex 0 .4ex; }

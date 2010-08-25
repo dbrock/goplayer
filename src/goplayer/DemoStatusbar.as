@@ -2,14 +2,14 @@ package goplayer
 {
   import flash.display.Sprite
 
-  public class PlayerStatusbar extends Sprite
+  public class DemoStatusbar extends Sprite
   {
     private const margins : Dimensions = new Dimensions(10, 5)
     private const label : Label = new Label
 
     private var player : Player
 
-    public function PlayerStatusbar(player : Player)
+    public function DemoStatusbar(player : Player)
     {
       this.player = player
 

@@ -4,17 +4,17 @@ package goplayer
 
   public class PlayerKit
   {
-    private const video : Video = new Video
+    private const flashVideo : Video = new Video
     private const connection : FlashNetConnection
-      = new StandardFlashNetConnection(video)
+      = new StandardFlashNetConnection(flashVideo)
 
     public var player : Player
-    public var view : PlayerView
+    public var video : PlayerVideo
 
     public function PlayerKit(movie : Movie)
     {
       player = new Player(movie, connection)
-      view = new PlayerView(player, video)
+      video = new PlayerVideo(player, flashVideo)
     }
   }
 }

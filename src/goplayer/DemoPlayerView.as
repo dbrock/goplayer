@@ -1,35 +1,34 @@
 package goplayer
 {
-  import flash.display.Sprite
   import flash.events.MouseEvent
 
-  public class DemoPlayerView extends Sprite
-    implements PlayerViewUpdateListener
+  public class DemoPlayerView extends ResizableSprite
+    implements PlayerVideoUpdateListener
   {
     private const overlay : Background
       = new Background(0x000000, 0.5)
     private const bufferingIndicator : BufferingIndicator
       = new BufferingIndicator
 
-    private var view : PlayerView
+    private var video : PlayerVideo
     private var player : Player
 
-    private var statusbar : PlayerStatusbar
+    private var statusbar : DemoStatusbar
 
     public function DemoPlayerView
-      (view : PlayerView, player : Player)
+      (video : PlayerVideo, player : Player)
     {
-      this.view = view
+      this.video = video
       this.player = player
 
-      statusbar = new PlayerStatusbar(player)
+      statusbar = new DemoStatusbar(player)
 
-      addChild(view)
+      addChild(video)
       addChild(overlay)
       addChild(bufferingIndicator)
       addChild(statusbar)
 
-      view.addUpdateListener(this)
+      video.addUpdateListener(this)
 
       if (!player.started)
         debug("Click movie to start playback.")
@@ -43,21 +42,21 @@ package goplayer
         player.start()
     }
 
-    public function set dimensions(value : Dimensions) : void
-    { view.dimensions = value }
+    override public function set dimensions(value : Dimensions) : void
+    { video.dimensions = value }
 
-    public function handlePlayerViewUpdated() : void
+    public function handlePlayerVideoUpdated() : void
     {
       statusbar.update()
 
       setPosition(statusbar, statusbarPosition)
-      setBounds(overlay, view.videoPosition, view.videoDimensions)
+      setBounds(overlay, video.videoPosition, video.videoDimensions)
 
       overlay.visible = player.buffering
 
-      setPosition(bufferingIndicator, view.videoDimensions.halved.asPosition)
+      setPosition(bufferingIndicator, video.videoDimensions.halved.asPosition)
 
-      bufferingIndicator.size = view.videoDimensions.innerSquare.width / 3
+      bufferingIndicator.size = video.videoDimensions.innerSquare.width / 3
       bufferingIndicator.ratio = player.bufferFillRatio
       bufferingIndicator.visible = player.buffering
 
@@ -69,6 +68,6 @@ package goplayer
     { return videoFarCorner.minus(getDimensions(statusbar)) }
 
     private function get videoFarCorner() : Position
-    { return view.videoPosition.plus(view.videoDimensions) }
+    { return video.videoPosition.plus(video.videoDimensions) }
   }
 }

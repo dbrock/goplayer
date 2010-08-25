@@ -22,6 +22,24 @@ package goplayer
     public function equals(other : Duration) : Boolean
     { return seconds == other.seconds }
 
+    public function get mss() : String
+    { return m + ":" + ss }
+
+    private function get m() : String
+    { return Math.floor(minutes).toString() }
+
+    private function get ss() : String
+    { return pad(seconds - Math.floor(minutes) * 60) }
+
+    private function get minutes() : Number
+    { return seconds / 60 }
+
+    private function pad(value : Number) : String
+    { return $pad(Math.round(value)) }
+
+    private function $pad(value : Number) : String
+    { return value < 10 ? "0" + value : value.toString() }
+
     public static function seconds(value : Number) : Duration
     { return new Duration(value) }
 

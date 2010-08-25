@@ -15,6 +15,7 @@ package goplayer
     private var connection : FlashNetConnection
 
     private var _started : Boolean = false
+    private var _finished : Boolean = false
     private var triedStandardRTMP : Boolean = false
     private var rtmpAvailable : Boolean = false
 
@@ -25,6 +26,7 @@ package goplayer
     private var metadata : Object = null
 
     private var _volume : Number = DEFAULT_VOLUME
+    private var savedVolume : Number = 0
     private var _paused : Boolean = false
     private var _buffering : Boolean = false
 
@@ -42,6 +44,9 @@ package goplayer
     public function addFinishingListener
       (value : PlayerFinishingListener) : void
     { finishingListeners.push(value) }
+
+    public function get finished() : Boolean
+    { return _finished }
 
     // -----------------------------------------------------
 
@@ -155,6 +160,7 @@ package goplayer
     {
       useStartBuffer()
       _buffering = true
+      _finished = false
     }
 
     public function handleBufferFilled() : void
@@ -164,8 +170,16 @@ package goplayer
     {
       _buffering = false
 
-      // Make sure to let playback resume first.
-      later(useLargeBuffer)
+      // Give the backend a chance to resume playback before we go
+      // ahead and raise the buffer size further.
+      later($handleBufferingFinished)
+    }
+
+    private function $handleBufferingFinished() : void
+    {
+      // Make sure playback was not interrupted.
+      if (!buffering && !finished)
+        useLargeBuffer()
     }
 
     public function handleBufferEmptied() : void
@@ -180,6 +194,7 @@ package goplayer
     {
       useSmallBuffer()
       _buffering = true
+      _finished = false
     }
 
     private function useStartBuffer() : void
@@ -203,6 +218,7 @@ package goplayer
     private function handleFinishedPlaying() : void
     {
       debug("Finished playing.")
+      _finished = true
 
       for each (var listener : PlayerFinishingListener in finishingListeners)
         listener.handleMovieFinishedPlaying()
@@ -221,6 +237,7 @@ package goplayer
 
     public function set paused(value : Boolean) : void
     {
+      // Allow pausing before the stream has been created.
       _paused = value
 
       if (stream)
@@ -228,16 +245,31 @@ package goplayer
     }
 
     public function togglePaused() : void
-    { paused = !paused }
+    {
+      // Forbid pausing before the stream has been created.
+      if (stream)
+        paused = !paused
+    }
 
     // -----------------------------------------------------
 
     public function get playheadPosition() : Duration
     { return stream ? stream.playheadPosition : Duration.ZERO }
 
+    public function get playheadFraction() : Number
+    { return Math.min(1, playheadPosition.seconds / streamLength.seconds) }
+
+    public function get bufferFraction() : Number
+    { return Math.min(1, bufferPosition.seconds / streamLength.seconds) }
+
+    private function get bufferPosition() : Duration
+    { return playheadPosition.plus(bufferLength) }
+
     public function set playheadPosition(value : Duration) : void
     {
+      if (!stream) return
       useStartBuffer()
+      _finished = false
       stream.playheadPosition = value
     }
 
@@ -263,13 +295,25 @@ package goplayer
     public function changeVolumeBy(delta : Number) : void
     { volume = volume + delta }
 
+    public function mute() : void
+    {
+      savedVolume = volume
+      volume = 0
+    }
+
+    public function unmute() : void
+    { volume = savedVolume == 0 ? DEFAULT_VOLUME : savedVolume }
+
+    public function get muted() : Boolean
+    { return volume == 0 }
+
     // -----------------------------------------------------
 
     public function get aspectRatio() : Number
     { return movie.aspectRatio }
 
     public function get bufferTime() : Duration
-    { return stream ? stream.bufferTime : Duration.ZERO }
+    { return stream ? stream.bufferTime : START_BUFFER }
 
     public function get bufferLength() : Duration
     { return stream ? stream.bufferLength : Duration.ZERO }

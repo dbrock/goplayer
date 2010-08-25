@@ -11,7 +11,7 @@ package goplayer
   import flash.media.Video
   import flash.utils.Timer
 
-  public class PlayerView extends Sprite
+  public class PlayerVideo extends Sprite
   {
     private const timer : Timer = new Timer(30)
     private const screenshot : ExternalImage = new ExternalImage
@@ -22,7 +22,7 @@ package goplayer
 
     private var _dimensions : Dimensions = Dimensions.ZERO
 
-    public function PlayerView
+    public function PlayerVideo
       (player : Player, video : Video)
     {
       this.player = player
@@ -47,7 +47,7 @@ package goplayer
     }
 
     public function addUpdateListener
-      (value : PlayerViewUpdateListener) : void
+      (value : PlayerVideoUpdateListener) : void
     { listeners.push(value) }
 
     private function handleAddedToStage(event : Event) : void
@@ -57,13 +57,23 @@ package goplayer
     }
 
     private function handleDoubleClick(event : MouseEvent) : void
+    { toggleFullscreen() }
+
+    public function toggleFullscreen() : void
     {
-      stage.displayState = fullscreen
-        ? StageDisplayState.NORMAL
-        : StageDisplayState.FULL_SCREEN
+      if (fullscreenEnabled)
+        disableFullscreen()
+      else
+        enableFullscreen()
     }
 
-    private function get fullscreen() : Boolean
+    public function enableFullscreen() : void
+    { stage.displayState = StageDisplayState.FULL_SCREEN }
+
+    public function disableFullscreen() : void
+    { stage.displayState = StageDisplayState.NORMAL }
+
+    private function get fullscreenEnabled() : Boolean
     { return stage && stage.displayState == StageDisplayState.FULL_SCREEN }
 
     public function set dimensions(value : Dimensions) : void
@@ -86,20 +96,20 @@ package goplayer
       if (stage)
         stage.fullScreenSourceRect = fullScreenSourceRect
 
-      for each (var listener : PlayerViewUpdateListener in listeners)
-        listener.handlePlayerViewUpdated()
+      for each (var listener : PlayerVideoUpdateListener in listeners)
+        listener.handlePlayerVideoUpdated()
     }
 
     public function get videoPosition() : Position
     {
-      return fullscreen
+      return fullscreenEnabled
         ? Position.ZERO
         : _dimensions.minus(videoDimensions).halved.asPosition
     }
 
     public function get videoDimensions() : Dimensions
     {
-      return fullscreen
+      return fullscreenEnabled
         ? player.highQualityDimensions
         : _dimensions.getInnerDimensions(player.aspectRatio)
     }
