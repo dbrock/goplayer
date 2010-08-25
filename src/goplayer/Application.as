@@ -33,13 +33,32 @@ package goplayer
       addEventListener(MouseEvent.CLICK, handleClick)
     }
 
+    public function start() : void
+    {
+      drawBackground()
+
+      stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown)
+      stage.addEventListener(Event.RESIZE, handleStageResized)
+
+      debug("Looking up Streamio movie “" + movieID + "”...")
+
+      api.fetchMovie(movieID, this)
+    }
+
+    private function drawBackground() : void
+    {
+      graphics.beginFill(0x000000)
+      graphics.drawRect(0, 0, stageDimensions.width, stageDimensions.height)
+      graphics.endFill()
+    }
+
     private function handleClick(event : MouseEvent) : void
     {
       if (ready)
-        ready = false, handleStartRequested()
+        ready = false, handlePlayRequested()
     }
 
-    private function handleStartRequested() : void
+    private function handlePlayRequested() : void
     {
       debug("Playing movie.")
       play()
@@ -61,25 +80,6 @@ package goplayer
         player.changeVolumeBy(-.1)
     }
 
-    public function start() : void
-    {
-      drawBackground()
-
-      stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown)
-      stage.addEventListener(Event.RESIZE, handleStageResized)
-
-      debug("Looking up Streamio movie “" + movieID + "”...")
-
-      api.fetchMovie(movieID, this)
-    }
-
-    private function drawBackground() : void
-    {
-      graphics.beginFill(0x000000)
-      graphics.drawRect(0, 0, stageDimensions.width, stageDimensions.height)
-      graphics.endFill()
-    }
-
     private function handleStageResized(event : Event) : void
     {
       if (view)
@@ -90,6 +90,17 @@ package goplayer
     {
       this.movie = movie
 
+      logMovieInformation()
+      createPlayer()
+
+      if (autoplay)
+        play()
+      else
+        ready = true, debug("Click movie to start playback.")
+    }
+
+    private function logMovieInformation() : void
+    {
       debug("Movie “" + movie.title + "” found.")
 
       const bitrates : Array = []
@@ -101,7 +112,10 @@ package goplayer
         debug("No RTMP streams available.")
       else
         debug("Available RTMP streams: " + bitrates.join(", "))
+    }
 
+    private function createPlayer() : void
+    {
       const kit : PlayerKit = new PlayerKit(movie)
 
       player = kit.player
@@ -111,11 +125,6 @@ package goplayer
       view.dimensions = stageDimensions
 
       addChild(view)
-
-      if (autoplay)
-        play()
-      else
-        ready = true, debug("Click movie to start playback.")
     }
 
     private function get stageDimensions() : Dimensions
