@@ -169,7 +169,7 @@ package goplayer
     { return !player.started || player.paused || player.finished }
 
     private function get barPosition() : Position
-    { return new Position(videoLeft, video.dimensions.height - bar.height + 1) }
+    { return new Position(videoLeft, video.dimensions.height - bar.height) }
 
     private function get videoWidth() : Number
     { return video.videoDimensions.width }
