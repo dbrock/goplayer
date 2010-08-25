@@ -3,7 +3,7 @@ body
 #player, #log-container
 { float: left;
   width: 800px;
-  height: 500px; }
+  height: 450px; }
 #log-container
 { font: 14px monospace;
   color: white;
