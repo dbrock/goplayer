@@ -76,6 +76,9 @@ package goplayer
     private function get fullscreenEnabled() : Boolean
     { return stage && stage.displayState == StageDisplayState.FULL_SCREEN }
 
+    public function get dimensions() : Dimensions
+    { return _dimensions }
+
     public function set dimensions(value : Dimensions) : void
     { _dimensions = value }
 
