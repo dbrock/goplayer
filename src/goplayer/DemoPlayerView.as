@@ -1,6 +1,7 @@
 package goplayer
 {
   import flash.display.Sprite
+  import flash.events.MouseEvent
 
   public class DemoPlayerView extends Sprite
     implements PlayerViewUpdateListener
@@ -15,7 +16,8 @@ package goplayer
 
     private var statusbar : PlayerStatusbar
 
-    public function DemoPlayerView(view : PlayerView, player : Player)
+    public function DemoPlayerView
+      (view : PlayerView, player : Player)
     {
       this.view = view
       this.player = player
@@ -28,6 +30,17 @@ package goplayer
       addChild(statusbar)
 
       view.addUpdateListener(this)
+
+      if (!player.started)
+        debug("Click movie to start playback.")
+
+      addEventListener(MouseEvent.CLICK, handleClick)
+    }
+
+    private function handleClick(event : MouseEvent) : void
+    {
+      if (!player.started)
+        player.start()
     }
 
     public function set dimensions(value : Dimensions) : void
@@ -53,9 +66,9 @@ package goplayer
     }
 
     private function get statusbarPosition() : Position
-    {
-      return view.videoPosition.plus(view.videoDimensions)
-        .minus(getDimensions(statusbar))
-    }
+    { return videoFarCorner.minus(getDimensions(statusbar)) }
+
+    private function get videoFarCorner() : Position
+    { return view.videoPosition.plus(view.videoDimensions) }
   }
 }

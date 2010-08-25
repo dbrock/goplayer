@@ -14,6 +14,7 @@ package goplayer
     private var _movie : Movie
     private var connection : FlashNetConnection
 
+    private var _started : Boolean = false
     private var triedStandardRTMP : Boolean = false
     private var rtmpAvailable : Boolean = false
 
@@ -44,8 +45,13 @@ package goplayer
 
     // -----------------------------------------------------
 
+    public function get started() : Boolean
+    { return _started }
+
     public function start() : void
     {
+      _started = true
+
       if (movie.rtmpURL)
         connectUsingRTMP()
       else

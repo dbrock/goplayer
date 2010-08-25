@@ -3,7 +3,6 @@ package goplayer
   import flash.display.Sprite
   import flash.events.Event
   import flash.events.KeyboardEvent
-  import flash.events.MouseEvent
   import flash.ui.Keyboard
 
   public class Application extends Sprite
@@ -16,7 +15,6 @@ package goplayer
     private var autoplay : Boolean
     private var loop : Boolean
 
-    private var ready : Boolean = false
     private var movie : Movie = null
     private var player : Player = null
     private var view : DemoPlayerView = null
@@ -29,8 +27,6 @@ package goplayer
       this.movieID = movieID
       this.autoplay = autoplay
       this.loop = loop
-      
-      addEventListener(MouseEvent.CLICK, handleClick)
     }
 
     public function start() : void
@@ -40,6 +36,11 @@ package goplayer
       stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown)
       stage.addEventListener(Event.RESIZE, handleStageResized)
 
+      lookupMovie()
+    }
+
+    private function lookupMovie() : void
+    {
       debug("Looking up Streamio movie “" + movieID + "”...")
 
       api.fetchMovie(movieID, this)
@@ -50,18 +51,6 @@ package goplayer
       graphics.beginFill(0x000000)
       graphics.drawRect(0, 0, stageDimensions.width, stageDimensions.height)
       graphics.endFill()
-    }
-
-    private function handleClick(event : MouseEvent) : void
-    {
-      if (ready)
-        ready = false, handlePlayRequested()
-    }
-
-    private function handlePlayRequested() : void
-    {
-      debug("Playing movie.")
-      play()
     }
 
     private function handleKeyDown(event : KeyboardEvent) : void
@@ -94,9 +83,7 @@ package goplayer
       createPlayer()
 
       if (autoplay)
-        play()
-      else
-        ready = true, debug("Click movie to start playback.")
+        player.start()
     }
 
     private function logMovieInformation() : void
