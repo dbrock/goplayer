@@ -8,7 +8,6 @@ package goplayer
   import flash.media.SoundTransform
   import flash.media.Video
   import flash.net.NetConnection
-  import flash.net.NetStream
 
   public class StandardFlashNetStream implements FlashNetStream
   {
@@ -19,7 +18,6 @@ package goplayer
     public function StandardFlashNetStream
       (connection : NetConnection, video : Video)
     {
-      // stream = new NetStream(connection)
       stream = new DynamicStream(connection)
 
       video.attachNetStream(stream)
@@ -80,9 +78,14 @@ package goplayer
 
     public function playRTMP(stream : RTMPStream, streams : Array) : void
     {
-      debug("Playing " + stream.bitrate + " RTMP stream: <" + stream.name + ">")
+      debug("Playing " + formatRTMPStream(stream) + ".")
+      debug("Stream name: <" + stream.name + ">")
+
       this.stream.startPlay(getDynamicStreamItem(stream, streams))
     }
+
+    private function formatRTMPStream(stream : RTMPStream) : String
+    { return stream.bitrate + " " + stream.dimensions + " RTMP stream" }
 
     public function playHTTP(url : URL) : void
     {

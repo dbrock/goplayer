@@ -1,7 +1,7 @@
 package goplayer
 {
   import flash.display.Sprite
-  import flash.display.StageDisplayState
+  import flash.events.Event
   import flash.events.KeyboardEvent
   import flash.events.MouseEvent
   import flash.ui.Keyboard
@@ -12,7 +12,6 @@ package goplayer
     private const api : StreamioAPI
       = new StreamioAPI(new StandardHTTPFetcher)
 
-    private var dimensions : Dimensions
     private var movieID : String
     private var autoplay : Boolean
     private var loop : Boolean
@@ -20,29 +19,18 @@ package goplayer
     private var ready : Boolean = false
     private var movie : Movie = null
     private var player : Player = null
+    private var view : DemoPlayerView = null
 
     public function Application
-      (dimensions : Dimensions,
-       movieID : String,
+      (movieID : String,
        autoplay : Boolean,
        loop : Boolean)
     {
-      this.dimensions = dimensions
       this.movieID = movieID
       this.autoplay = autoplay
       this.loop = loop
       
-      drawBackground()
-      
       addEventListener(MouseEvent.CLICK, handleClick)
-      addEventListener(MouseEvent.DOUBLE_CLICK, handleDoubleClick)
-    }
-
-    private function drawBackground() : void
-    {
-      graphics.beginFill(0x000000)
-      graphics.drawRect(0, 0, dimensions.width, dimensions.height)
-      graphics.endFill()
     }
 
     private function handleClick(event : MouseEvent) : void
@@ -55,13 +43,6 @@ package goplayer
     {
       debug("Playing movie.")
       play()
-    }
-
-    private function handleDoubleClick(event : MouseEvent) : void
-    {
-      stage.displayState = fullscreen
-        ? StageDisplayState.NORMAL
-        : StageDisplayState.FULL_SCREEN
     }
 
     private function handleKeyDown(event : KeyboardEvent) : void
@@ -80,16 +61,29 @@ package goplayer
         player.changeVolumeBy(-.1)
     }
 
-    private function get fullscreen() : Boolean
-    { return stage.displayState == StageDisplayState.FULL_SCREEN }
-
     public function start() : void
     {
+      drawBackground()
+
       stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown)
+      stage.addEventListener(Event.RESIZE, handleStageResized)
 
       debug("Looking up Streamio movie “" + movieID + "”...")
 
       api.fetchMovie(movieID, this)
+    }
+
+    private function drawBackground() : void
+    {
+      graphics.beginFill(0x000000)
+      graphics.drawRect(0, 0, stageDimensions.width, stageDimensions.height)
+      graphics.endFill()
+    }
+
+    private function handleStageResized(event : Event) : void
+    {
+      if (view)
+        view.dimensions = stageDimensions
     }
 
     public function handleMovie(movie : Movie) : void
@@ -113,9 +107,10 @@ package goplayer
       player = kit.player
       player.addFinishingListener(this)
 
-      kit.view.dimensions = dimensions
+      view = new DemoPlayerView(kit.view, player)
+      view.dimensions = stageDimensions
 
-      addChild(kit.view)
+      addChild(view)
 
       if (autoplay)
         play()
@@ -123,11 +118,11 @@ package goplayer
         ready = true, debug("Click movie to start playback.")
     }
 
+    private function get stageDimensions() : Dimensions
+    { return new Dimensions(stage.stageWidth, stage.stageHeight) }
+
     private function play() : void
-    {
-      player.start()
-      doubleClickEnabled = true
-    }
+    { player.start() }
 
     public function handleMovieFinishedPlaying() : void
     {

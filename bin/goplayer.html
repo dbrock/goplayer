@@ -28,11 +28,15 @@
     li.innerHTML = getTimestamp(currentTime)
     span.appendChild(document.createTextNode(message))
 
+    var zeroWidthSpace = String.fromCharCode(0x200b) //"​"
+    var valueHTML = "<span class='value'>$1</span>"
+
     span.innerHTML = span.innerHTML
-      .replace(/\/(\w)/g, "/​$1")
-      .replace(/(“.*?”)/g, "<span class='value'>$1</span>")
-      .replace(/(&lt;.*?&gt;)/g, "<span class='value'>$1</span>")
-      .replace(/(\d+(?:\.\d+)?(?:s|.bps))/g, "<span class='value'>$1</span>")
+      .replace(/\/(\w)/g, "/" + zeroWidthSpace + "$1")
+      .replace(/(“.*?”)/g, valueHTML)
+      .replace(/(&lt;.*?&gt;)/g, valueHTML)
+      .replace(/(\d+×\d+)/g, valueHTML)
+      .replace(/(\d+(?:\.\d+)?(?:s|.bps))/g, valueHTML)
 
     li.appendChild(span)
 

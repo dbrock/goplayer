@@ -12,7 +12,7 @@ package goplayer
       stage.align = StageAlign.TOP_LEFT
 
       const application : Application
-        = new Application(stageDimensions, movieID, autoplay, loop)
+        = new Application(movieID, autoplay, loop)
 
       addChild(application)
       setupLogger()
@@ -27,9 +27,6 @@ package goplayer
 
     private function get loop() : Boolean
     { return "loop" in loaderInfo.parameters }
-
-    private function get stageDimensions() : Dimensions
-    { return new Dimensions(stage.stageWidth, stage.stageHeight) }
 
     private function setupLogger() : void
     {

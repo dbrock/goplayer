@@ -14,6 +14,12 @@ package goplayer
     public function get y() : Number
     { return _y }
 
+    public function plus(other : Dimensions) : Position
+    { return new Position(x + other.width, y + other.height) }
+
+    public function minus(other : Dimensions) : Position
+    { return new Position(x - other.width, y - other.height) }
+
     public static const ZERO : Position = new Position(0, 0)
   }
 }
