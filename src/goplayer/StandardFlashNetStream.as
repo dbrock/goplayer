@@ -115,26 +115,41 @@ package goplayer
     }
 
     public function get playheadPosition() : Duration
-    { return Duration.seconds(stream.time) }
+    {
+      return isNaN(stream.time) ? null
+        : Duration.seconds(stream.time)
+    }
 
     public function set playheadPosition(position : Duration) : void
     { stream.seek(position.seconds) }
 
     public function get bandwidth() : Bitrate
-    { return Bitrate.kbps(stream.maxBandwidth) }
+    {
+      return isNaN(stream.maxBandwidth) ? null
+        : Bitrate.kbps(stream.maxBandwidth)
+    }
 
     public function get bitrate() : Bitrate
-    { return Bitrate.kbps(stream.currentStreamBitRate) }
+    {
+      return isNaN(stream.currentStreamBitRate) ? null
+        : Bitrate.kbps(stream.currentStreamBitRate)
+    }
 
     public function get bufferLength() : Duration
-    { return Duration.seconds(stream.bufferLength) }
+    {
+      return isNaN(stream.bufferLength) ? null
+        : Duration.seconds(stream.bufferLength)
+    }
 
     public function get bufferTime() : Duration
-    { return Duration.seconds(stream.bufferTime) }
+    {
+      return isNaN(stream.bufferTime) ? null
+        : Duration.seconds(stream.bufferTime)
+    }
 
     public function set bufferTime(value : Duration) : void
     {
-      if (!value.equals(bufferTime))
+      if (!Duration.equals(value, bufferTime))
         $bufferTime = value
     }
 
@@ -157,7 +172,7 @@ package goplayer
 
       later(function () : void {
         if (setBufferTimeToken == token)
-          if (!bufferTime.equals(value))
+          if (!Duration.equals(bufferTime, value))
             debug("Buffer size automatically reverted to " + bufferTime + ".")
       })
     }

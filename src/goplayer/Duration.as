@@ -19,8 +19,8 @@ package goplayer
     public function minus(other : Duration) : Duration
     { return Duration.seconds(seconds - other.seconds) }
 
-    public function equals(other : Duration) : Boolean
-    { return seconds == other.seconds }
+    public static function equals(a : Duration, b : Duration) : Boolean
+    { return a == null ? b == null : b != null && a.seconds == b.seconds }
 
     public function get mss() : String
     { return m + ":" + ss }

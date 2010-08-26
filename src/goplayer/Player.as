@@ -254,13 +254,20 @@ package goplayer
     // -----------------------------------------------------
 
     public function get playheadPosition() : Duration
-    { return stream ? stream.playheadPosition : Duration.ZERO }
+    {
+      return stream != null && stream.playheadPosition != null
+        ? stream.playheadPosition : Duration.ZERO
+    }
 
     public function get playheadFraction() : Number
-    { return Math.min(1, playheadPosition.seconds / streamLength.seconds) }
+    { return getFraction(playheadPosition.seconds, streamLength.seconds) }
 
     public function get bufferFraction() : Number
-    { return Math.min(1, bufferPosition.seconds / streamLength.seconds) }
+    { return getFraction(bufferPosition.seconds, streamLength.seconds) }
+
+    private function getFraction
+      (numerator : Number, denominator : Number) : Number
+    { return Math.min(1, numerator / denominator) }
 
     private function get bufferPosition() : Duration
     { return playheadPosition.plus(bufferLength) }
@@ -313,26 +320,38 @@ package goplayer
     { return movie.aspectRatio }
 
     public function get bufferTime() : Duration
-    { return stream ? stream.bufferTime : START_BUFFER }
+    {
+      return stream != null && stream.bufferTime != null
+        ? stream.bufferTime : START_BUFFER
+    }
 
     public function get bufferLength() : Duration
-    { return stream ? stream.bufferLength : Duration.ZERO }
+    {
+      return stream != null && stream.bufferLength != null
+        ? stream.bufferLength : Duration.ZERO
+    }
 
     public function get bufferFillRatio() : Number
-    { return Math.min(1, bufferLength.seconds / bufferTime.seconds) }
+    { return getFraction(bufferLength.seconds, bufferTime.seconds) }
 
     public function get streamLength() : Duration
     {
-      return metadata
+      return metadata != null
         ? Duration.seconds(metadata.duration)
         : movie.duration
     }
 
     public function get currentBitrate() : Bitrate
-    { return stream ? stream.bitrate : Bitrate.ZERO }
+    {
+      return stream != null && stream.bitrate != null
+        ? stream.bitrate : Bitrate.ZERO
+    }
 
     public function get currentBandwidth() : Bitrate
-    { return stream ? stream.bandwidth : Bitrate.ZERO }
+    {
+      return stream != null && stream.bandwidth != null
+        ? stream.bandwidth : Bitrate.ZERO
+    }
 
     public function get highQualityDimensions() : Dimensions
     {
