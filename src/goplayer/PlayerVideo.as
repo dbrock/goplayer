@@ -13,6 +13,8 @@ package goplayer
 
   public class PlayerVideo extends Sprite
   {
+    private const USE_FULL_SCREEN_SOURCE_RECT : Boolean = false
+
     private const timer : Timer = new Timer(30)
     private const screenshot : ExternalImage = new ExternalImage
     private const listeners : Array = []
@@ -20,13 +22,15 @@ package goplayer
     private var player : Player
     private var video : Video
 
-    private var _dimensions : Dimensions = Dimensions.ZERO
+    private var _normalDimensions : Dimensions = Dimensions.ZERO
 
     public function PlayerVideo
       (player : Player, video : Video)
     {
       this.player = player
       this.video = video
+
+      video.smoothing = true
 
       addChild(screenshot)
       addChild(video)
@@ -45,6 +49,12 @@ package goplayer
 
       update()
     }
+
+    public function get normalDimensions() : Dimensions
+    { return _normalDimensions }
+
+    public function set normalDimensions(value : Dimensions) : void
+    { _normalDimensions = value }
 
     public function addUpdateListener
       (value : PlayerVideoUpdateListener) : void
@@ -76,12 +86,6 @@ package goplayer
     private function get fullscreenEnabled() : Boolean
     { return stage && stage.displayState == StageDisplayState.FULL_SCREEN }
 
-    public function get dimensions() : Dimensions
-    { return _dimensions }
-
-    public function set dimensions(value : Dimensions) : void
-    { _dimensions = value }
-
     private function handleTimerEvent(event : TimerEvent) : void
     { update() }
 
@@ -90,35 +94,50 @@ package goplayer
 
     public function update() : void
     {
+      video.visible = videoVisible
+
       setBounds(video, videoPosition, videoDimensions)
       setBounds(screenshot, videoPosition, videoDimensions)
 
-      video.visible = videoVisible
-      video.smoothing = true
-
-      if (stage)
+      if (stage && USE_FULL_SCREEN_SOURCE_RECT)
         stage.fullScreenSourceRect = fullScreenSourceRect
 
       for each (var listener : PlayerVideoUpdateListener in listeners)
         listener.handlePlayerVideoUpdated()
     }
 
+    private function get videoVisible() : Boolean
+    { return player.playheadPosition.seconds > 0.1 }
+
     public function get videoPosition() : Position
     {
-      return fullscreenEnabled
+      return legacyFullscreenEnabled
         ? Position.ZERO
-        : _dimensions.minus(videoDimensions).halved.asPosition
+        : dimensions.minus(videoDimensions).halved.asPosition
     }
+
+    private function get legacyFullscreenEnabled() : Boolean
+    { return fullscreenEnabled && USE_FULL_SCREEN_SOURCE_RECT }
 
     public function get videoDimensions() : Dimensions
     {
-      return fullscreenEnabled
+      return legacyFullscreenEnabled
         ? player.highQualityDimensions
-        : _dimensions.getInnerDimensions(player.aspectRatio)
+        : dimensions.getInnerDimensions(player.aspectRatio)
     }
 
-    private function get videoVisible() : Boolean
-    { return player.playheadPosition.seconds > 0.1 }
+    public function get dimensions() : Dimensions
+    {
+      return legacyFullscreenEnabled ? videoDimensions
+        : fullscreenEnabled ? fullscreenDimensions
+        : normalDimensions
+    }
+
+    private function get fullscreenDimensions() : Dimensions
+    { return stage ? $fullscreenDimensions : normalDimensions }
+
+    private function get $fullscreenDimensions() : Dimensions
+    { return new Dimensions(stage.fullScreenWidth, stage.fullScreenHeight) }
 
     private function get fullScreenSourceRect() : Rectangle
     {

@@ -120,7 +120,7 @@ package goplayer
     { video.toggleFullscreen() }
 
     override public function set dimensions(value : Dimensions) : void
-    { video.dimensions = value }
+    { video.normalDimensions = value }
 
     public function handlePlayerVideoUpdated() : void
     {
