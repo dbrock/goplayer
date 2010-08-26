@@ -11,7 +11,15 @@ package goplayer
 
     public function get bestStream() : RTMPStream
     {
-      var result : RTMPStream = worstStream
+      if (maxBitrate == null)
+        return highEndStream
+      else
+        return $bestStream
+    }
+
+    private function get $bestStream() : RTMPStream
+    {
+      var result : RTMPStream = lowEndStream
 
       for each (var stream : RTMPStream in goodStreams)
         if (stream.bitrate.isGreaterThan(result.bitrate))
@@ -20,12 +28,23 @@ package goplayer
       return result
     }
 
-    private function get worstStream() : RTMPStream
+    private function get lowEndStream() : RTMPStream
     {
       var result : RTMPStream = streams[0]
 
       for each (var stream : RTMPStream in streams)
         if (stream.bitrate.isLessThan(result.bitrate))
+          result = stream
+
+      return result
+    }
+
+    private function get highEndStream() : RTMPStream
+    {
+      var result : RTMPStream = streams[0]
+
+      for each (var stream : RTMPStream in streams)
+        if (stream.bitrate.isGreaterThan(result.bitrate))
           result = stream
 
       return result

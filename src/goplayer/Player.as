@@ -4,9 +4,10 @@ package goplayer
     implements FlashNetConnectionListener, FlashNetStreamListener
   {
     private const DEFAULT_VOLUME : Number = .8
+    private const DETERMINE_BANDWIDTH : Boolean = true
 
     private const START_BUFFER : Duration = Duration.seconds(.1)
-    private const SMALL_BUFFER : Duration = Duration.seconds(3)
+    private const SMALL_BUFFER : Duration = Duration.seconds(10)
     private const LARGE_BUFFER : Duration = Duration.seconds(60)
 
     private const finishingListeners : Array = []
@@ -107,7 +108,11 @@ package goplayer
     public function handleConnectionEstablished() : void
     {
       rtmpAvailable = true
-      connection.determineBandwidth()
+
+      if (DETERMINE_BANDWIDTH)
+        connection.determineBandwidth()
+      else
+        startPlaying()
     }
 
     public function handleBandwidthDetermined
@@ -118,6 +123,9 @@ package goplayer
 
       startPlaying()
     }
+
+    private function get bandwidthDetermined() : Boolean
+    { return measuredBandwidth != null }
 
     private function startPlaying() : void
     {
@@ -149,7 +157,7 @@ package goplayer
     { return movie.rtmpStreams }
 
     private function get maxBitrate() : Bitrate
-    { return measuredBandwidth.scaledBy(.8) }
+    { return bandwidthDetermined ? measuredBandwidth.scaledBy(.8) : null }
 
     // -----------------------------------------------------
     
