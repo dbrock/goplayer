@@ -267,13 +267,13 @@ package goplayer
         ? stream.playheadPosition : Duration.ZERO
     }
 
-    public function get playheadFraction() : Number
-    { return getFraction(playheadPosition.seconds, streamLength.seconds) }
+    public function get playheadRatio() : Number
+    { return getRatio(playheadPosition.seconds, streamLength.seconds) }
 
-    public function get bufferFraction() : Number
-    { return getFraction(bufferPosition.seconds, streamLength.seconds) }
+    public function get bufferRatio() : Number
+    { return getRatio(bufferPosition.seconds, streamLength.seconds) }
 
-    private function getFraction
+    private function getRatio
       (numerator : Number, denominator : Number) : Number
     { return Math.min(1, numerator / denominator) }
 
@@ -340,7 +340,7 @@ package goplayer
     }
 
     public function get bufferFillRatio() : Number
-    { return getFraction(bufferLength.seconds, bufferTime.seconds) }
+    { return getRatio(bufferLength.seconds, bufferTime.seconds) }
 
     public function get streamLength() : Duration
     {

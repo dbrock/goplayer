@@ -6,97 +6,40 @@ package goplayer
   import flash.text.TextField
   import flash.events.MouseEvent
   import flash.utils.getQualifiedClassName
+  import flash.utils.describeType
 
   public class SkinPlayerView extends ResizableSprite
     implements PlayerVideoUpdateListener
   {
-    private const bar : Sprite = new Sprite
-    private const seekBar : Sprite = new Sprite
-
     private const overlay : Background
       = new Background(0x000000, 0.5)
     private const bufferingIndicator : BufferingIndicator
       = new BufferingIndicator
 
-    private var skin : Skin
+    private var skin : WrappedSkin
     private var video : PlayerVideo
     private var player : Player
 
-    private var leftSide : DisplayObjectContainer
-    private var rightSide : DisplayObjectContainer
-
-    private var seekBarBackground : DisplayObjectContainer
-    private var seekBarBuffer : DisplayObjectContainer
-    private var seekBarPlayhead : DisplayObjectContainer
-
     public function SkinPlayerView
-      (skin : Skin, video : PlayerVideo, player : Player)
+      (skin : WrappedSkin, video : PlayerVideo, player : Player)
     {
       this.skin = skin
       this.video = video
       this.player = player
 
-      leftSide = skin.instantiate("LeftSide")
-      rightSide = skin.instantiate("RightSide")
+      onclick(skin.playButton, handlePlayButtonClicked)
+      onclick(skin.pauseButton, handlePauseButtonClicked)
 
-      seekBarBackground = skin.instantiate("SeekBarBackground")
-      seekBarBuffer = skin.instantiate("SeekBarBuffer")
-      seekBarPlayhead = skin.instantiate("SeekBarPlayhead")
-
-      onclick(playButton, handlePlayButtonClicked)
-      onclick(pauseButton, handlePauseButtonClicked)
-
-      onclick(enableFullscreenButton, handleEnableFullscreenButtonClicked)
-      onclick(muteButton, handleMuteButtonClicked)
-      onclick(unmuteButton, handleUnmuteButtonClicked)
-
-      seekBar.addChild(seekBarBackground)
-      seekBar.addChild(seekBarBuffer)
-      seekBar.addChild(seekBarPlayhead)
-
-      bar.addChild(leftSide)
-      bar.addChild(seekBar)
-      bar.addChild(rightSide)
+      onclick(skin.enableFullscreenButton, handleEnableFullscreenButtonClicked)
+      onclick(skin.muteButton, handleMuteButtonClicked)
+      onclick(skin.unmuteButton, handleUnmuteButtonClicked)
 
       addChild(video)
       addChild(overlay)
       addChild(bufferingIndicator)
-      addChild(bar)
+      addChild(skin.root)
 
       video.addUpdateListener(this)
-    }
-
-    private function get playButton() : DisplayObject
-    { return lookup(leftSide, "playButton") }
-
-    private function get pauseButton() : DisplayObject
-    { return lookup(leftSide, "pauseButton") }
-
-    private function get muteButton() : DisplayObject
-    { return lookup(rightSide, "muteButton") }
-
-    private function get unmuteButton() : DisplayObject
-    { return lookup(rightSide, "unmuteButton") }
-
-    private function get enableFullscreenButton() : DisplayObject
-    { return lookup(rightSide, "enableFullscreenButton") }
-
-    private function get leftTimeField() : TextField
-    { return lookup(leftSide, "timeLabel") }
-
-    private function get rightTimeField() : TextField
-    { return lookup(rightSide, "timeLabel") }
-
-    private function lookup
-      (container : DisplayObjectContainer, name : String) : *
-    {
-      const containerName : String = getQualifiedClassName(container)
-      const result : DisplayObject = container.getChildByName(name)
-
-      if (result == null)
-        debug("Error: Skin part not found: " + containerName + "::" + name)
-
-      return result
     }
 
     private function handlePlayButtonClicked() : void
@@ -124,26 +67,21 @@ package goplayer
 
     public function handlePlayerVideoUpdated() : void
     {
-      setPosition(bar, barPosition)
+      setDimensions(skin.root, video.dimensions)
 
-      leftSide.x = 0
-      seekBar.x = leftSide.width
-      rightSide.x = videoWidth - rightSide.width
-
-      seekBarBackground.width = rightSide.x - seekBar.x
-      seekBarBuffer.width = seekBarBackground.width * player.bufferFraction
-      seekBarPlayhead.width = seekBarBackground.width * player.playheadFraction
+      skin.bufferRatio = player.bufferRatio
+      skin.playheadRatio = player.playheadRatio
 
       video.visible = !player.finished
 
-      playButton.visible = playButtonVisible
-      pauseButton.visible = !playButtonVisible
+      skin.playButton.visible = playButtonVisible
+      skin.pauseButton.visible = !playButtonVisible
 
-      muteButton.visible = !player.muted
-      unmuteButton.visible = player.muted
+      skin.muteButton.visible = !player.muted
+      skin.unmuteButton.visible = player.muted
 
-      leftTimeField.text = leftTimeLabel
-      rightTimeField.text = rightTimeLabel
+      skin.leftTimeField.text = leftTimeLabel
+      skin.rightTimeField.text = rightTimeLabel
 
       setBounds(overlay, video.videoPosition, video.videoDimensions)
 
@@ -167,9 +105,6 @@ package goplayer
 
     private function get playButtonVisible() : Boolean
     { return !player.started || player.paused || player.finished }
-
-    private function get barPosition() : Position
-    { return new Position(videoLeft, video.dimensions.height - bar.height) }
 
     private function get videoWidth() : Number
     { return video.videoDimensions.width }

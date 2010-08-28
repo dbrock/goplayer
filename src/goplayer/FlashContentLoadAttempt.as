@@ -4,6 +4,9 @@ package goplayer
   import flash.events.Event
   import flash.events.IOErrorEvent
   import flash.net.URLRequest
+  import flash.system.ApplicationDomain
+  import flash.system.LoaderContext
+  import flash.system.SecurityDomain
 
   public class FlashContentLoadAttempt
   {
@@ -25,6 +28,15 @@ package goplayer
 
     public function execute() : void
     { loader.load(new URLRequest(url)) }
+
+    private function get loaderContext() : LoaderContext
+    {
+      const result : LoaderContext = new LoaderContext(false, new ApplicationDomain(ApplicationDomain.currentDomain))
+
+      result.securityDomain = SecurityDomain.currentDomain
+
+      return result
+    }
 
     private function handleContentLoaded(event : Event) : void
     { listener.handleContentLoaded(loader.contentLoaderInfo) }

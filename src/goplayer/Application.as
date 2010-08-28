@@ -7,8 +7,7 @@ package goplayer
   import flash.ui.Keyboard
 
   public class Application extends Sprite
-    implements FlashContentLoaderListener, MovieHandler,
-      PlayerFinishingListener
+    implements SkinSWFLoaderListener, MovieHandler, PlayerFinishingListener
   {
     private const api : StreamioAPI
       = new StreamioAPI(new StandardHTTPFetcher)
@@ -18,7 +17,7 @@ package goplayer
     private var autoplay : Boolean
     private var loop : Boolean
 
-    private var skin : Skin = null
+    private var skinSWF : SkinSWF = null
     private var movie : Movie = null
     private var player : Player = null
     private var view : ResizableSprite = null
@@ -49,25 +48,17 @@ package goplayer
     }
 
     private function loadSkin() : void
-    {
-      debug("Loading skin <" + skinURL + ">...")
-      new FlashContentLoader().load(skinURL, this)
-    }
+    { new SkinSWFLoader(skinURL, this).execute() }
 
-    public function handleContentLoaded(info : LoaderInfo) : void
+    public function handleSkinSWFLoaded(swf : SkinSWF) : void
     {
-      debug("Skin loaded successfully.")
-      skin = new Skin(info)
-      handleSkinLoaded()
+      skinSWF = swf
+      lookUpMovie()
     }
-
-    private function handleSkinLoaded() : void
-    { lookUpMovie() }
 
     private function lookUpMovie() : void
     {
       debug("Looking up Streamio movie “" + movieID + "”...")
-
       api.fetchMovie(movieID, this)
     }
 
@@ -133,8 +124,8 @@ package goplayer
       player = kit.player
       player.addFinishingListener(this)
 
-      if (skin)
-        view = new SkinPlayerView(skin, kit.video, player)
+      if (skinSWF)
+        view = new SkinPlayerView(getSkin(), kit.video, player)
       else
         view = new DemoPlayerView(kit.video, player)
 
@@ -142,6 +133,9 @@ package goplayer
 
       addChild(view)
     }
+
+    private function getSkin() : WrappedSkin
+    { return new WrappedSkin(skinSWF.getSkin()) }
 
     private function get stageDimensions() : Dimensions
     { return new Dimensions(stage.stageWidth, stage.stageHeight) }

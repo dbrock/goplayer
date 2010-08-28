@@ -8,6 +8,6 @@ if [ $ASSPEC_SRC = "" ] ; then
   exit -1
 fi
   
-asautotest src/goplayer.as -o bin/goplayer.swf \
+asautotest src/goplayer.as -o bin/goplayer.swf -I skin-interface \
    -- src/goplayer_spec.as --test --asspec-adapter-source -I "$ASSPEC_SRC" \
    --- --static-typing
