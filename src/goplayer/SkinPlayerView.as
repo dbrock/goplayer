@@ -39,6 +39,8 @@ package goplayer
       addChild(bufferingIndicator)
       addChild(skin.root)
 
+      skin.root.visible = false
+
       video.addUpdateListener(this)
     }
 
@@ -68,6 +70,8 @@ package goplayer
     public function handlePlayerVideoUpdated() : void
     {
       setDimensions(skin.root, video.dimensions)
+
+      skin.root.visible = true
 
       skin.bufferRatio = player.bufferRatio
       skin.playheadRatio = player.playheadRatio
