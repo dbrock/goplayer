@@ -1,14 +1,12 @@
 package goplayer
 {
-  import flash.display.Sprite
-
-  public class Background extends Sprite
+  public class Background extends Component
   {
     public function Background(color : uint, alpha : Number)
     { this.color = color, this.alpha = alpha }
 
-    public function set dimensions(value : Dimensions) : void
-    { width = value.width, height = value.height }
+    override public function update() : void
+    { width = dimensions.width, height = dimensions.height }
 
     public function set color(value : uint) : void
     {

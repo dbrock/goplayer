@@ -11,7 +11,7 @@ package goplayer
   import flash.media.Video
   import flash.utils.Timer
 
-  public class PlayerVideo extends Sprite
+  public class PlayerVideo extends Component
   {
     private const USE_FULL_SCREEN_SOURCE_RECT : Boolean = false
 
@@ -46,8 +46,6 @@ package goplayer
 
       addEventListener(Event.ADDED_TO_STAGE, handleAddedToStage)
       addEventListener(MouseEvent.DOUBLE_CLICK, handleDoubleClick)
-
-      update()
     }
 
     public function get normalDimensions() : Dimensions
@@ -87,12 +85,12 @@ package goplayer
     { return stage && stage.displayState == StageDisplayState.FULL_SCREEN }
 
     private function handleTimerEvent(event : TimerEvent) : void
-    { update() }
+    { relayout() }
 
     private function handleFullScreenEvent(event : FullScreenEvent) : void
-    { update() }
+    { relayout() }
 
-    public function update() : void
+    override public function update() : void
     {
       video.visible = videoVisible
 
@@ -126,15 +124,15 @@ package goplayer
         : dimensions.getInnerDimensions(player.aspectRatio)
     }
 
-    public function get dimensions() : Dimensions
+    override public function get dimensions() : Dimensions
     {
       return legacyFullscreenEnabled ? videoDimensions
         : fullscreenEnabled ? fullscreenDimensions
-        : normalDimensions
+        : layoutDimensions
     }
 
     private function get fullscreenDimensions() : Dimensions
-    { return stage ? $fullscreenDimensions : normalDimensions }
+    { return stage ? $fullscreenDimensions : layoutDimensions }
 
     private function get $fullscreenDimensions() : Dimensions
     { return new Dimensions(stage.fullScreenWidth, stage.fullScreenHeight) }

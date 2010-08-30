@@ -8,7 +8,7 @@ package goplayer
   import flash.utils.getQualifiedClassName
   import flash.utils.describeType
 
-  public class SkinPlayerView extends ResizableSprite
+  public class SkinPlayerView extends Component
     implements PlayerVideoUpdateListener
   {
     private const overlay : Background
@@ -64,9 +64,6 @@ package goplayer
     private function handleEnableFullscreenButtonClicked() : void
     { video.toggleFullscreen() }
 
-    override public function set dimensions(value : Dimensions) : void
-    { video.normalDimensions = value }
-
     public function handlePlayerVideoUpdated() : void
     {
       setDimensions(skin.root, video.dimensions)
@@ -86,8 +83,6 @@ package goplayer
 
       skin.leftTimeField.text = leftTimeLabel
       skin.rightTimeField.text = rightTimeLabel
-
-      setBounds(overlay, video.videoPosition, video.videoDimensions)
 
       overlay.visible = player.buffering
 

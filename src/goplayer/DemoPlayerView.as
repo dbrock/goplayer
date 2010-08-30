@@ -2,7 +2,7 @@ package goplayer
 {
   import flash.events.MouseEvent
 
-  public class DemoPlayerView extends ResizableSprite
+  public class DemoPlayerView extends Component
     implements PlayerVideoUpdateListener
   {
     private const overlay : Background
@@ -42,10 +42,10 @@ package goplayer
         player.start()
     }
 
-    override public function set dimensions(value : Dimensions) : void
-    { video.normalDimensions = value }
-
     public function handlePlayerVideoUpdated() : void
+    { update() }
+
+    override public function update() : void
     {
       statusbar.update()
 

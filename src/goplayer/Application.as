@@ -3,12 +3,15 @@ package goplayer
   import flash.display.Sprite
   import flash.display.LoaderInfo
   import flash.events.Event
-  import flash.events.KeyboardEvent
-  import flash.ui.Keyboard
 
-  public class Application extends Sprite
+  public class Application extends Component
     implements SkinSWFLoaderListener, MovieHandler, PlayerFinishingListener
   {
+    private const background : Background = new Background(0x000000, 1)
+    private const contentLayer : Sprite = new Component
+    internal const debugLayer : Sprite = new Component
+    internal const internalLogger : InternalLogger = new InternalLogger
+
     private const api : StreamioAPI
       = new StreamioAPI(new StandardHTTPFetcher)
 
@@ -17,10 +20,13 @@ package goplayer
     private var autoplay : Boolean
     private var loop : Boolean
 
+    private var keyboardHandler : ApplicationKeyboardHandler
+
+    private var _dimensions : Dimensions = null
     private var skinSWF : SkinSWF = null
     private var movie : Movie = null
-    private var player : Player = null
-    private var view : ResizableSprite = null
+    internal var player : Player = null
+    private var view : Component = null
 
     public function Application
       (movieID : String,
@@ -32,20 +38,34 @@ package goplayer
       this.skinURL = skinURL
       this.autoplay = autoplay
       this.loop = loop
+
+      keyboardHandler = new ApplicationKeyboardHandler(this)
+
+      debugLayer.mouseEnabled = false
+      debugLayer.mouseChildren = false
+
+      addChild(background)
+      addChild(contentLayer)
+      addChild(debugLayer)
+
+      addEventListener(Event.ADDED_TO_STAGE, handleAddedToStage)
     }
 
-    public function start() : void
-    {
-      drawBackground()
+    public function handleKeyDown(key : Key) : void
+    { keyboardHandler.handleKeyDown(key) }
 
-      stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown)
-      stage.addEventListener(Event.RESIZE, handleStageResized)
+    private function handleAddedToStage(event : Event) : void
+    {
+      setupLogger()
 
       if (skinURL)
         loadSkin()
       else
         lookUpMovie()
     }
+
+    private function setupLogger() : void
+    { new ApplicationLoggerInstaller(this).execute() }
 
     private function loadSkin() : void
     { new SkinSWFLoader(skinURL, this).execute() }
@@ -60,35 +80,6 @@ package goplayer
     {
       debug("Looking up Streamio movie “" + movieID + "”...")
       api.fetchMovie(movieID, this)
-    }
-
-    private function drawBackground() : void
-    {
-      graphics.beginFill(0x000000)
-      graphics.drawRect(0, 0, stageDimensions.width, stageDimensions.height)
-      graphics.endFill()
-    }
-
-    private function handleKeyDown(event : KeyboardEvent) : void
-    {
-      if (!player) return
-
-      if (event.keyCode == Keyboard.SPACE)
-        player.togglePaused()
-      else if (event.keyCode == Keyboard.LEFT)
-        player.seekBy(Duration.seconds(-3))
-      else if (event.keyCode == Keyboard.RIGHT)
-        player.seekBy(Duration.seconds(+3))
-      else if (event.keyCode == Keyboard.UP)
-        player.changeVolumeBy(+.1)
-      else if (event.keyCode == Keyboard.DOWN)
-        player.changeVolumeBy(-.1)
-    }
-
-    private function handleStageResized(event : Event) : void
-    {
-      if (view)
-        view.dimensions = stageDimensions
     }
 
     public function handleMovie(movie : Movie) : void
@@ -129,16 +120,13 @@ package goplayer
       else
         view = new DemoPlayerView(kit.video, player)
 
-      view.dimensions = stageDimensions
+      update()
 
-      addChild(view)
+      contentLayer.addChild(view)
     }
 
     private function getSkin() : WrappedSkin
     { return new WrappedSkin(skinSWF.getSkin()) }
-
-    private function get stageDimensions() : Dimensions
-    { return new Dimensions(stage.stageWidth, stage.stageHeight) }
 
     private function play() : void
     { player.start() }
