@@ -17,11 +17,12 @@ package goplayer
       const line : Label = new Label
       
       line.text = message
+      line.width = container.stage.stageWidth - MARGIN * 2
 
       line.x = MARGIN
       line.y = MARGIN + nextY
 
-      nextY += line.fontSize * 1.5
+      nextY += line.height + 2
 
       container.addChild(line)
     }

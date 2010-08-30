@@ -11,11 +11,14 @@ package goplayer
     public function Label()
     {
       format.color = 0xffffff
-      format.size = 14
-      format.font = "Consolas"
+      format.size = 16
+      format.font = "Courier New"
       format.leading = 0
 
       autoSize = TextFieldAutoSize.LEFT
+
+      multiline = true
+      wordWrap = true
     }
 
     override public function set text(value : String) : void

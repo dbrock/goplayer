@@ -34,9 +34,20 @@ package goplayer
     private function setupLogger() : void
     {
       if (ExternalLogger.available)
-        setupExternalLogger()
+        trySetupExternalLogger()
       else
         setupInternalLogger()
+    }
+
+    private function trySetupExternalLogger() : void
+    {
+      try
+        { setupExternalLogger() }
+      catch (error : Error)
+        {
+          setupInternalLogger()
+          debug("Error: Failed to set up external logging: " + error.message)
+        }
     }
 
     private function setupExternalLogger() : void
@@ -51,9 +62,9 @@ package goplayer
 
       debugLayer.mouseEnabled = false
       debugLogger = new InternalLogger(debugLayer)
-      debug("External logging not available; using internal logging.")
 
-      addChild(debugLayer)
+      addChild(debugLayer)      
+      debug("Using internal logging.")
     }
   }
 }
