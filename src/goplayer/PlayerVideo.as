@@ -22,8 +22,6 @@ package goplayer
     private var player : Player
     private var video : Video
 
-    private var _normalDimensions : Dimensions = Dimensions.ZERO
-
     public function PlayerVideo
       (player : Player, video : Video)
     {
@@ -47,12 +45,6 @@ package goplayer
       addEventListener(Event.ADDED_TO_STAGE, handleAddedToStage)
       addEventListener(MouseEvent.DOUBLE_CLICK, handleDoubleClick)
     }
-
-    public function get normalDimensions() : Dimensions
-    { return _normalDimensions }
-
-    public function set normalDimensions(value : Dimensions) : void
-    { _normalDimensions = value }
 
     public function addUpdateListener
       (value : PlayerVideoUpdateListener) : void

@@ -1,4 +1,4 @@
-package
+package goplayer
 {
   public class SkinPartMissingError extends Error
   {

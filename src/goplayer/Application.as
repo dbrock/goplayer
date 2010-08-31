@@ -116,9 +116,9 @@ package goplayer
       player.addFinishingListener(this)
 
       if (skinSWF)
-        view = new SkinPlayerView(skinSWF.getSkin(), kit.video, player)
+        view = new SkinnedPlayerView(skinSWF.getSkin(), kit.video, player)
       else
-        view = new DemoPlayerView(kit.video, player)
+        view = new SimplePlayerView(kit.video, player)
 
       update()
 

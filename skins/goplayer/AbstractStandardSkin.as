@@ -1,4 +1,4 @@
-package
+package goplayer
 {
   import flash.display.DisplayObject
   import flash.display.Sprite
@@ -37,7 +37,7 @@ package
     }
 
     private function get seekTooltipText() : String
-    { return backend.getTimeStringByRatio(seekBarMouseRatio) }
+    { return getDurationByRatio(seekBarMouseRatio).mss }
 
     private function get seekBarMouseRatio() : Number
     { return seekBar.mouseX / seekBarWidth }

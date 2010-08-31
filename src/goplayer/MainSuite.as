@@ -8,9 +8,6 @@ package goplayer
     public function get size() : uint { return 6 }
 
     override protected function populate() : void
-    {
-      add(DimensionsSpecification)
-      add(URLSpecification)
-    }
+    { add(LibrarySuite) }
   }
 }

@@ -1,10 +1,7 @@
-package
+package goplayer
 {
 	import flash.display.DisplayObject
 	import flash.display.Sprite
-
-  import goplayer.Skin
-  import goplayer.SkinBackend
 
   public class AbstractSkin extends Sprite implements Skin
   {
@@ -49,10 +46,13 @@ package
     { return backend.bufferRatio }
 
     protected function get leftTimeText() : String
-    { return backend.getTimeStringByRatio(playheadRatio) }
+    { return getDurationByRatio(playheadRatio).mss }
 
     protected function get rightTimeText() : String
-    { return backend.getTimeStringByRatio(1 - playheadRatio) }
+    { return getDurationByRatio(1 - playheadRatio).mss }
+
+    protected function getDurationByRatio(ratio : Number) : Duration
+    { return Duration.seconds(backend.streamLengthSeconds * ratio) }
 
     protected function lookup(name : String) : *
     {

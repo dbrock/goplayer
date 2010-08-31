@@ -5,9 +5,6 @@ package goplayer
   import flash.events.IOErrorEvent
   import flash.events.SecurityErrorEvent
   import flash.net.URLRequest
-  import flash.system.ApplicationDomain
-  import flash.system.LoaderContext
-  import flash.system.SecurityDomain
 
   public class FlashContentLoadAttempt
   {
@@ -44,8 +41,6 @@ package goplayer
     }
 
     private function handleSecurityError(event : SecurityErrorEvent) : void
-    {
-      debug("Error: Failed to load <" + url + ">: " + event.text)
-    }
+    { debug("Error: Failed to load <" + url + ">: " + event.text) }
   }
 }

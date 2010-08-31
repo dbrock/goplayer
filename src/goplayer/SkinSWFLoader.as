@@ -43,7 +43,10 @@ package goplayer
     {
       debug("Error: Could not load skin into the application domain " +
             "of the player.")
-      debug("If you are running locally, please make sure that both the player SWF and the skin SWF are trusted by Flash Player; the easiest way to do so is usually to go to the Flash Player global settings and choose Add directory.")
+      debug("If you are running locally, please make sure that both the " +
+            "player SWF and the skin SWF are trusted by Flash Player; the " +
+            "easiest way to do so is usually to go to the Flash Player " +
+            "global settings and choose Add directory.")
     }
 
     private function reportInterfaceMissing() : void

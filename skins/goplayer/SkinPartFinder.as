@@ -1,4 +1,4 @@
-package
+package goplayer
 {
   import flash.display.DisplayObject
   import flash.display.DisplayObjectContainer

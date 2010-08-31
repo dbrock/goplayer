@@ -6,12 +6,12 @@ package goplayer
     function get skinHeight() : Number
     function get skinScale() : Number
 
+    function get streamLengthSeconds() : Number
     function get bufferRatio() : Number
     function get playheadRatio() : Number
     function get playing() : Boolean
     function get volume() : Number
 
-    function getTimeStringByRatio(ratio : Number) : String
     function handleSkinPartMissing(name : String) : void
 
     function handleUserSeek(ratio : Number) : void

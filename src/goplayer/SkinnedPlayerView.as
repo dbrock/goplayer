@@ -1,14 +1,6 @@
 package goplayer
 {
-  import flash.display.DisplayObject
-  import flash.display.DisplayObjectContainer
-  import flash.display.Sprite
-  import flash.text.TextField
-  import flash.events.MouseEvent
-  import flash.utils.getQualifiedClassName
-  import flash.utils.describeType
-
-  public class SkinPlayerView extends Component
+  public class SkinnedPlayerView extends Component
     implements PlayerVideoUpdateListener, SkinBackend
   {
     private const missingSkinParts : Array = []
@@ -21,7 +13,7 @@ package goplayer
     private var video : PlayerVideo
     private var player : Player
 
-    public function SkinPlayerView
+    public function SkinnedPlayerView
       (skin : Skin, video : PlayerVideo, player : Player)
     {
       this.skin = skin
@@ -73,6 +65,9 @@ package goplayer
 
     public function get skinScale() : Number
     { return video.fullscreenEnabled ? 2 : 1 }
+
+    public function get streamLengthSeconds() : Number
+    { return player.streamLength.seconds }
 
     public function get playheadRatio() : Number
     { return player.playheadRatio }
