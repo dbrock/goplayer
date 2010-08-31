@@ -6,8 +6,8 @@ package goplayer
     private const DEFAULT_VOLUME : Number = .8
     private const DETERMINE_BANDWIDTH : Boolean = true
 
-    private const START_BUFFER : Duration = Duration.seconds(.1)
-    private const SMALL_BUFFER : Duration = Duration.seconds(10)
+    private const START_BUFFER : Duration = Duration.seconds(1)
+    private const SMALL_BUFFER : Duration = Duration.seconds(5)
     private const LARGE_BUFFER : Duration = Duration.seconds(60)
 
     private const finishingListeners : Array = []
