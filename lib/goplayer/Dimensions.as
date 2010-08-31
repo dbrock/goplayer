@@ -23,6 +23,9 @@ package goplayer
     public function scaledBy(scalar : Number) : Dimensions
     { return new Dimensions(width * scalar, height * scalar) }
 
+    public function get center() : Position
+    { return halved.asPosition }
+
     public function get asPosition() : Position
     { return new Position(width, height) }
 
@@ -52,6 +55,12 @@ package goplayer
 
     public function toString() : String
     { return width + "×" + height }
+
+    public static function equals(a : Dimensions, b : Dimensions) : Boolean
+    {
+      return a == null ? b == null
+        : b != null && a.width == b.width && a.height == b.height
+    }
 
     public static function square(size : Number) : Dimensions
     { return new Dimensions(size, size) }

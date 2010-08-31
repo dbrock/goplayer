@@ -2,16 +2,20 @@ package goplayer
 {
   import flash.display.DisplayObject
   import flash.display.Sprite
-  import flash.events.MouseEvent
   import flash.text.TextField
 
 	public class AbstractStandardSkin extends AbstractSkin
   {
+    private const bufferingIndicator : BufferingIndicator
+      = new BufferingIndicator
+
     public function AbstractStandardSkin()
     {
       seekBarTooltip.visible = false
       seekBar.mouseChildren = false
       seekBar.buttonMode = true
+
+      addChild(bufferingIndicator)
 
       addEventListeners()
     }
@@ -34,6 +38,11 @@ package goplayer
 
       seekBarTooltip.x = seekBar.mouseX
       seekBarTooltipField.text = seekTooltipText
+
+      bufferingIndicator.visible = buffering
+
+      if (bufferingIndicator.visible)
+        bufferingIndicator.ratio = bufferFillRatio
     }
 
     private function get seekTooltipText() : String
@@ -46,52 +55,42 @@ package goplayer
 
     private function addEventListeners() : void
     {
-      seekBar.addEventListener
-        (MouseEvent.MOUSE_MOVE, handleSeekBarMouseMove)
-      seekBar.addEventListener
-        (MouseEvent.ROLL_OVER, handleSeekBarRollOver)
-      seekBar.addEventListener
-        (MouseEvent.ROLL_OUT, handleSeekBarRollOut)
-      seekBar.addEventListener
-        (MouseEvent.CLICK, handleSeekBarClicked)
-      playButton.addEventListener
-        (MouseEvent.CLICK, handlePlayButtonClicked)
-      pauseButton.addEventListener
-        (MouseEvent.CLICK, handlePauseButtonClicked)
-      muteButton.addEventListener
-        (MouseEvent.CLICK, handleMuteButtonClicked)
-      unmuteButton.addEventListener
-        (MouseEvent.CLICK, handleUnmuteButtonClicked)
-      enableFullscreenButton.addEventListener
-        (MouseEvent.CLICK, handleEnableFullscreenButtonClicked)
+      onclick(playButton, handlePlayButtonClicked)
+      onclick(pauseButton, handlePauseButtonClicked)
+      onclick(muteButton, handleMuteButtonClicked)
+      onclick(unmuteButton, handleUnmuteButtonClicked)
+      onclick(enableFullscreenButton, handleEnableFullscreenButtonClicked)
+      onmousemove(seekBar, handleSeekBarMouseMove)
+      onrollover(seekBar, handleSeekBarRollOver)
+      onrollout(seekBar, handleSeekBarRollOut)
+      onclick(seekBar, handleSeekBarClicked)
     }
 
-    private function handlePlayButtonClicked(event : MouseEvent) : void
+    private function handlePlayButtonClicked() : void
     { backend.handleUserPlay() }
 
-    private function handlePauseButtonClicked(event : MouseEvent) : void
+    private function handlePauseButtonClicked() : void
     { backend.handleUserPause() }
 
-    private function handleMuteButtonClicked(event : MouseEvent) : void
+    private function handleMuteButtonClicked() : void
     { backend.handleUserMute() }
 
-    private function handleUnmuteButtonClicked(event : MouseEvent) : void
+    private function handleUnmuteButtonClicked() : void
     { backend.handleUserUnmute() }
 
-    private function handleEnableFullscreenButtonClicked
-      (event : MouseEvent) : void
+    private function handleEnableFullscreenButtonClicked() : void
     { backend.handleUserToggleFullscreen() }
 
-    private function handleSeekBarMouseMove(event : MouseEvent) : void
+    private function handleSeekBarMouseMove() : void
     { update() }
 
-    private function handleSeekBarRollOver(event : MouseEvent) : void
+    private function handleSeekBarRollOver() : void
     { seekBarTooltip.visible = true }
 
-    private function handleSeekBarRollOut(event : MouseEvent) : void
+    private function handleSeekBarRollOut() : void
     { seekBarTooltip.visible = false }
 
-    private function handleSeekBarClicked(event : MouseEvent) : void
+    private function handleSeekBarClicked() : void
     { backend.handleUserSeek(seekBarMouseRatio) }
 
     // -----------------------------------------------------

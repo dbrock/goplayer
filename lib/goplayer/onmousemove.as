@@ -3,7 +3,7 @@ package goplayer
   import flash.display.DisplayObject
   import flash.events.MouseEvent
 
-  public function onclick
+  public function onmousemove
     (object : DisplayObject, callback : Function) : void
-  { addNullaryEventListener(object, MouseEvent.CLICK, callback) }
+  { addNullaryEventListener(object, MouseEvent.MOUSE_MOVE, callback) }
 }

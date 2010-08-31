@@ -3,7 +3,7 @@ package goplayer
 	import flash.display.DisplayObject
 	import flash.display.Sprite
 
-  public class AbstractSkin extends Sprite implements Skin
+  public class AbstractSkin extends Component implements Skin
   {
     private var _backend : SkinBackend = null
 
@@ -13,37 +13,47 @@ package goplayer
     public function get frontend() : DisplayObject
     { return this }
 
-    public function update() : void
+    override public function update() : void
     {
+      super.update()
+
+      dimensions = internalDimensions
+
       scaleX = backend.skinScale
       scaleY = backend.skinScale
     }
+
+    private function get internalDimensions() : Dimensions
+    { return externalDimensions.scaledBy(1 / backend.skinScale) }
+
+    private function get externalDimensions() : Dimensions
+    { return new Dimensions(backend.skinWidth, backend.skinHeight) }
 
     // -----------------------------------------------------
 
     public function get backend() : SkinBackend
     { return _backend }
 
-    protected function get skinWidth() : Number
-    { return backend.skinWidth / backend.skinScale }
+    protected function get playheadRatio() : Number
+    { return backend.playheadRatio }
 
-    protected function get skinHeight() : Number
-    { return backend.skinHeight / backend.skinScale }
+    protected function get bufferRatio() : Number
+    { return backend.bufferRatio }
+
+    protected function get bufferFillRatio() : Number
+    { return backend.bufferFillRatio }
 
     protected function get playing() : Boolean
     { return backend.playing }
+
+    protected function get buffering() : Boolean
+    { return backend.buffering }
 
     protected function get volume() : Number
     { return backend.volume }
 
     protected function get muted() : Boolean
     { return volume == 0 }
-
-    protected function get playheadRatio() : Number
-    { return backend.playheadRatio }
-
-    protected function get bufferRatio() : Number
-    { return backend.bufferRatio }
 
     protected function get leftTimeText() : String
     { return getDurationByRatio(playheadRatio).mss }

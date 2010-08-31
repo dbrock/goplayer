@@ -4,10 +4,6 @@ package goplayer
     implements PlayerVideoUpdateListener, SkinBackend
   {
     private const missingSkinParts : Array = []
-    private const overlay : Background
-      = new Background(0x000000, 0.5)
-    private const bufferingIndicator : BufferingIndicator
-      = new BufferingIndicator
 
     private var skin : Skin
     private var video : PlayerVideo
@@ -23,14 +19,18 @@ package goplayer
       skin.backend = this
 
       addChild(video)
-      addChild(overlay)
-      addChild(bufferingIndicator)
       addChild(skin.frontend)
-
-      skin.frontend.visible = false
 
       video.addUpdateListener(this)
     }
+
+    public function handlePlayerVideoUpdated() : void
+    {
+      video.visible = !player.finished
+      skin.update()
+    }
+
+    // -----------------------------------------------------
 
     public function handleUserPlay() : void
     {
@@ -75,14 +75,19 @@ package goplayer
     public function get bufferRatio() : Number
     { return player.bufferRatio }
 
+    public function get bufferFillRatio() : Number
+    { return player.bufferFillRatio }
+
     public function get playing() : Boolean
     { return player.playing }
+
+    public function get buffering() : Boolean
+    { return player.buffering }
 
     public function get volume() : Number
     { return player.volume }
 
-    public function getTimeStringByRatio(ratio : Number) : String
-    { return player.streamLength.scaledBy(ratio).mss }
+    // -----------------------------------------------------
 
     public function handleSkinPartMissing(name : String) : void
     {
@@ -94,43 +99,6 @@ package goplayer
     {
       debug("Error: Skin part missing: " + name)
       missingSkinParts.push(name)
-    }
-
-    // -----------------------------------------------------
-
-    public function handlePlayerVideoUpdated() : void
-    {
-      updateVideo()
-      updateOverlay()
-      updateSkin()
-    }
-
-    private function updateVideo() : void
-    { video.visible = !player.finished }
-
-    private function updateOverlay() : void
-    {
-      overlay.visible = player.buffering
-      bufferingIndicator.visible = player.buffering
-
-      if (player.buffering)
-        updateBufferingIndicator()
-    }
-
-    private function updateBufferingIndicator() :void
-    {
-      setPosition(bufferingIndicator, video.videoCenter)
-      bufferingIndicator.size = video.videoDimensions.innerSquare.width / 3
-      bufferingIndicator.ratio = player.bufferFillRatio
-      bufferingIndicator.update()
-    }
-
-    private function updateSkin() : void
-    {
-      skin.update()
-
-      // If the skin could be updated, show it.
-      skin.frontend.visible = true
     }
   }
 }

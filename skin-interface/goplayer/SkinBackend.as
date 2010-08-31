@@ -7,9 +7,11 @@ package goplayer
     function get skinScale() : Number
 
     function get streamLengthSeconds() : Number
-    function get bufferRatio() : Number
     function get playheadRatio() : Number
+    function get bufferRatio() : Number
+    function get bufferFillRatio() : Number
     function get playing() : Boolean
+    function get buffering() : Boolean
     function get volume() : Number
 
     function handleSkinPartMissing(name : String) : void

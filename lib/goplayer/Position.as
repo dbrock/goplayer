@@ -20,6 +20,15 @@ package goplayer
     public function minus(other : Dimensions) : Position
     { return new Position(x - other.width, y - other.height) }
 
+    public function scaledBy(scalar : Number) : Position
+    { return new Position(x * scalar, y * scalar) }
+
+    public function get horizontallyFlipped() : Position
+    { return new Position(-x, y) }
+
+    public function toString() : String
+    { return "(" + x + "," + y + ")" }
+
     public static const ZERO : Position = new Position(0, 0)
   }
 }

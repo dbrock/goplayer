@@ -10,12 +10,12 @@ package goplayer
     {
       super.update()
 
-      controlBar.y = skinHeight - leftSide.height
+      controlBar.y = dimensions.height - leftSide.height
       Packer.packLeft(leftSide, [seekBar, seekBarWidth], rightSide)
     }
 
     override protected function get seekBarWidth() : Number
-    { return -leftSide.width + +skinWidth + -rightSide.width }
+    { return dimensions.width - leftSide.width - rightSide.width }
 
     private function get leftSide() : Sprite
     { return lookup("controlBar.leftSide") }

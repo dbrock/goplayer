@@ -21,18 +21,30 @@ package goplayer
     override public function addChild(child : DisplayObject) : DisplayObject
     { return addChildAt(child, numChildren) }
 
+    public function set position(value : Position) : void
+    { setPosition(this, value) }
+
+    public function get position() : Position
+    { return getPosition(this) }
+
     public function set implicitDimensions(value : Dimensions) : void
     {
-      _implicitDimensions = value
+      if (!Dimensions.equals(value, _implicitDimensions))
+        {
+          _implicitDimensions = value
 
-      if (_explicitDimensions == null)
-        relayout()
+          if (_explicitDimensions == null)
+            relayout()
+        }
     }
 
     public function set dimensions(value : Dimensions) : void
     {
-      _explicitDimensions = value
-      relayout()
+      if (!Dimensions.equals(value, _explicitDimensions))
+        {
+          _explicitDimensions = value
+          relayout()
+        }
     }
 
     public function get layoutDimensions() : Dimensions
