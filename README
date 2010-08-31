@@ -1,0 +1,31 @@
+This is the Goplayer source tree.  Goplayer is a Flash-based video
+player with a strong focus on code quality.  The top-level directories
+and files are described below.
+
+asautotest.sh
+  Helper script for invoking ASAutotest in a way appropriate for
+  hacking on the player engine.  Start here if you want to work with
+  the player engine code.
+
+bin/
+  The web framework used for demoing and debugging the player.
+  Before running goplayer.html, you need to create goplayer.swf,
+  preferably using the asautotest.sh script.
+
+src/
+  The source code for the player engine.
+
+skin-interface/
+  The interfaces used for player-skin-communication.
+
+skins/
+  Skin FLA files and any skin-specific code.  Start here if you only
+  want to work with skins.
+
+skin-src/
+  Low-level, generic skin code.  When creating a new skin, you may
+  want to inherit from one of the abstract base classes here.
+
+lib/
+  Generic utility functions and classes, used in both the player
+  engine code and the skin code.
