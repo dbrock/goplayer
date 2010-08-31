@@ -2,11 +2,13 @@ package goplayer
 {
   import flash.display.Sprite
 
-
   public class BufferingIndicator extends Sprite
   {
     public var size : Number = 0
     public var ratio : Number = 0
+
+    public function BufferingIndicator()
+    { mouseEnabled = false, mouseChildren = false }
 
     public function update() : void
     {

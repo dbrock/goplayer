@@ -15,10 +15,13 @@ package goplayer
     { return _height }
 
     public function get doubled() : Dimensions
-    { return new Dimensions(width * 2, height * 2) }
+    { return scaledBy(2) }
 
     public function get halved() : Dimensions
-    { return new Dimensions(width / 2, height / 2) }
+    { return scaledBy(.5) }
+
+    public function scaledBy(scalar : Number) : Dimensions
+    { return new Dimensions(width * scalar, height * scalar) }
 
     public function get asPosition() : Position
     { return new Position(width, height) }

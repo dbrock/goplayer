@@ -1,4 +1,4 @@
-package goplayer
+package
 {
   import flash.display.DisplayObject
   import flash.display.DisplayObjectContainer
@@ -38,7 +38,7 @@ package goplayer
     private function recurse() : DisplayObject
     {
       try 
-        { return $lookup(firstPart, remainingNames) }
+        { return lookup(firstPart, remainingNames) }
       catch (error : SkinPartMissingError)
         { throw error.wrap(firstName) }
 
@@ -48,33 +48,8 @@ package goplayer
     private function get remainingNames() : Array
     { return names.slice(1) }
 
-    private static function $lookup
-      (root : DisplayObject, names : Array) : *
-    { return new SkinPartFinder(root, names).execute() }
-
     public static function lookup
       (root : DisplayObject, names : Array) : *
-    {
-      try
-        { return $lookup(root, names) }
-      catch (error : SkinPartMissingError)
-        { handleSkinPartMissing(error.names.join(".")) }
-
-      return null
-    }
-
-    private static const missingSkinParts : Array = []
-
-    private static function handleSkinPartMissing(name : String) : void
-    {
-      if (missingSkinParts.indexOf(name) == -1)
-        $handleSkinPartMissing(name)
-    }
-
-    private static function $handleSkinPartMissing(name : String) : void
-    {
-      debug("Error: Skin part missing: " + name)
-      missingSkinParts.push(name)
-    }
+    { return new SkinPartFinder(root, names).execute() }
   }
 }

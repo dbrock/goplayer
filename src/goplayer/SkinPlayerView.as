@@ -9,42 +9,38 @@ package goplayer
   import flash.utils.describeType
 
   public class SkinPlayerView extends Component
-    implements PlayerVideoUpdateListener
+    implements PlayerVideoUpdateListener, SkinBackend
   {
+    private const missingSkinParts : Array = []
     private const overlay : Background
       = new Background(0x000000, 0.5)
     private const bufferingIndicator : BufferingIndicator
       = new BufferingIndicator
 
-    private var skin : WrappedSkin
+    private var skin : Skin
     private var video : PlayerVideo
     private var player : Player
 
     public function SkinPlayerView
-      (skin : WrappedSkin, video : PlayerVideo, player : Player)
+      (skin : Skin, video : PlayerVideo, player : Player)
     {
       this.skin = skin
       this.video = video
       this.player = player
 
-      onclick(skin.playButton, handlePlayButtonClicked)
-      onclick(skin.pauseButton, handlePauseButtonClicked)
-
-      onclick(skin.enableFullscreenButton, handleEnableFullscreenButtonClicked)
-      onclick(skin.muteButton, handleMuteButtonClicked)
-      onclick(skin.unmuteButton, handleUnmuteButtonClicked)
+      skin.backend = this
 
       addChild(video)
       addChild(overlay)
       addChild(bufferingIndicator)
-      addChild(skin.root)
+      addChild(skin.frontend)
 
-      skin.root.visible = false
+      skin.frontend.visible = false
 
       video.addUpdateListener(this)
     }
 
-    private function handlePlayButtonClicked() : void
+    public function handleUserPlay() : void
     {
       if (player.started)
         player.paused = false
@@ -52,66 +48,94 @@ package goplayer
         player.start()
     }
 
-    private function handlePauseButtonClicked() : void
+    public function handleUserPause() : void
     { player.paused = true }
 
-    private function handleMuteButtonClicked() : void
+    public function handleUserSeek(ratio : Number) : void
+    { player.playheadRatio = ratio }
+
+    public function handleUserMute() : void
     { player.mute() }
 
-    private function handleUnmuteButtonClicked() : void
+    public function handleUserUnmute() : void
     { player.unmute() }
 
-    private function handleEnableFullscreenButtonClicked() : void
+    public function handleUserToggleFullscreen() : void
     { video.toggleFullscreen() }
+
+    // -----------------------------------------------------
+
+    public function get skinWidth() : Number
+    { return video.dimensions.width }
+
+    public function get skinHeight() : Number
+    { return video.dimensions.height }
+
+    public function get skinScale() : Number
+    { return video.fullscreenEnabled ? 2 : 1 }
+
+    public function get playheadRatio() : Number
+    { return player.playheadRatio }
+
+    public function get bufferRatio() : Number
+    { return player.bufferRatio }
+
+    public function get playing() : Boolean
+    { return player.playing }
+
+    public function get volume() : Number
+    { return player.volume }
+
+    public function getTimeStringByRatio(ratio : Number) : String
+    { return player.streamLength.scaledBy(ratio).mss }
+
+    public function handleSkinPartMissing(name : String) : void
+    {
+      if (missingSkinParts.indexOf(name) == -1)
+        $handleSkinPartMissing(name)
+    }
+
+    private function $handleSkinPartMissing(name : String) : void
+    {
+      debug("Error: Skin part missing: " + name)
+      missingSkinParts.push(name)
+    }
+
+    // -----------------------------------------------------
 
     public function handlePlayerVideoUpdated() : void
     {
-      setDimensions(skin.root, video.dimensions)
-
-      skin.root.visible = true
-
-      skin.bufferRatio = player.bufferRatio
-      skin.playheadRatio = player.playheadRatio
-
-      video.visible = !player.finished
-
-      skin.playButton.visible = playButtonVisible
-      skin.pauseButton.visible = !playButtonVisible
-
-      skin.muteButton.visible = !player.muted
-      skin.unmuteButton.visible = player.muted
-
-      skin.leftTimeField.text = leftTimeLabel
-      skin.rightTimeField.text = rightTimeLabel
-
-      overlay.visible = player.buffering
-
-      setPosition(bufferingIndicator, video.videoDimensions.halved.asPosition)
-
-      bufferingIndicator.size = video.videoDimensions.innerSquare.width / 3
-      bufferingIndicator.ratio = player.bufferFillRatio
-      bufferingIndicator.visible = player.buffering
-
-      if (bufferingIndicator.visible)
-        bufferingIndicator.update()
+      updateVideo()
+      updateOverlay()
+      updateSkin()
     }
 
-    private function get leftTimeLabel() : String
-    { return player.playheadPosition.mss }
+    private function updateVideo() : void
+    { video.visible = !player.finished }
 
-    private function get rightTimeLabel() : String
-    { return player.streamLength.minus(player.playheadPosition).mss }
+    private function updateOverlay() : void
+    {
+      overlay.visible = player.buffering
+      bufferingIndicator.visible = player.buffering
 
-    private function get playButtonVisible() : Boolean
-    { return !player.started || player.paused || player.finished }
+      if (player.buffering)
+        updateBufferingIndicator()
+    }
 
-    private function get videoWidth() : Number
-    { return video.videoDimensions.width }
+    private function updateBufferingIndicator() :void
+    {
+      setPosition(bufferingIndicator, video.videoCenter)
+      bufferingIndicator.size = video.videoDimensions.innerSquare.width / 3
+      bufferingIndicator.ratio = player.bufferFillRatio
+      bufferingIndicator.update()
+    }
 
-    private function get videoLeft() : Number
-    { return video.videoPosition.x }
+    private function updateSkin() : void
+    {
+      skin.update()
 
-    private function get videoBottom() : Number
-    { return video.videoPosition.plus(video.videoDimensions).y }
+      // If the skin could be updated, show it.
+      skin.frontend.visible = true
+    }
   }
 }

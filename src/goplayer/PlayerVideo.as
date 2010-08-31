@@ -81,7 +81,7 @@ package goplayer
     public function disableFullscreen() : void
     { stage.displayState = StageDisplayState.NORMAL }
 
-    private function get fullscreenEnabled() : Boolean
+    public function get fullscreenEnabled() : Boolean
     { return stage && stage.displayState == StageDisplayState.FULL_SCREEN }
 
     private function handleTimerEvent(event : TimerEvent) : void
@@ -113,6 +113,9 @@ package goplayer
         ? Position.ZERO
         : dimensions.minus(videoDimensions).halved.asPosition
     }
+
+    public function get videoCenter() : Position
+    { return videoPosition.plus(videoDimensions.halved) }
 
     private function get legacyFullscreenEnabled() : Boolean
     { return fullscreenEnabled && USE_FULL_SCREEN_SOURCE_RECT }

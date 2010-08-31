@@ -288,11 +288,17 @@ package goplayer
       stream.playheadPosition = value
     }
 
+    public function set playheadRatio(value : Number) : void
+    { playheadPosition = streamLength.scaledBy(value) }
+
     public function seekBy(delta : Duration) : void
     { playheadPosition = playheadPosition.plus(delta) }
 
     public function rewind() : void
     { playheadPosition = Duration.ZERO }
+
+    public function get playing() : Boolean
+    { return started && !paused && !finished }
 
     // -----------------------------------------------------
 

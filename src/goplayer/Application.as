@@ -116,7 +116,7 @@ package goplayer
       player.addFinishingListener(this)
 
       if (skinSWF)
-        view = new SkinPlayerView(getSkin(), kit.video, player)
+        view = new SkinPlayerView(skinSWF.getSkin(), kit.video, player)
       else
         view = new DemoPlayerView(kit.video, player)
 
@@ -124,9 +124,6 @@ package goplayer
 
       contentLayer.addChild(view)
     }
-
-    private function getSkin() : WrappedSkin
-    { return new WrappedSkin(skinSWF.getSkin()) }
 
     private function play() : void
     { player.start() }
