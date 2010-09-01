@@ -120,8 +120,6 @@ package goplayer
       else
         view = new SimplePlayerView(kit.video, player)
 
-      update()
-
       contentLayer.addChild(view)
     }
 
