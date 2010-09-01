@@ -33,14 +33,21 @@ package goplayer
     { listener.handleContentLoaded(loader.contentLoaderInfo) }
 
     private function handleIOError(event : IOErrorEvent) : void
-    {
-      const code : String = event.text.match(/^Error #(\d+)/)[1]      
-      const message : String = code == "2035" ? "Not found" : event.text
-
-      debug("Error: Failed to load <" + url + ">: " + message)
-    }
+    { handleError(event.text) }
 
     private function handleSecurityError(event : SecurityErrorEvent) : void
-    { debug("Error: Failed to load <" + url + ">: " + event.text) }
+    { handleError(event.text) }
+
+    private function handleError(message : String) : void
+    {
+      debug("Error: Failed to load <" + url + ">: "
+            + getErrorMessage(message))
+    }
+
+    private function getErrorMessage(message : String) : String
+    { return getErrorCode(message) == "2035" ? "Not found" : message }
+
+    private function getErrorCode(message : String) : String
+    { return message.match(/^Error #(\d+)/)[1] }
   }
 }
