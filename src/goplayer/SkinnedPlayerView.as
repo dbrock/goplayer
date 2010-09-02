@@ -1,13 +1,23 @@
 package goplayer
 {
+  import flash.display.Sprite
+  import flash.events.Event
+  import flash.events.MouseEvent
+  import flash.utils.getTimer
+
   public class SkinnedPlayerView extends Component
     implements PlayerVideoUpdateListener, SkinBackend
   {
+    private const IDLE_TIME_MS : uint = 2000
+
     private const missingSkinParts : Array = []
+    private const skinContainer : Sprite = new Sprite
 
     private var skin : Skin
     private var video : PlayerVideo
     private var player : Player
+
+    private var lastInteractionTime : uint = 0
 
     public function SkinnedPlayerView
       (skin : Skin, video : PlayerVideo, player : Player)
@@ -19,16 +29,35 @@ package goplayer
       skin.backend = this
 
       addChild(video)
-      addChild(skin.frontend)
+      skinContainer.addChild(skin.frontend)
+      addChild(skinContainer)
 
       video.addUpdateListener(this)
+
+      addEventListener(Event.ADDED_TO_STAGE, handleAddedToStage)
     }
+
+    private function handleAddedToStage(event : Event) : void
+    {
+      stage.addEventListener(MouseEvent.MOUSE_MOVE, handleStageMouseMove)
+      stage.addEventListener(Event.MOUSE_LEAVE, handleStageMouseLeave)
+    }
+
+    private function handleStageMouseMove(event : MouseEvent) : void
+    { lastInteractionTime = getTimer() }
+
+    private function handleStageMouseLeave(event : Event) : void
+    { lastInteractionTime = 0 }
 
     public function handlePlayerVideoUpdated() : void
     {
       video.visible = !player.finished
+      skinContainer.visible = !userIdle
       skin.update()
     }
+
+    private function get userIdle() : Boolean
+    { return getTimer() - lastInteractionTime > IDLE_TIME_MS }
 
     // -----------------------------------------------------
 
