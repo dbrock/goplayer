@@ -11,7 +11,6 @@ package goplayer
     private const IDLE_TIME_MS : uint = 2000
 
     private const missingSkinParts : Array = []
-    private const skinContainer : Sprite = new Sprite
 
     private var skin : Skin
     private var video : PlayerVideo
@@ -29,8 +28,7 @@ package goplayer
       skin.backend = this
 
       addChild(video)
-      skinContainer.addChild(skin.frontend)
-      addChild(skinContainer)
+      addChild(skin.frontend)
 
       video.addUpdateListener(this)
 
@@ -44,6 +42,9 @@ package goplayer
     }
 
     private function handleStageMouseMove(event : MouseEvent) : void
+    { registerInteraction() }
+
+    private function registerInteraction() : void
     { lastInteractionTime = getTimer() }
 
     private function handleStageMouseLeave(event : Event) : void
@@ -51,10 +52,15 @@ package goplayer
 
     public function handlePlayerVideoUpdated() : void
     {
+      if (!player.playing)
+        registerInteraction()
+
       video.visible = !player.finished
-      skinContainer.visible = !userIdle
       skin.update()
     }
+
+    public function get showControls() : Boolean
+    { return !player.playing || !userIdle }
 
     private function get userIdle() : Boolean
     { return getTimer() - lastInteractionTime > IDLE_TIME_MS }
@@ -93,7 +99,7 @@ package goplayer
     { return video.dimensions.height }
 
     public function get skinScale() : Number
-    { return video.fullscreenEnabled ? 2 : 1 }
+    { return video.modernFullscreenEnabled ? 2 : 1 }
 
     public function get streamLengthSeconds() : Number
     { return player.streamLength.seconds }

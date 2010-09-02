@@ -1,5 +1,6 @@
 package goplayer
 {
+  import flash.display.BlendMode
   import flash.display.DisplayObject
   import flash.display.Sprite
   import flash.text.TextField
@@ -9,13 +10,18 @@ package goplayer
     private const bufferingIndicator : BufferingIndicator
       = new BufferingIndicator
 
+    private var controlsFader : Fader
+
     public function AbstractStandardSkin()
     {
+      controls.blendMode = BlendMode.LAYER
+      controlsFader = new Fader(controls, Duration.seconds(.1))
+
       seekBarTooltip.visible = false
       seekBar.mouseChildren = false
       seekBar.buttonMode = true
 
-      addChild(bufferingIndicator)
+      addChildAt(bufferingIndicator, 0)
 
       addEventListeners()
     }
@@ -23,6 +29,8 @@ package goplayer
     override public function update() : void
     {
       super.update()
+
+      controlsFader.targetAlpha = showControls ? 1 : 0
 
       playButton.visible = !playing
       pauseButton.visible = playing
@@ -97,6 +105,9 @@ package goplayer
 
     protected function get seekBarWidth() : Number
     { throw new Error }
+
+    protected function get controls() : Sprite
+    { return undefinedPart("controls") }
 
     protected function get leftTimeField() : TextField
     { return undefinedPart("leftTimeField") }

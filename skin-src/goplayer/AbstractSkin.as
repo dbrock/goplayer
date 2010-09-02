@@ -34,6 +34,9 @@ package goplayer
     public function get backend() : SkinBackend
     { return _backend }
 
+    protected function get showControls() : Boolean
+    { return backend.showControls }
+
     protected function get playheadRatio() : Number
     { return backend.playheadRatio }
 

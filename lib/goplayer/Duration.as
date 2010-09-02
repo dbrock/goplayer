@@ -22,6 +22,9 @@ package goplayer
     public function scaledBy(scalar : Number) : Duration
     { return Duration.seconds(seconds * scalar) }
 
+    public function dividedBy(other : Duration) : Number
+    { return seconds / other.seconds }
+
     public static function equals(a : Duration, b : Duration) : Boolean
     { return a == null ? b == null : b != null && a.seconds == b.seconds }
 

@@ -304,7 +304,7 @@ package goplayer
     { playheadPosition = Duration.ZERO }
 
     public function get playing() : Boolean
-    { return started && !paused && !finished }
+    { return stream != null && !paused && !finished }
 
     // -----------------------------------------------------
 

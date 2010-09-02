@@ -22,6 +22,9 @@ package goplayer
     private function get rightSide() : Sprite
     { return lookup("controlBar.rightSide") }
 
+    override protected function get controls() : Sprite
+    { return lookup("controlBar") }
+
     override protected function get leftTimeField() : TextField
     { return lookup("controlBar.leftSide.timeField") }
     override protected function get playButton() : DisplayObject

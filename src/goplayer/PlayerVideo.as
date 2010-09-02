@@ -97,7 +97,7 @@ package goplayer
     }
 
     private function get videoVisible() : Boolean
-    { return player.playheadPosition.seconds > 0.1 }
+    { return player.playing || player.paused }
 
     public function get videoPosition() : Position
     {
@@ -109,7 +109,10 @@ package goplayer
     public function get videoCenter() : Position
     { return videoPosition.plus(videoDimensions.halved) }
 
-    private function get legacyFullscreenEnabled() : Boolean
+    public function get modernFullscreenEnabled() : Boolean
+    { return fullscreenEnabled && !USE_FULL_SCREEN_SOURCE_RECT }
+
+    public function get legacyFullscreenEnabled() : Boolean
     { return fullscreenEnabled && USE_FULL_SCREEN_SOURCE_RECT }
 
     public function get videoDimensions() : Dimensions
