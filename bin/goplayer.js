@@ -35,7 +35,7 @@ function log(message)
     .replace(/(“.*?”)/g, valueHTML)
     .replace(/(&lt;.*?&gt;)/g, valueHTML)
     .replace(/(\d+×\d+)/g, valueHTML)
-    .replace(/(\d+(?:\.\d+)?(?:s|.bps))/g, valueHTML)
+    .replace(/(\d+(\.\d+)?(s|(k|M|G)?(bps|B)))/g, valueHTML)
     .replace(/(^Error: .*)/g, errorHTML)
 
   li.appendChild(span)

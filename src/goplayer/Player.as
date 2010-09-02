@@ -3,6 +3,7 @@ package goplayer
   public class Player
     implements FlashNetConnectionListener, FlashNetStreamListener
   {
+    private const USE_RTMP : Boolean = true
     private const DEFAULT_VOLUME : Number = .8
     private const DETERMINE_BANDWIDTH : Boolean = true
 
@@ -18,7 +19,7 @@ package goplayer
     private var _started : Boolean = false
     private var _finished : Boolean = false
     private var triedStandardRTMP : Boolean = false
-    private var rtmpAvailable : Boolean = false
+    private var usingRTMP : Boolean = false
 
     private var measuredBandwidth : Bitrate = null
     private var measuredLatency : Duration = null
@@ -58,7 +59,7 @@ package goplayer
     {
       _started = true
 
-      if (movie.rtmpURL)
+      if (movie.rtmpURL && USE_RTMP)
         connectUsingRTMP()
       else
         connectUsingHTTP()
@@ -95,7 +96,7 @@ package goplayer
 
     private function connectUsingHTTP() : void
     {
-      rtmpAvailable = false
+      usingRTMP = false
       connection.dontConnect()
       startPlaying()
     }
@@ -107,7 +108,7 @@ package goplayer
 
     public function handleConnectionEstablished() : void
     {
-      rtmpAvailable = true
+      usingRTMP = true
 
       if (DETERMINE_BANDWIDTH)
         connection.determineBandwidth()
@@ -135,7 +136,7 @@ package goplayer
 
       useStartBuffer()
 
-      if (rtmpAvailable)
+      if (usingRTMP)
         playRTMPStream()
       else
         playHTTPStream()
@@ -162,7 +163,12 @@ package goplayer
     // -----------------------------------------------------
     
     public function handleNetStreamMetadata(data : Object) : void
-    { metadata = data }
+    {
+      metadata = data
+
+      if (!usingRTMP)
+        debug("Video file size: " + stream.httpFileSize)
+    }
 
     public function handleStreamingStarted() : void
     {

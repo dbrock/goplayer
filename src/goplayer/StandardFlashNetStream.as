@@ -106,6 +106,9 @@ package goplayer
       return result
     }
 
+    public function get httpFileSize() : Bitsize
+    { return Bitsize.bytes(stream.bytesTotal) }
+
     public function set paused(value : Boolean) : void
     {
       if (value)

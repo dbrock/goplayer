@@ -9,6 +9,8 @@ package goplayer
     function playRTMP(stream : RTMPStream, streams : Array) : void
     function playHTTP(url : URL) : void
 
+    function get httpFileSize() : Bitsize
+
     function set paused(value : Boolean) : void
 
     function get playheadPosition() : Duration
