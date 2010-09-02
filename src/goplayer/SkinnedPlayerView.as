@@ -55,7 +55,6 @@ package goplayer
       if (!player.playing)
         registerInteraction()
 
-      video.visible = !player.finished
       skin.update()
     }
 
@@ -69,7 +68,9 @@ package goplayer
 
     public function handleUserPlay() : void
     {
-      if (player.started)
+      if (player.finished)
+        player.rewind()
+      else if (player.started)
         player.paused = false
       else
         player.start()
