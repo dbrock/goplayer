@@ -3,6 +3,7 @@ package goplayer
   import flash.display.Sprite
   import flash.events.Event
   import flash.events.MouseEvent
+  import flash.ui.Mouse
   import flash.utils.getTimer
 
   public class SkinnedPlayerView extends Component
@@ -54,6 +55,11 @@ package goplayer
     {
       if (!player.playing)
         registerInteraction()
+
+      if (showControls)
+        Mouse.show()
+      else
+        Mouse.hide()
 
       skin.update()
     }
