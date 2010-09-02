@@ -10,12 +10,12 @@ package goplayer
     private const bufferingIndicator : BufferingIndicator
       = new BufferingIndicator
 
-    private var controlsFader : Fader
+    private var controlBarFader : Fader
 
     public function AbstractStandardSkin()
     {
-      controls.blendMode = BlendMode.LAYER
-      controlsFader = new Fader(controls, Duration.seconds(.1))
+      controlBar.blendMode = BlendMode.LAYER
+      controlBarFader = new Fader(controlBar, Duration.seconds(.1))
 
       seekBarTooltip.visible = false
       seekBar.mouseChildren = false
@@ -30,7 +30,7 @@ package goplayer
     {
       super.update()
 
-      controlsFader.targetAlpha = showControls ? 1 : 0
+      controlBarFader.targetAlpha = showControls ? 1 : 0
 
       playButton.visible = !playing
       pauseButton.visible = playing
@@ -47,6 +47,7 @@ package goplayer
       seekBarTooltip.x = seekBar.mouseX
       seekBarTooltipField.text = seekTooltipText
 
+      largePlayButton.visible = !running
       bufferingIndicator.visible = buffering
 
       if (bufferingIndicator.visible)
@@ -63,6 +64,7 @@ package goplayer
 
     private function addEventListeners() : void
     {
+      onclick(largePlayButton, handlePlayButtonClicked)
       onclick(playButton, handlePlayButtonClicked)
       onclick(pauseButton, handlePauseButtonClicked)
       onclick(muteButton, handleMuteButtonClicked)
@@ -106,8 +108,11 @@ package goplayer
     protected function get seekBarWidth() : Number
     { throw new Error }
 
-    protected function get controls() : Sprite
-    { return undefinedPart("controls") }
+    protected function get controlBar() : Sprite
+    { return undefinedPart("controlBar") }
+
+    protected function get largePlayButton() : DisplayObject
+    { return undefinedPart("largePlayButton") }
 
     protected function get leftTimeField() : TextField
     { return undefinedPart("leftTimeField") }

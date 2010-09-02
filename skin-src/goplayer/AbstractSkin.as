@@ -58,6 +58,9 @@ package goplayer
     protected function get muted() : Boolean
     { return volume == 0 }
 
+    protected function get running() : Boolean
+    { return backend.running }
+
     protected function get leftTimeText() : String
     { return getDurationByRatio(playheadRatio).mss }
 

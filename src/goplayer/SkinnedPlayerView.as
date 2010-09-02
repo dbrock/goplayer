@@ -102,6 +102,9 @@ package goplayer
     public function get skinScale() : Number
     { return video.modernFullscreenEnabled ? 2 : 1 }
 
+    public function get running() : Boolean
+    { return player.running }
+
     public function get streamLengthSeconds() : Number
     { return player.streamLength.seconds }
 

@@ -10,7 +10,11 @@ package goplayer
     {
       super.update()
 
+      setPosition(largePlayButton, dimensions.center)
+
+      controlBar.x = 0
       controlBar.y = dimensions.height - leftSide.height
+
       Packer.packLeft(leftSide, [seekBar, seekBarWidth], rightSide)
     }
 
@@ -22,8 +26,11 @@ package goplayer
     private function get rightSide() : Sprite
     { return lookup("controlBar.rightSide") }
 
-    override protected function get controls() : Sprite
+    override protected function get controlBar() : Sprite
     { return lookup("controlBar") }
+
+    override protected function get largePlayButton() : DisplayObject
+    { return lookup("largePlayButton") }
 
     override protected function get leftTimeField() : TextField
     { return lookup("controlBar.leftSide.timeField") }
@@ -53,5 +60,8 @@ package goplayer
     { return lookup("controlBar.rightSide.unmuteButton") }
     override protected function get enableFullscreenButton() : DisplayObject
     { return lookup("controlBar.rightSide.enableFullscreenButton") }
+
+    override protected function lookup(name : String) : *
+    { return super.lookup("skinContent." + name) }
 	}
 }

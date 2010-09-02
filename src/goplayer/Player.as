@@ -47,13 +47,16 @@ package goplayer
       (value : PlayerFinishingListener) : void
     { finishingListeners.push(value) }
 
+    public function get started() : Boolean
+    { return _started }
+
+    public function get running() : Boolean
+    { return started && !finished }
+
     public function get finished() : Boolean
     { return _finished }
 
     // -----------------------------------------------------
-
-    public function get started() : Boolean
-    { return _started }
 
     public function start() : void
     {
