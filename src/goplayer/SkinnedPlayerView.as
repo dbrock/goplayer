@@ -94,6 +94,9 @@ package goplayer
     public function handleUserUnmute() : void
     { player.unmute() }
 
+    public function handleUserSetVolume(volume : Number) : void
+    { player.volume = volume }
+
     public function handleUserToggleFullscreen() : void
     { video.toggleFullscreen() }
 

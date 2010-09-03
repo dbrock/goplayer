@@ -12,14 +12,14 @@ package goplayer
 
       setPosition(largePlayButton, dimensions.center)
 
-      controlBar.x = 0
-      controlBar.y = dimensions.height - leftSide.height
+      controlBar.x = 10
+      controlBar.y = dimensions.height - 10
 
       Packer.packLeft(leftSide, [seekBar, seekBarWidth], rightSide)
     }
 
     override protected function get seekBarWidth() : Number
-    { return dimensions.width - leftSide.width - rightSide.width }
+    { return dimensions.width - 20 - leftSide.width - rightSide.width }
 
     private function get leftSide() : Sprite
     { return lookup("controlBar.leftSide") }
@@ -60,6 +60,15 @@ package goplayer
     { return lookup("controlBar.rightSide.unmuteButton") }
     override protected function get enableFullscreenButton() : DisplayObject
     { return lookup("controlBar.rightSide.enableFullscreenButton") }
+
+    override protected function get volumeSlider() : Sprite
+    { return lookup("controlBar.rightSide.volumeControl") }
+    override protected function get volumeSliderThumb() : DisplayObject
+    { return lookup("controlBar.rightSide.volumeControl.thumb") }
+    override protected function get volumeSliderThumbGuide() : DisplayObject
+    { return lookup("controlBar.rightSide.volumeControl.thumbGuide") }
+    override protected function get volumeSliderFill() : DisplayObject
+    { return lookup("controlBar.rightSide.volumeControl.fill") }
 
     override protected function lookup(name : String) : *
     { return super.lookup("skinContent." + name) }

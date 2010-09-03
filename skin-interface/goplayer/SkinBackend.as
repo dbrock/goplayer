@@ -23,6 +23,7 @@ package goplayer
     function handleUserPause() : void
     function handleUserMute() : void
     function handleUserUnmute() : void
+    function handleUserSetVolume(volume : Number) : void
     function handleUserToggleFullscreen() : void
   }
 }

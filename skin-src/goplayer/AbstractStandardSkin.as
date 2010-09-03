@@ -3,6 +3,8 @@ package goplayer
   import flash.display.BlendMode
   import flash.display.DisplayObject
   import flash.display.Sprite
+  import flash.events.Event
+  import flash.events.MouseEvent
   import flash.text.TextField
 
 	public class AbstractStandardSkin extends AbstractSkin
@@ -11,6 +13,9 @@ package goplayer
       = new BufferingIndicator
 
     private var controlBarFader : Fader
+
+    private var volumeSliderFillMaxHeight : Number
+    private var volumeSliderFillMinY : Number
 
     public function AbstractStandardSkin()
     {
@@ -22,6 +27,13 @@ package goplayer
       seekBar.buttonMode = true
 
       addChildAt(bufferingIndicator, 0)
+
+      volumeSliderFillMaxHeight = volumeSliderFill.height
+      volumeSliderFillMinY = volumeSliderFill.y
+      volumeSlider.mouseChildren = false
+      volumeSlider.buttonMode = true
+
+      volumeSliderThumbGuide.visible = false
 
       addEventListeners()
     }
@@ -36,6 +48,10 @@ package goplayer
       pauseButton.visible = playing
       muteButton.visible = !muted
       unmuteButton.visible = muted
+
+      volumeSliderThumb.y = volumeSliderThumbY
+      volumeSliderFill.height = volumeSliderFillMaxHeight * volume
+      volumeSliderFill.y = volumeSliderFillMinY + volumeSliderFillMaxHeight * (1 - volume)
 
       leftTimeField.text = leftTimeText
       rightTimeField.text = rightTimeText
@@ -52,6 +68,18 @@ package goplayer
 
       if (bufferingIndicator.visible)
         bufferingIndicator.ratio = bufferFillRatio
+    }
+
+    private function get volumeSliderMouseVolume() : Number
+    {
+      return 1 - (volumeSlider.mouseY - volumeSliderThumbGuide.y)
+        / volumeSliderThumbGuide.height
+    }
+
+    private function get volumeSliderThumbY() : Number
+    {
+      return volumeSliderThumbGuide.y
+        + volumeSliderThumbGuide.height * (1 - volume)
     }
 
     private function get seekTooltipText() : String
@@ -74,6 +102,7 @@ package goplayer
       onrollover(seekBar, handleSeekBarRollOver)
       onrollout(seekBar, handleSeekBarRollOut)
       onclick(seekBar, handleSeekBarClicked)
+      onmousedown(volumeSlider, handleVolumeSliderMouseDown)
     }
 
     private function handlePlayButtonClicked() : void
@@ -102,6 +131,36 @@ package goplayer
 
     private function handleSeekBarClicked() : void
     { backend.handleUserSeek(seekBarMouseRatio) }
+
+    private function handleVolumeSliderMouseDown() : void
+    {
+      backend.handleUserSetVolume(volumeSliderMouseVolume)
+      stage.addEventListener
+        (MouseEvent.MOUSE_MOVE, handleVolumeSliderMouseMove);
+      stage.addEventListener
+        (MouseEvent.MOUSE_UP, handleVolumeSliderMouseUp);
+      stage.addEventListener
+        (Event.MOUSE_LEAVE, handleVolumeSliderMouseLeftStage);
+    }
+
+    private function handleVolumeSliderMouseMove(event : MouseEvent) : void
+    { backend.handleUserSetVolume(volumeSliderMouseVolume) }
+
+    private function handleVolumeSliderMouseUp(event : MouseEvent) : void
+    { removeVolumeSliderEventListeners() }
+
+    private function handleVolumeSliderMouseLeftStage(event : Event) : void
+    { removeVolumeSliderEventListeners() }
+
+    private function removeVolumeSliderEventListeners() : void
+    {
+      stage.removeEventListener
+        (MouseEvent.MOUSE_MOVE, handleVolumeSliderMouseMove);
+      stage.removeEventListener
+        (MouseEvent.MOUSE_UP, handleVolumeSliderMouseUp);
+      stage.removeEventListener
+        (Event.MOUSE_LEAVE, handleVolumeSliderMouseLeftStage);
+    }
 
     // -----------------------------------------------------
 
@@ -142,5 +201,14 @@ package goplayer
     { return undefinedPart("unmuteButton") }
     protected function get enableFullscreenButton() : DisplayObject
     { return undefinedPart("enableFullscreenButton") }
+
+    protected function get volumeSlider() : Sprite
+    { return undefinedPart("volumeSlider") }
+    protected function get volumeSliderThumb() : DisplayObject
+    { return undefinedPart("volumeSliderThumb") }
+    protected function get volumeSliderThumbGuide() : DisplayObject
+    { return undefinedPart("volumeSliderThumbGuide") }
+    protected function get volumeSliderFill() : DisplayObject
+    { return undefinedPart("volumeSliderFill") }
   }
 }
