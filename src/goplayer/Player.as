@@ -316,7 +316,7 @@ package goplayer
 
     public function set volume(value : Number) : void
     {
-      _volume = value
+      _volume = Math.round(clamp(value, 0, 1) * 100) / 100
 
       if (stream)
         stream.volume = value
