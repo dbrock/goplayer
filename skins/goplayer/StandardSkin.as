@@ -12,14 +12,14 @@ package goplayer
 
       setPosition(largePlayButton, dimensions.center)
 
-      controlBar.x = 10
-      controlBar.y = dimensions.height - 10
+      controlBar.x = 0
+      controlBar.y = dimensions.height
 
       Packer.packLeft(leftSide, [seekBar, seekBarWidth], rightSide)
     }
 
     override protected function get seekBarWidth() : Number
-    { return dimensions.width - 20 - leftSide.width - rightSide.width }
+    { return dimensions.width - leftSide.width - rightSide.width }
 
     private function get leftSide() : Sprite
     { return lookup("controlBar.leftSide") }

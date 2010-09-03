@@ -7,7 +7,7 @@ body
 #log-container
 { font: 14px monospace;
   color: white;
-  background: #333;
+  background: #222;
   overflow: auto; }
 #log
 { list-style-type: none;
