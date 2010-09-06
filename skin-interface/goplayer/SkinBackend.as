@@ -14,6 +14,7 @@ package goplayer
     function get bufferFillRatio() : Number
     function get playing() : Boolean
     function get buffering() : Boolean
+    function get bufferingUnexpectedly() : Boolean
     function get volume() : Number
 
     function handleSkinPartMissing(name : String) : void

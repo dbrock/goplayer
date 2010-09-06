@@ -51,7 +51,8 @@ package goplayer
 
       volumeSliderThumb.y = volumeSliderThumbY
       volumeSliderFill.height = volumeSliderFillMaxHeight * volume
-      volumeSliderFill.y = volumeSliderFillMinY + volumeSliderFillMaxHeight * (1 - volume)
+      volumeSliderFill.y = volumeSliderFillMinY
+        + volumeSliderFillMaxHeight * (1 - volume)
 
       leftTimeField.text = leftTimeText
       rightTimeField.text = rightTimeText
@@ -64,7 +65,7 @@ package goplayer
       seekBarTooltipField.text = seekTooltipText
 
       largePlayButton.visible = !running
-      bufferingIndicator.visible = buffering
+      bufferingIndicator.visible = bufferingUnexpectedly
 
       if (bufferingIndicator.visible)
         bufferingIndicator.ratio = bufferFillRatio

@@ -1,5 +1,7 @@
 package goplayer
 {
+  import flash.utils.getTimer
+
   public class Player
     implements FlashNetConnectionListener, FlashNetStreamListener
   {
@@ -10,6 +12,7 @@ package goplayer
     private const START_BUFFER : Duration = Duration.seconds(1)
     private const SMALL_BUFFER : Duration = Duration.seconds(5)
     private const LARGE_BUFFER : Duration = Duration.seconds(60)
+    private const SEEK_GRACE_TIME : Duration = Duration.seconds(2)
 
     private const finishingListeners : Array = []
 
@@ -31,6 +34,7 @@ package goplayer
     private var savedVolume : Number = 0
     private var _paused : Boolean = false
     private var _buffering : Boolean = false
+    private var seekStopwatch : Stopwatch = new Stopwatch
 
     public function Player
       (movie : Movie, connection : FlashNetConnection)
@@ -226,6 +230,12 @@ package goplayer
     public function get buffering() : Boolean
     { return _buffering }
 
+    public function get bufferingUnexpectedly() : Boolean
+    { return buffering && !justSeeked }
+
+    private function get justSeeked() : Boolean
+    { return seekStopwatch.within(SEEK_GRACE_TIME) }
+
     public function handleStreamingStopped() : void
     {
       if (finishedPlaying)
@@ -291,9 +301,15 @@ package goplayer
 
     public function set playheadPosition(value : Duration) : void
     {
-      if (!stream) return
-      useStartBuffer()
+      if (stream)
+        $playheadPosition = value
+    }
+
+    private function set $playheadPosition(value : Duration) : void
+    {
       _finished = false
+      seekStopwatch.start()
+      useStartBuffer()
       stream.playheadPosition = value
     }
 

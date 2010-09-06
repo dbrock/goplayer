@@ -25,6 +25,9 @@ package goplayer
     public function dividedBy(other : Duration) : Number
     { return seconds / other.seconds }
 
+    public function isGreaterThan(other : Duration) : Boolean
+    { return seconds > other.seconds }
+
     public static function equals(a : Duration, b : Duration) : Boolean
     { return a == null ? b == null : b != null && a.seconds == b.seconds }
 
