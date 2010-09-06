@@ -12,5 +12,5 @@ while true ; do
      -- src/goplayer_spec.as --test --asspec-adapter-source -I "$ASSPEC_SRC" \
      --- -I lib --static-typing
   [ $? == 200 ] && exit
-  which growlnotify && growlnotify ASAutotest -m Restarting...
+  which growlnotify > /dev/null && growlnotify ASAutotest -m Restarting...
 done
