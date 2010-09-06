@@ -20,7 +20,7 @@ package goplayer
     public function AbstractStandardSkin()
     {
       controlBar.blendMode = BlendMode.LAYER
-      controlBarFader = new Fader(controlBar, Duration.seconds(.1))
+      controlBarFader = new Fader(controlBar, Duration.seconds(.3))
 
       seekBarTooltip.visible = false
       seekBar.mouseChildren = false

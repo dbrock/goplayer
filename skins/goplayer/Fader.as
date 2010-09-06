@@ -35,17 +35,28 @@ package goplayer
     private function get ended() : Boolean
     { return phase == 1 }
 
+    public function get targetAlpha() : Number
+    { return _targetAlpha }
+
     public function set targetAlpha(value : Number) : void
     {
-      if (value != object.alpha)
-        fadeTo(value)
+      if (value != targetAlpha)
+        $targetAlpha = value
     }
 
-    private function fadeTo(value : Number) : void
+    private function set $targetAlpha(value : Number) : void
     {
       _targetAlpha = value
+
+      if (targetAlpha != object.alpha)
+        startFading()
+    }
+
+    private function startFading() : void
+    {
       startAlpha = object.alpha
       startTime = getTimer()
+
       timer.start()
     }
 
@@ -53,7 +64,7 @@ package goplayer
     { object.alpha = startAlpha + deltaAlpha * phase }
 
     private function get deltaAlpha() : Number
-    { return _targetAlpha - startAlpha }
+    { return targetAlpha - startAlpha }
 
     private function get phase() : Number
     { return clamp(elapsedTime.dividedBy(duration), 0, 1) }
@@ -62,6 +73,6 @@ package goplayer
     { return Duration.milliseconds(getTimer() - startTime) }
 
     private function get duration() : Duration
-    { return speed.scaledBy(Math.abs(_targetAlpha - startAlpha)) }
+    { return speed.scaledBy(Math.abs(targetAlpha - startAlpha)) }
   }
 }
