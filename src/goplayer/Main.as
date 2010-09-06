@@ -17,11 +17,14 @@ package goplayer
       stage.addEventListener(Event.RESIZE, handleStageResized)
       stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown)
 
-      application = new Application(movieID, skinURL, autoplay, loop)
+      application = new Application(configuration)
       application.dimensions = stageDimensions
 
       addChild(application)
     }
+
+    private function get configuration() : Configuration
+    { return Configuration.fromParameters(loaderInfo.parameters) }
 
     private function handleStageResized(event : Event) : void
     { application.dimensions = stageDimensions }
@@ -31,17 +34,5 @@ package goplayer
 
     private function handleKeyDown(event : KeyboardEvent) : void
     { application.handleKeyDown(new Key(event)) }
-
-    private function get movieID() : String
-    { return loaderInfo.parameters.streamioMovieID }
-
-    private function get skinURL() : String
-    { return loaderInfo.parameters.skinURL }
-
-    private function get autoplay() : Boolean
-    { return "autoplay" in loaderInfo.parameters }
-
-    private function get loop() : Boolean
-    { return "loop" in loaderInfo.parameters }
   }
 }

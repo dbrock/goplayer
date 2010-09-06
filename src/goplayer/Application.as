@@ -15,10 +15,7 @@ package goplayer
     private const api : StreamioAPI
       = new StreamioAPI(new StandardHTTPFetcher)
 
-    private var movieID : String
-    private var skinURL : String
-    private var autoplay : Boolean
-    private var loop : Boolean
+    private var configuration : Configuration
 
     private var keyboardHandler : ApplicationKeyboardHandler
 
@@ -28,16 +25,9 @@ package goplayer
     internal var player : Player = null
     private var view : Component = null
 
-    public function Application
-      (movieID : String,
-       skinURL : String,
-       autoplay : Boolean,
-       loop : Boolean)
+    public function Application(configuration : Configuration)
     {
-      this.movieID = movieID
-      this.skinURL = skinURL
-      this.autoplay = autoplay
-      this.loop = loop
+      this.configuration = configuration
 
       keyboardHandler = new ApplicationKeyboardHandler(this)
 
@@ -58,7 +48,7 @@ package goplayer
     {
       setupLogger()
 
-      if (skinURL)
+      if (configuration.skinURL)
         loadSkin()
       else
         lookUpMovie()
@@ -68,7 +58,7 @@ package goplayer
     { new ApplicationLoggerInstaller(this).execute() }
 
     private function loadSkin() : void
-    { new SkinSWFLoader(skinURL, this).execute() }
+    { new SkinSWFLoader(configuration.skinURL, this).execute() }
 
     public function handleSkinSWFLoaded(swf : SkinSWF) : void
     {
@@ -78,8 +68,10 @@ package goplayer
 
     private function lookUpMovie() : void
     {
-      debug("Looking up Streamio movie “" + movieID + "”...")
-      api.fetchMovie(movieID, this)
+      debug("Looking up Streamio movie “" +
+            configuration.streamioMovieID + "”...")
+
+      api.fetchMovie(configuration.streamioMovieID, this)
     }
 
     public function handleMovie(movie : Movie) : void
@@ -89,7 +81,7 @@ package goplayer
       logMovieInformation()
       createPlayer()
 
-      if (autoplay)
+      if (configuration.autoplay)
         player.start()
     }
 
@@ -128,7 +120,7 @@ package goplayer
 
     public function handleMovieFinishedPlaying() : void
     {
-      if (loop)
+      if (configuration.loop)
         debug("Looping."), player.rewind()
     }
   }
