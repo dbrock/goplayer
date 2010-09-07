@@ -1,14 +1,11 @@
 package goplayer
 {
-  public class Background extends Component
+  public class Background extends EphemeralComponent
   {
     public function Background(color : uint, alpha : Number)
     {
       this.color = color
       this.alpha = alpha
-
-      mouseEnabled = false
-      mouseChildren = false
     }
 
     override public function update() : void

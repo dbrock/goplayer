@@ -1,38 +1,37 @@
 package goplayer
 {
-  import flash.display.Sprite
-  import flash.display.StageAlign
-  import flash.display.StageScaleMode
-  import flash.events.Event
-  import flash.events.KeyboardEvent
+  import flash.ui.Keyboard
 
-  public class Main extends Sprite
+  public class Main extends RootComponent
   {
+    private const debugLayer : Component = new EphemeralComponent
+
     private var application : Application
 
     public function Main()
     {
-      stage.scaleMode = StageScaleMode.NO_SCALE
-      stage.align = StageAlign.TOP_LEFT
-      stage.addEventListener(Event.RESIZE, handleStageResized)
-      stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown)
+      installLogger()
 
-      application = new Application(configuration)
-      application.dimensions = stageDimensions
+      application = new Application(getConfiguration())
 
       addChild(application)
+      addChild(debugLayer)
+
+      onkeydown(stage, handleKeyDown)
     }
 
-    private function get configuration() : Configuration
+    private function installLogger() : void
+    { new DebugLoggerInstaller(debugLayer).execute() }
+
+    private function getConfiguration() : Configuration
     { return Configuration.fromParameters(loaderInfo.parameters) }
 
-    private function handleStageResized(event : Event) : void
-    { application.dimensions = stageDimensions }
-
-    private function get stageDimensions() : Dimensions
-    { return new Dimensions(stage.stageWidth, stage.stageHeight) }
-
-    private function handleKeyDown(event : KeyboardEvent) : void
-    { application.handleKeyDown(new Key(event)) }
+    private function handleKeyDown(key : Key) : void
+    {
+      if (key.code == Keyboard.ENTER)
+        debugLayer.visible = !debugLayer.visible
+      else
+        application.handleKeyDown(key)
+    }
   }
 }

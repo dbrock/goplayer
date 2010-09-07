@@ -1,11 +1,11 @@
 package goplayer
 {
-  public class ApplicationLoggerInstaller
+  public class DebugLoggerInstaller
   {
-    private var application : Application
+    private var debugLayer : Component
 
-    public function ApplicationLoggerInstaller(application : Application)
-    { this.application = application }
+    public function DebugLoggerInstaller(debugLayer : Component)
+    { this.debugLayer = debugLayer }
 
     public function execute() : void
     {
@@ -52,8 +52,11 @@ package goplayer
 
     private function setupInternalLogger() : void
     {
-      debugLogger = application.internalLogger
-      application.debugLayer.addChild(application.internalLogger)
+      const logger : InternalLogger = new InternalLogger
+
+      debugLogger = logger
+      debugLayer.addChild(logger)
+
       debug("Using internal logging: press Enter to toggle log visibility.")
     }
   }

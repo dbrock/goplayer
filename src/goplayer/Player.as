@@ -7,7 +7,6 @@ package goplayer
   {
     private const USE_RTMP : Boolean = true
     private const DEFAULT_VOLUME : Number = .8
-    private const DETERMINE_BANDWIDTH : Boolean = true
 
     private const START_BUFFER : Duration = Duration.seconds(1)
     private const SMALL_BUFFER : Duration = Duration.seconds(5)
@@ -16,8 +15,9 @@ package goplayer
 
     private const finishingListeners : Array = []
 
-    private var _movie : Movie
     private var connection : FlashNetConnection
+    private var _movie : Movie
+    private var bitratePolicy : BitratePolicy
 
     private var _started : Boolean = false
     private var _finished : Boolean = false
@@ -37,9 +37,13 @@ package goplayer
     private var seekStopwatch : Stopwatch = new Stopwatch
 
     public function Player
-      (movie : Movie, connection : FlashNetConnection)
+      (connection : FlashNetConnection,
+       movie : Movie,
+       bitratePolicy : BitratePolicy)
     {
-      _movie = movie, this.connection = connection
+      this.connection = connection
+      _movie = movie
+      this.bitratePolicy = bitratePolicy
 
       connection.listener = this
     }
@@ -117,11 +121,14 @@ package goplayer
     {
       usingRTMP = true
 
-      if (DETERMINE_BANDWIDTH)
+      if (bandwidthDeterminationNeeded)
         connection.determineBandwidth()
       else
         startPlaying()
     }
+
+    private function get bandwidthDeterminationNeeded() : Boolean
+    { return bitratePolicy == BitratePolicy.BEST }
 
     public function handleBandwidthDetermined
       (bandwidth : Bitrate, latency : Duration) : void
@@ -153,19 +160,16 @@ package goplayer
     }
 
     private function playRTMPStream() : void
-    { stream.playRTMP(bestStream, streams) }
+    { stream.playRTMP(streamPicker.first, streamPicker.all) }
 
     private function playHTTPStream() : void
     { stream.playHTTP(movie.httpURL) }
 
-    private function get bestStream() : RTMPStream
-    { return new RTMPStreamPicker(streams, maxBitrate).bestStream }
-
-    private function get streams() : Array
-    { return movie.rtmpStreams }
-
-    private function get maxBitrate() : Bitrate
-    { return bandwidthDetermined ? measuredBandwidth.scaledBy(.8) : null }
+    private function get streamPicker() : RTMPStreamPicker
+    {
+      return new RTMPStreamPicker
+        (movie.rtmpStreams, bitratePolicy, measuredBandwidth)
+    }
 
     // -----------------------------------------------------
     

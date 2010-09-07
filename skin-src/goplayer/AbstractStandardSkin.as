@@ -17,8 +17,10 @@ package goplayer
     private var volumeSliderFillMaxHeight : Number
     private var volumeSliderFillMinY : Number
 
-    public function AbstractStandardSkin()
+    override protected function initialize() : void
     {
+      super.initialize()
+
       controlBar.blendMode = BlendMode.LAYER
       controlBarFader = new Fader(controlBar, Duration.seconds(.3))
 

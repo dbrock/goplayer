@@ -1,61 +1,36 @@
 package goplayer
 {
-  import flash.display.Sprite
-  import flash.display.LoaderInfo
-  import flash.events.Event
+  import flash.ui.Keyboard
 
   public class Application extends Component
     implements SkinSWFLoaderListener, MovieHandler, PlayerFinishingListener
   {
-    private const background : Background = new Background(0x000000, 1)
-    private const contentLayer : Sprite = new Component
-    internal const debugLayer : Sprite = new Component
-    internal const internalLogger : InternalLogger = new InternalLogger
-
+    private const background : Background
+      = new Background(0x000000, 1)
     private const api : StreamioAPI
       = new StreamioAPI(new StandardHTTPFetcher)
 
     private var configuration : Configuration
 
-    private var keyboardHandler : ApplicationKeyboardHandler
-
-    private var _dimensions : Dimensions = null
     private var skinSWF : SkinSWF = null
     private var movie : Movie = null
-    internal var player : Player = null
+    private var player : Player = null
     private var view : Component = null
 
     public function Application(configuration : Configuration)
     {
       this.configuration = configuration
 
-      keyboardHandler = new ApplicationKeyboardHandler(this)
-
-      debugLayer.mouseEnabled = false
-      debugLayer.mouseChildren = false
-
       addChild(background)
-      addChild(contentLayer)
-      addChild(debugLayer)
-
-      addEventListener(Event.ADDED_TO_STAGE, handleAddedToStage)
     }
 
-    public function handleKeyDown(key : Key) : void
-    { keyboardHandler.handleKeyDown(key) }
-
-    private function handleAddedToStage(event : Event) : void
+    override protected function initialize() : void
     {
-      setupLogger()
-
       if (configuration.skinURL)
         loadSkin()
       else
         lookUpMovie()
     }
-
-    private function setupLogger() : void
-    { new ApplicationLoggerInstaller(this).execute() }
 
     private function loadSkin() : void
     { new SkinSWFLoader(configuration.skinURL, this).execute() }
@@ -88,6 +63,7 @@ package goplayer
     private function logMovieInformation() : void
     {
       debug("Movie “" + movie.title + "” found.")
+      debug("Will use " + configuration.bitratePolicy + ".")
 
       const bitrates : Array = []
 
@@ -102,7 +78,8 @@ package goplayer
 
     private function createPlayer() : void
     {
-      const kit : PlayerKit = new PlayerKit(movie)
+      const kit : PlayerKit = new PlayerKit
+        (movie, configuration.bitratePolicy)
 
       player = kit.player
       player.addFinishingListener(this)
@@ -112,11 +89,28 @@ package goplayer
       else
         view = new SimplePlayerView(kit.video, player)
 
-      contentLayer.addChild(view)
+      addChild(view)
     }
 
-    private function play() : void
-    { player.start() }
+    public function handleKeyDown(key : Key) : void
+    {
+      if (player)
+        $handleKeyDown(key)
+    }
+
+    private function $handleKeyDown(key : Key) : void
+    {
+      if (key.code == Keyboard.SPACE)
+        player.togglePaused()
+      else if (key.code == Keyboard.LEFT)
+        player.seekBy(Duration.seconds(-3))
+      else if (key.code == Keyboard.RIGHT)
+        player.seekBy(Duration.seconds(+3))
+      else if (key.code == Keyboard.UP)
+        player.changeVolumeBy(+.1)
+      else if (key.code == Keyboard.DOWN)
+        player.changeVolumeBy(-.1)
+    }
 
     public function handleMovieFinishedPlaying() : void
     {

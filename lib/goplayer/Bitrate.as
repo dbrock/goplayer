@@ -31,5 +31,12 @@ package goplayer
     { return new Bitrate(value) }
 
     public static const ZERO : Bitrate = new Bitrate(0)
+
+    public static function parse(input : String) : Bitrate
+    {
+      const match : Array = input.match(/^((\d*\.)?\d+)kbps$/)
+
+      return match == null ? null : Bitrate.kbps(parseFloat(match[1]))
+    }
   }
 }

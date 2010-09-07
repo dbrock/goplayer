@@ -2,11 +2,21 @@ package goplayer
 {
   import flash.display.Sprite
   import flash.display.DisplayObject
+  import flash.events.Event
 
   public class Component extends Sprite
   {
     private var _implicitDimensions : Dimensions = null
     private var _explicitDimensions : Dimensions = null
+
+    public function Component()
+    { addEventListener(Event.ADDED_TO_STAGE, handleAddedToStage) }
+
+    private function handleAddedToStage(event : Event) : void
+    { initialize() }
+
+    protected function initialize() : void
+    {}
 
     override public function addChildAt
       (child : DisplayObject, index : int) : DisplayObject
