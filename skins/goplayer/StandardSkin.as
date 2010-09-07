@@ -62,13 +62,13 @@ package goplayer
     { return lookup("controlBar.rightSide.enableFullscreenButton") }
 
     override protected function get volumeSlider() : Sprite
-    { return lookup("controlBar.rightSide.volumeControl") }
+    { return lookup("controlBar.rightSide.volumeSlider") }
     override protected function get volumeSliderThumb() : DisplayObject
-    { return lookup("controlBar.rightSide.volumeControl.thumb") }
+    { return lookup("controlBar.rightSide.volumeSlider.thumb") }
     override protected function get volumeSliderThumbGuide() : DisplayObject
-    { return lookup("controlBar.rightSide.volumeControl.thumbGuide") }
+    { return lookup("controlBar.rightSide.volumeSlider.thumbGuide") }
     override protected function get volumeSliderFill() : DisplayObject
-    { return lookup("controlBar.rightSide.volumeControl.fill") }
+    { return lookup("controlBar.rightSide.volumeSlider.fill") }
 
     override protected function lookup(name : String) : *
     { return super.lookup("skinContent." + name) }

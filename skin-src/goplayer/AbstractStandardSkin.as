@@ -37,6 +37,8 @@ package goplayer
 
       volumeSliderThumbGuide.visible = false
 
+      volumeSlider.visible = false
+
       addEventListeners()
     }
 
@@ -45,6 +47,9 @@ package goplayer
       super.update()
 
       controlBarFader.targetAlpha = showControls ? 1 : 0
+
+      if (controlBar.alpha == 0)
+        volumeSlider.visible = false
 
       playButton.visible = !playing
       pauseButton.visible = playing
@@ -106,6 +111,8 @@ package goplayer
       onrollout(seekBar, handleSeekBarRollOut)
       onclick(seekBar, handleSeekBarClicked)
       onmousedown(volumeSlider, handleVolumeSliderMouseDown)
+      onrollover(muteButton, handleVolumeButtonRollOver)
+      onrollover(unmuteButton, handleVolumeButtonRollOver)
     }
 
     private function handlePlayButtonClicked() : void
@@ -164,6 +171,10 @@ package goplayer
       stage.removeEventListener
         (Event.MOUSE_LEAVE, handleVolumeSliderMouseLeftStage);
     }
+
+
+    private function handleVolumeButtonRollOver() : void
+    { volumeSlider.visible = true }
 
     // -----------------------------------------------------
 
