@@ -6,8 +6,9 @@ package goplayer
     function get skinHeight() : Number
     function get skinScale() : Number
 
+    function get title() : String
     function get running() : Boolean
-    function get showControls() : Boolean
+    function get showChrome() : Boolean
     function get streamLengthSeconds() : Number
     function get playheadRatio() : Number
     function get bufferRatio() : Number

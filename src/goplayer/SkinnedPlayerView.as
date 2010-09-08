@@ -56,7 +56,7 @@ package goplayer
       if (!player.playing)
         registerInteraction()
 
-      if (showControls)
+      if (showChrome)
         Mouse.show()
       else
         Mouse.hide()
@@ -64,7 +64,7 @@ package goplayer
       skin.update()
     }
 
-    public function get showControls() : Boolean
+    public function get showChrome() : Boolean
     { return !player.playing || !userIdle }
 
     private function get userIdle() : Boolean
@@ -110,6 +110,9 @@ package goplayer
 
     public function get skinScale() : Number
     { return video.modernFullscreenEnabled ? 2 : 1 }
+
+    public function get title() : String
+    { return player.movie.title }
 
     public function get running() : Boolean
     { return player.running }

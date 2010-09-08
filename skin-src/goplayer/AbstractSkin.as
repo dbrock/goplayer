@@ -34,8 +34,11 @@ package goplayer
     public function get backend() : SkinBackend
     { return _backend }
 
-    protected function get showControls() : Boolean
-    { return backend.showControls }
+    protected function get titleText() : String
+    { return backend.title }
+
+    protected function get showChrome() : Boolean
+    { return backend.showChrome }
 
     protected function get playheadRatio() : Number
     { return backend.playheadRatio }
@@ -84,6 +87,6 @@ package goplayer
     }
 
     protected function undefinedPart(name : String) : *
-    { lookup("<undefined:" + name + ">") ; return null }
+    { lookup("[undefined:" + name + "]") ; return null }
   }
 }

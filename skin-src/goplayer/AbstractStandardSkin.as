@@ -12,7 +12,7 @@ package goplayer
     private const bufferingIndicator : BufferingIndicator
       = new BufferingIndicator
 
-    private var controlBarFader : Fader
+    private var chromeFader : Fader
 
     private var volumeSliderFillMaxHeight : Number
     private var volumeSliderFillMinY : Number
@@ -21,8 +21,8 @@ package goplayer
     {
       super.initialize()
 
-      controlBar.blendMode = BlendMode.LAYER
-      controlBarFader = new Fader(controlBar, Duration.seconds(.3))
+      chrome.blendMode = BlendMode.LAYER
+      chromeFader = new Fader(chrome, Duration.seconds(.3))
 
       seekBarTooltip.visible = false
       seekBar.mouseChildren = false
@@ -46,9 +46,11 @@ package goplayer
     {
       super.update()
 
-      controlBarFader.targetAlpha = showControls ? 1 : 0
+      titleField.text = titleText
 
-      if (controlBar.alpha == 0)
+      chromeFader.targetAlpha = showChrome ? 1 : 0
+
+      if (chrome.alpha == 0)
         volumeSlider.visible = false
 
       playButton.visible = !playing
@@ -181,11 +183,17 @@ package goplayer
     protected function get seekBarWidth() : Number
     { throw new Error }
 
-    protected function get controlBar() : Sprite
-    { return undefinedPart("controlBar") }
-
     protected function get largePlayButton() : DisplayObject
     { return undefinedPart("largePlayButton") }
+
+    protected function get chrome() : Sprite
+    { return undefinedPart("chrome") }
+
+    protected function get titleField() : TextField
+    { return undefinedPart("titleField") }
+
+    protected function get controlBar() : Sprite
+    { return undefinedPart("controlBar") }
 
     protected function get leftTimeField() : TextField
     { return undefinedPart("leftTimeField") }
