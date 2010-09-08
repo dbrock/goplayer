@@ -24,21 +24,5 @@ package goplayer
 
     public static function specific(bitrate : Bitrate) : BitratePolicy
     { return new BitratePolicy(bitrate) }
-
-    public static function parse(input : String) : BitratePolicy
-    {
-      if (input == "max")
-        return MAX
-      else if (input == "min")
-        return MIN
-      else if (input == "best")
-        return BEST
-      else if (Bitrate.parse(input))
-        return specific(Bitrate.parse(input))
-      else
-        debug("Error: Invalid bitrate policy: “" + input + "”")
-
-      return null
-    }
   }
 }

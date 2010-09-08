@@ -22,6 +22,7 @@ package goplayer
       super.initialize()
 
       chrome.blendMode = BlendMode.LAYER
+      chrome.alpha = showChrome ? 1 : 0
       chromeFader = new Fader(chrome, Duration.seconds(.3))
 
       seekBarTooltip.visible = false

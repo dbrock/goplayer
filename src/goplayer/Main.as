@@ -24,7 +24,7 @@ package goplayer
     { new DebugLoggerInstaller(debugLayer).execute() }
 
     private function getConfiguration() : Configuration
-    { return Configuration.fromParameters(loaderInfo.parameters) }
+    { return ConfigurationParser.parse(loaderInfo.parameters) }
 
     private function handleKeyDown(key : Key) : void
     {

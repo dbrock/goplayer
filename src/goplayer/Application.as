@@ -83,7 +83,8 @@ package goplayer
       player.addFinishingListener(this)
 
       if (skinSWF)
-        view = new SkinnedPlayerView(skinSWF.getSkin(), kit.video, player)
+        view = new SkinnedPlayerView
+          (skinSWF.getSkin(), kit.video, player, configuration.chrome)
       else
         view = new SimplePlayerView(kit.video, player)
 

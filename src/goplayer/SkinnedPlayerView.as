@@ -16,15 +16,20 @@ package goplayer
     private var skin : Skin
     private var video : PlayerVideo
     private var player : Player
+    private var chromeEnabled : Boolean
 
     private var lastInteractionTime : uint = 0
 
     public function SkinnedPlayerView
-      (skin : Skin, video : PlayerVideo, player : Player)
+      (skin : Skin,
+       video : PlayerVideo,
+       player : Player,
+       chromeEnabled : Boolean)
     {
       this.skin = skin
       this.video = video
       this.player = player
+      this.chromeEnabled = chromeEnabled
 
       skin.backend = this
 
@@ -56,7 +61,7 @@ package goplayer
       if (!player.playing)
         registerInteraction()
 
-      if (showChrome)
+      if (showMousePointer)
         Mouse.show()
       else
         Mouse.hide()
@@ -64,8 +69,11 @@ package goplayer
       skin.update()
     }
 
-    public function get showChrome() : Boolean
+    public function get showMousePointer() : Boolean
     { return !player.playing || !userIdle }
+
+    public function get showChrome() : Boolean
+    { return chromeEnabled && showMousePointer }
 
     private function get userIdle() : Boolean
     { return getTimer() - lastInteractionTime > IDLE_TIME_MS }
