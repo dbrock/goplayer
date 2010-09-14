@@ -11,8 +11,9 @@ package goplayer
 
     public function execute() : void
     {
+      result.host = parameters.host || "staging.streamio.se"
       result.movieID = parameters.movieId
-      result.skinURL = parameters.skinUrl
+      result.skinURL = parameters.skinUrl || "http://" + result.host + "/swfs/goplayer-black-skin.swf"
       result.autoplay = getBoolean("autoplay", false)
       result.loop = getBoolean("loop", false)
       result.chrome = getBoolean("chrome", true)

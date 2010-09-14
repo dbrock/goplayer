@@ -2,8 +2,10 @@ package goplayer
 {
   public class StreamioAPI
   {
-    private const baseURL : String
-      = "http://staging.streamio.se/api/v1/"
+    static public var host : String = "staging.streamio.se"
+
+    static public function get baseURL() : String
+    { return "http://"+host+"/api/v1/" }
 
     private var fetcher : JSONFetcher
 

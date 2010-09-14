@@ -21,6 +21,8 @@ package goplayer
     {
       this.configuration = configuration
 
+      StreamioAPI.host = configuration.host
+
       addChild(background)
     }
 
