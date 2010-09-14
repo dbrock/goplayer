@@ -9,5 +9,6 @@ package goplayer
     public var loop : Boolean
     public var chrome : Boolean
     public var bitratePolicy : BitratePolicy
+    public var trackerID : String
   }
 }

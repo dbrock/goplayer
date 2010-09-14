@@ -1,6 +1,7 @@
 package goplayer
 {
   import flash.ui.Keyboard
+  import streamio.Stat
 
   public class Application extends Component
     implements SkinSWFLoaderListener, MovieHandler, PlayerFinishingListener
@@ -22,6 +23,7 @@ package goplayer
       this.configuration = configuration
 
       StreamioAPI.host = configuration.host
+      Stat.trackerId = configuration.trackerID
 
       addChild(background)
     }

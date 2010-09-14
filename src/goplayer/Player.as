@@ -1,6 +1,8 @@
 package goplayer
 {
   import flash.utils.getTimer
+  
+  import streamio.Stat
 
   public class Player
     implements FlashNetConnectionListener, FlashNetStreamListener
@@ -44,6 +46,8 @@ package goplayer
       this.connection = connection
       _movie = movie
       this.bitratePolicy = bitratePolicy
+      
+      Stat.view(movie.id)
 
       connection.listener = this
     }
@@ -74,6 +78,8 @@ package goplayer
         connectUsingRTMP()
       else
         connectUsingHTTP()
+        
+      Stat.play(movie.id)
     }
 
     public function handleConnectionFailed() : void

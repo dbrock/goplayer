@@ -18,6 +18,7 @@ package goplayer
       result.loop = getBoolean("loop", false)
       result.chrome = getBoolean("chrome", true)
       result.bitratePolicy = getBitratePolicy("bitrate", BitratePolicy.BEST)
+      result.trackerID = parameters.trackerId || "global"
     }
 
     public static function parse(parameters : Object) : Configuration
