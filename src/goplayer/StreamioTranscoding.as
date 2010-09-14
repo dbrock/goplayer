@@ -11,7 +11,7 @@ package goplayer
     {
       // Always try port 443 first.  If this fails, the player will
       // fall back to trying all the standard ports and protocols.
-      return $rtmpURL.withPort(443)
+      return json.rtmp_base_uri ? $rtmpURL.withPort(443) : null
     }
 
     private function get $rtmpURL() : URL
