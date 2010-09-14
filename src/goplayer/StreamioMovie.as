@@ -8,6 +8,9 @@ package goplayer
     public function StreamioMovie(json : Object)
     { this.json = json }
 
+    public function get id() : String
+    { return json.id }
+
     public function get title() : String
     { return json.title }
 

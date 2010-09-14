@@ -2,6 +2,7 @@ package goplayer
 {
   public interface Movie
   {
+    function get id() : String
     function get title() : String
     function get duration() : Duration
     function get aspectRatio() : Number
