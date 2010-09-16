@@ -13,6 +13,7 @@ package goplayer
       = new BufferingIndicator
 
     private var chromeFader : Fader
+    private var hoveringChrome : Boolean = false
 
     private var volumeSliderFillMaxHeight : Number
     private var volumeSliderFillMinY : Number
@@ -81,6 +82,9 @@ package goplayer
         bufferingIndicator.ratio = bufferFillRatio
     }
 
+    override protected function get showChrome() : Boolean
+    { return super.showChrome || hoveringChrome }
+
     private function get volumeSliderMouseVolume() : Number
     {
       return 1 - (volumeSlider.mouseY - volumeSliderThumbGuide.y)
@@ -116,7 +120,15 @@ package goplayer
       onmousedown(volumeSlider, handleVolumeSliderMouseDown)
       onrollover(muteButton, handleVolumeButtonRollOver)
       onrollover(unmuteButton, handleVolumeButtonRollOver)
+      onrollover(chrome, handleChromeRollOver)
+      onrollout(chrome, handleChromeRollOut)
     }
+
+    private function handleChromeRollOver() : void
+    { hoveringChrome = true, update() }
+
+    private function handleChromeRollOut() : void
+    { hoveringChrome = false, update() }
 
     private function handlePlayButtonClicked() : void
     { backend.handleUserPlay() }
