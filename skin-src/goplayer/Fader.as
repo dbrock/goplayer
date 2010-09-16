@@ -1,5 +1,6 @@
 package goplayer
 {
+  import flash.display.BlendMode
   import flash.display.DisplayObject
   import flash.events.TimerEvent
   import flash.utils.Timer
@@ -12,7 +13,7 @@ package goplayer
     private var object : DisplayObject
     private var speed : Duration
 
-    private var _targetAlpha : Number
+    private var _targetAlpha : Number = NaN
     private var startAlpha : Number
     private var startTime : uint
 
@@ -22,6 +23,8 @@ package goplayer
       this.speed = speed
 
       timer.addEventListener(TimerEvent.TIMER, handleTimer)
+
+      object.blendMode = BlendMode.LAYER
     }
 
     private function handleTimer(event : TimerEvent) : void
@@ -40,6 +43,10 @@ package goplayer
 
     public function set targetAlpha(value : Number) : void
     {
+      // First time around, set the alpha immediately.
+      if (isNaN(targetAlpha))
+        object.alpha = value
+
       if (value != targetAlpha)
         $targetAlpha = value
     }

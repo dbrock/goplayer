@@ -1,6 +1,5 @@
 package goplayer
 {
-  import flash.display.BlendMode
   import flash.display.DisplayObject
   import flash.display.Sprite
   import flash.events.Event
@@ -13,6 +12,9 @@ package goplayer
       = new BufferingIndicator
 
     private var chromeFader : Fader
+    private var largePlayButtonFader : Fader
+    private var bufferingIndicatorFader : Fader
+
     private var hoveringChrome : Boolean = false
 
     private var volumeSliderFillMaxHeight : Number
@@ -22,9 +24,11 @@ package goplayer
     {
       super.initialize()
 
-      chrome.blendMode = BlendMode.LAYER
-      chrome.alpha = showChrome ? 1 : 0
       chromeFader = new Fader(chrome, Duration.seconds(.3))
+      largePlayButtonFader = new Fader
+        (largePlayButton, Duration.seconds(1))
+      bufferingIndicatorFader = new Fader
+        (bufferingIndicator, Duration.seconds(.3))
 
       seekBarTooltip.visible = false
       seekBar.mouseChildren = false
@@ -75,8 +79,8 @@ package goplayer
       seekBarTooltip.x = seekBar.mouseX
       seekBarTooltipField.text = seekTooltipText
 
-      largePlayButton.visible = !running
-      bufferingIndicator.visible = bufferingUnexpectedly
+      largePlayButtonFader.targetAlpha = running ? 0 : 1
+      bufferingIndicatorFader.targetAlpha = bufferingUnexpectedly ? 1 : 0
 
       if (bufferingIndicator.visible)
         bufferingIndicator.ratio = bufferFillRatio
