@@ -9,6 +9,7 @@ package goplayer
     function get title() : String
     function get running() : Boolean
     function get showChrome() : Boolean
+    function get showTitleBar() : Boolean
     function get streamLengthSeconds() : Number
     function get playheadRatio() : Number
     function get bufferRatio() : Number

@@ -38,7 +38,7 @@ package goplayer
     override protected function get seekBarWidth() : Number
     { return dimensions.width - controlBarLeft.width - controlBarRight.width }
 
-    private function get titleBar() : Sprite
+    override protected function get titleBar() : Sprite
     { return lookup("chrome.titleBar") }
     private function get titleBarLeft() : Sprite
     { return lookup("chrome.titleBar.left") }

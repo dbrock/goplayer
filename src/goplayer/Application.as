@@ -87,12 +87,23 @@ package goplayer
       player.addFinishingListener(this)
 
       if (skinSWF)
-        view = new SkinnedPlayerView
-          (skinSWF.getSkin(), kit.video, player, configuration.chrome)
+        view = new SkinnedPlayerView(kit.video, player, viewConfiguration)
       else
         view = new SimplePlayerView(kit.video, player)
 
       addChild(view)
+    }
+
+    private function get viewConfiguration() : SkinnedPlayerViewConfiguration
+    {
+      const result : SkinnedPlayerViewConfiguration
+        = new SkinnedPlayerViewConfiguration
+
+      result.skin = skinSWF.getSkin()
+      result.chromeEnabled = configuration.chrome
+      result.titleBarEnabled = configuration.titleBar
+
+      return result
     }
 
     public function handleKeyDown(key : Key) : void

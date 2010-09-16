@@ -53,6 +53,7 @@ package goplayer
     {
       super.update()
 
+      titleBar.visible = showTitleBar
       titleField.text = titleText
 
       chromeFader.targetAlpha = showChrome ? 1 : 0
@@ -211,6 +212,9 @@ package goplayer
 
     protected function get chrome() : Sprite
     { return undefinedPart("chrome") }
+
+    protected function get titleBar() : Sprite
+    { return undefinedPart("titleBar") }
 
     protected function get titleField() : TextField
     { return undefinedPart("titleField") }

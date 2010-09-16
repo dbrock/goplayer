@@ -13,22 +13,20 @@ package goplayer
     private const userInteractionStopwatch : Stopwatch = new Stopwatch
     private const missingSkinParts : Array = []
 
-    private var skin : Skin
     private var video : PlayerVideo
     private var player : Player
-    private var chromeEnabled : Boolean
-
+    private var skin : Skin
+    private var configuration : SkinnedPlayerViewConfiguration
 
     public function SkinnedPlayerView
-      (skin : Skin,
-       video : PlayerVideo,
+      (video : PlayerVideo,
        player : Player,
-       chromeEnabled : Boolean)
+       configuration : SkinnedPlayerViewConfiguration)
     {
-      this.skin = skin
       this.video = video
       this.player = player
-      this.chromeEnabled = chromeEnabled
+      this.skin = configuration.skin
+      this.configuration = configuration
 
       skin.backend = this
 
@@ -72,7 +70,7 @@ package goplayer
     { return !player.playing || !userIdle }
 
     public function get showChrome() : Boolean
-    { return chromeEnabled && !userIdle }
+    { return configuration.chromeEnabled && !userIdle }
 
     private function get userIdle() : Boolean
     { return !userInteractionStopwatch.within(idleTime) }
@@ -117,6 +115,9 @@ package goplayer
 
     public function get skinScale() : Number
     { return video.modernFullscreenEnabled ? 2 : 1 }
+
+    public function get showTitleBar() : Boolean
+    { return configuration.titleBarEnabled }
 
     public function get title() : String
     { return player.movie.title }

@@ -11,12 +11,15 @@ package goplayer
 
     public function execute() : void
     {
+      // XXX: Clean up the host stuff.
       result.host = parameters.host || "staging.streamio.se"
       result.movieID = parameters.movieId
-      result.skinURL = parameters.skinUrl || "http://" + result.host + "/swfs/goplayer-black-skin.swf"
+      result.skinURL = parameters.skinUrl
+        || "http://" + result.host + "/swfs/goplayer-black-skin.swf"
       result.autoplay = getBoolean("autoplay", false)
       result.loop = getBoolean("loop", false)
       result.chrome = getBoolean("chrome", true)
+      result.titleBar = getBoolean("titleBar", true)
       result.bitratePolicy = getBitratePolicy("bitrate", BitratePolicy.BEST)
       result.trackerID = parameters.trackerId || "global"
     }

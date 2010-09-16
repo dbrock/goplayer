@@ -8,6 +8,7 @@ package goplayer
     public var autoplay : Boolean
     public var loop : Boolean
     public var chrome : Boolean
+    public var titleBar : Boolean
     public var bitratePolicy : BitratePolicy
     public var trackerID : String
   }
