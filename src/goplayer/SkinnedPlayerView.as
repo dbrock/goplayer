@@ -130,8 +130,9 @@ package goplayer
     public function get playheadRatio() : Number
     { return player.playheadRatio }
 
+    // XXX: Maybe not a good name due to the conditional.
     public function get bufferRatio() : Number
-    { return player.bufferRatio }
+    { return player.usingRTMP ? 0 : player.bufferRatio }
 
     public function get bufferFillRatio() : Number
     { return player.bufferFillRatio }

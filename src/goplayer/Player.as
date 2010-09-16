@@ -24,7 +24,7 @@ package goplayer
     private var _started : Boolean = false
     private var _finished : Boolean = false
     private var triedStandardRTMP : Boolean = false
-    private var usingRTMP : Boolean = false
+    private var _usingRTMP : Boolean = false
 
     private var measuredBandwidth : Bitrate = null
     private var measuredLatency : Duration = null
@@ -102,6 +102,9 @@ package goplayer
       connectUsingHTTP()
     }
 
+    public function get usingRTMP() : Boolean
+    { return _usingRTMP }
+
     private function connectUsingRTMP() : void
     { connection.connect(movie.rtmpURL) }
 
@@ -113,7 +116,7 @@ package goplayer
 
     private function connectUsingHTTP() : void
     {
-      usingRTMP = false
+      _usingRTMP = false
       connection.dontConnect()
       startPlaying()
     }
@@ -125,7 +128,7 @@ package goplayer
 
     public function handleConnectionEstablished() : void
     {
-      usingRTMP = true
+      _usingRTMP = true
 
       if (bandwidthDeterminationNeeded)
         connection.determineBandwidth()
