@@ -9,8 +9,8 @@ package goplayer
   public class SkinnedPlayerView extends Component
     implements PlayerVideoUpdateListener, SkinBackend
   {
-    private const IDLE_TIME_MS : uint = 2000
-
+    private const idleTime : Duration = Duration.seconds(2)
+    private const userInteractionStopwatch : Stopwatch = new Stopwatch
     private const missingSkinParts : Array = []
 
     private var skin : Skin
@@ -18,7 +18,6 @@ package goplayer
     private var player : Player
     private var chromeEnabled : Boolean
 
-    private var lastInteractionTime : uint = 0
 
     public function SkinnedPlayerView
       (skin : Skin,
@@ -50,17 +49,17 @@ package goplayer
     private function handleStageMouseMove(event : MouseEvent) : void
     { registerInteraction() }
 
-    private function registerInteraction() : void
-    { lastInteractionTime = getTimer() }
-
     private function handleStageMouseLeave(event : Event) : void
-    { lastInteractionTime = 0 }
+    { unregisterInteraction() }
+
+    private function registerInteraction() : void
+    { userInteractionStopwatch.start() }
+
+    private function unregisterInteraction() : void
+    { userInteractionStopwatch.reset() }
 
     public function handlePlayerVideoUpdated() : void
     {
-      if (!player.playing)
-        registerInteraction()
-
       if (showMousePointer)
         Mouse.show()
       else
@@ -73,10 +72,10 @@ package goplayer
     { return !player.playing || !userIdle }
 
     public function get showChrome() : Boolean
-    { return chromeEnabled && showMousePointer }
+    { return chromeEnabled && !userIdle }
 
     private function get userIdle() : Boolean
-    { return getTimer() - lastInteractionTime > IDLE_TIME_MS }
+    { return !userInteractionStopwatch.within(idleTime) }
 
     // -----------------------------------------------------
 

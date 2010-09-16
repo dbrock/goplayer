@@ -4,24 +4,27 @@ package goplayer
 
   public class Stopwatch
   {
+    private var _running : Boolean = false
     private var startTime : uint
-    private var _started : Boolean = false
 
     public function start() : void
-    { startTime = getTimer(), _started = true }
+    { _running = true, startTime = getTimer() }
 
-    public function get started() : Boolean
-    { return _started }
+    public function reset() : void
+    { _running = false }
+
+    public function get running() : Boolean
+    { return _running }
 
     public function getElapsedTime() : Duration
     {
-      if (started)
+      if (running)
         return Duration.milliseconds(getTimer() - startTime)
       else
         throw new Error
     }
 
     public function within(limit : Duration) : Boolean
-    { return started && !getElapsedTime().isGreaterThan(limit) }
+    { return running && !getElapsedTime().isGreaterThan(limit) }
   }
 }
