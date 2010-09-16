@@ -8,12 +8,12 @@ package goplayer
 
 	public class AbstractStandardSkin extends AbstractSkin
   {
-    private const bufferingIndicator : BufferingIndicator
-      = new BufferingIndicator
+    private const bufferIndicator : BufferIndicator
+      = new BufferIndicator
 
     private var chromeFader : Fader
     private var largePlayButtonFader : Fader
-    private var bufferingIndicatorFader : Fader
+    private var bufferIndicatorFader : Fader
 
     private var hoveringChrome : Boolean = false
 
@@ -27,14 +27,14 @@ package goplayer
       chromeFader = new Fader(chrome, Duration.seconds(.3))
       largePlayButtonFader = new Fader
         (largePlayButton, Duration.seconds(1))
-      bufferingIndicatorFader = new Fader
-        (bufferingIndicator, Duration.seconds(.3))
+      bufferIndicatorFader = new Fader
+        (bufferIndicator, Duration.seconds(.3))
 
       seekBarTooltip.visible = false
       seekBar.mouseChildren = false
       seekBar.buttonMode = true
 
-      addChildAt(bufferingIndicator, 0)
+      addChildAt(bufferIndicator, 0)
 
       volumeSliderFillMaxHeight = volumeSliderFill.height
       volumeSliderFillMinY = volumeSliderFill.y
@@ -80,10 +80,10 @@ package goplayer
       seekBarTooltipField.text = seekTooltipText
 
       largePlayButtonFader.targetAlpha = running ? 0 : 1
-      bufferingIndicatorFader.targetAlpha = bufferingUnexpectedly ? 1 : 0
+      bufferIndicatorFader.targetAlpha = bufferingUnexpectedly ? 1 : 0
 
-      if (bufferingIndicator.visible)
-        bufferingIndicator.ratio = bufferFillRatio
+      if (bufferIndicator.visible)
+        bufferIndicator.ratio = bufferFillRatio
     }
 
     override protected function get showChrome() : Boolean

@@ -2,13 +2,13 @@ package goplayer
 {
   import flash.display.Sprite
 
-  public class BufferingIndicator extends Component
+  public class BufferIndicator extends Component
   {
     private const canvas : Sprite = new Sprite
 
     private var _ratio : Number = 0
 
-    public function BufferingIndicator()
+    public function BufferIndicator()
     {
       mouseEnabled = false
       mouseChildren = false
