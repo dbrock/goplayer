@@ -11,9 +11,10 @@ package goplayer
     public var player : Player
     public var video : PlayerVideo
 
-    public function PlayerKit(movie : Movie, bitratePolicy : BitratePolicy)
+    public function PlayerKit
+      (movie : Movie, bitratePolicy : BitratePolicy, enableRTMP : Boolean)
     {
-      player = new Player(connection, movie, bitratePolicy)
+      player = new Player(connection, movie, bitratePolicy, enableRTMP)
       video = new PlayerVideo(player, flashVideo)
     }
   }

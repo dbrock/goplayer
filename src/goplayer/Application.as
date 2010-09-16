@@ -76,12 +76,15 @@ package goplayer
         debug("No RTMP streams available.")
       else
         debug("Available RTMP streams: " + bitrates.join(", "))
+
+      if (!configuration.enableRTMP)
+        debug("Will not use RTMP (disabled by configuration).")
     }
 
     private function createPlayer() : void
     {
       const kit : PlayerKit = new PlayerKit
-        (movie, configuration.bitratePolicy)
+        (movie, configuration.bitratePolicy, configuration.enableRTMP)
 
       player = kit.player
       player.addFinishingListener(this)

@@ -7,7 +7,6 @@ package goplayer
   public class Player
     implements FlashNetConnectionListener, FlashNetStreamListener
   {
-    private const USE_RTMP : Boolean = true
     private const DEFAULT_VOLUME : Number = .8
 
     private const START_BUFFER : Duration = Duration.seconds(1)
@@ -20,6 +19,7 @@ package goplayer
     private var connection : FlashNetConnection
     private var _movie : Movie
     private var bitratePolicy : BitratePolicy
+    private var enableRTMP : Boolean
 
     private var _started : Boolean = false
     private var _finished : Boolean = false
@@ -41,11 +41,13 @@ package goplayer
     public function Player
       (connection : FlashNetConnection,
        movie : Movie,
-       bitratePolicy : BitratePolicy)
+       bitratePolicy : BitratePolicy,
+       enableRTMP : Boolean)
     {
       this.connection = connection
       _movie = movie
       this.bitratePolicy = bitratePolicy
+      this.enableRTMP = enableRTMP
       
       Stat.view(movie.id)
 
@@ -74,7 +76,7 @@ package goplayer
     {
       _started = true
 
-      if (movie.rtmpURL && USE_RTMP)
+      if (enableRTMP && movie.rtmpURL != null)
         connectUsingRTMP()
       else
         connectUsingHTTP()

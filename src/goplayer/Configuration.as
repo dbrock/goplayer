@@ -4,6 +4,7 @@ package goplayer
   {
     public var host : String
     public var movieID : String
+    public var enableRTMP : Boolean
     public var skinURL : String
     public var autoplay : Boolean
     public var loop : Boolean

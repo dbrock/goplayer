@@ -13,6 +13,7 @@ package goplayer
     {
       // XXX: Clean up the host stuff.
       result.host = parameters.host || "staging.streamio.se"
+      result.enableRTMP = getBoolean("rtmp", true)
       result.movieID = parameters.movieId
       result.skinURL = parameters.skinUrl
         || "http://" + result.host + "/swfs/goplayer-black-skin.swf"
