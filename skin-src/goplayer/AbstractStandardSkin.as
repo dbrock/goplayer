@@ -16,6 +16,7 @@ package goplayer
     private var bufferIndicatorFader : Fader
 
     private var hoveringChrome : Boolean = false
+    private var showRemainingTime : Boolean = false
 
     private var volumeSliderFillMaxHeight : Number
     private var volumeSliderFillMinY : Number
@@ -70,7 +71,8 @@ package goplayer
         + volumeSliderFillMaxHeight * (1 - volume)
 
       leftTimeField.text = elapsedTimeText
-      rightTimeField.text = totalTimeText
+      rightTimeField.text = showRemainingTime
+        ? remainingTimeText : totalTimeText
 
       seekBarBackground.width = seekBarWidth
       seekBarBuffer.width = seekBarWidth * bufferRatio
@@ -126,6 +128,7 @@ package goplayer
       onrollover(unmuteButton, handleVolumeButtonRollOver)
       onrollover(chrome, handleChromeRollOver)
       onrollout(chrome, handleChromeRollOut)
+      onclick(rightTimeField, handleRightTimeFieldClicked)
     }
 
     private function handleChromeRollOver() : void
@@ -133,6 +136,9 @@ package goplayer
 
     private function handleChromeRollOut() : void
     { hoveringChrome = false, update() }
+
+    private function handleRightTimeFieldClicked() : void
+    { showRemainingTime = !showRemainingTime }
 
     private function handlePlayButtonClicked() : void
     { backend.handleUserPlay() }

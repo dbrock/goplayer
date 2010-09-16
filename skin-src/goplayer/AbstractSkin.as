@@ -71,7 +71,7 @@ package goplayer
     { return getDurationByRatio(playheadRatio).mss }
 
     protected function get remainingTimeText() : String
-    { return getDurationByRatio(1 - playheadRatio).mss }
+    { return "−" + getDurationByRatio(1 - playheadRatio).mss }
 
     protected function get totalTimeText() : String
     { return getDurationByRatio(1).mss }
