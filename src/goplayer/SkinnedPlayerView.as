@@ -70,7 +70,7 @@ package goplayer
     { return !player.playing || !userIdle }
 
     public function get showChrome() : Boolean
-    { return configuration.chromeEnabled && !userIdle }
+    { return configuration.enableChrome && !userIdle }
 
     private function get userIdle() : Boolean
     { return !userInteractionStopwatch.within(idleTime) }
@@ -117,7 +117,7 @@ package goplayer
     { return video.modernFullscreenEnabled ? 2 : 1 }
 
     public function get showTitleBar() : Boolean
-    { return configuration.titleBarEnabled }
+    { return configuration.enableTitleBar }
 
     public function get title() : String
     { return player.movie.title }

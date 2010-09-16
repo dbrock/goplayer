@@ -58,7 +58,7 @@ package goplayer
       logMovieInformation()
       createPlayer()
 
-      if (configuration.autoplay)
+      if (configuration.enableAutoplay)
         player.start()
     }
 
@@ -103,8 +103,8 @@ package goplayer
         = new SkinnedPlayerViewConfiguration
 
       result.skin = skinSWF.getSkin()
-      result.chromeEnabled = configuration.chrome
-      result.titleBarEnabled = configuration.titleBar
+      result.enableChrome = configuration.enableChrome
+      result.enableTitleBar = configuration.enableTitleBar
 
       return result
     }
@@ -131,7 +131,7 @@ package goplayer
 
     public function handleMovieFinishedPlaying() : void
     {
-      if (configuration.loop)
+      if (configuration.enableLooping)
         debug("Looping."), player.rewind()
     }
   }

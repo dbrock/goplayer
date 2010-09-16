@@ -13,16 +13,16 @@ package goplayer
     {
       // XXX: Clean up the host stuff.
       result.host = parameters.host || "staging.streamio.se"
-      result.enableRTMP = getBoolean("rtmp", true)
-      result.movieID = parameters.movieId
       result.skinURL = parameters.skinUrl
         || "http://" + result.host + "/swfs/goplayer-black-skin.swf"
-      result.autoplay = getBoolean("autoplay", false)
-      result.loop = getBoolean("loop", false)
-      result.chrome = getBoolean("chrome", true)
-      result.titleBar = getBoolean("titleBar", true)
-      result.bitratePolicy = getBitratePolicy("bitrate", BitratePolicy.BEST)
+      result.movieID = parameters.movieId
       result.trackerID = parameters.trackerId || "global"
+      result.bitratePolicy = getBitratePolicy("bitrate", BitratePolicy.BEST)
+      result.enableRTMP = getBoolean("rtmp", true)
+      result.enableAutoplay = getBoolean("autoplay", false)
+      result.enableLooping = getBoolean("loop", false)
+      result.enableChrome = getBoolean("chrome", true)
+      result.enableTitleBar = getBoolean("titleBar", true)
     }
 
     public static function parse(parameters : Object) : Configuration
