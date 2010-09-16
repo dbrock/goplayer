@@ -67,11 +67,14 @@ package goplayer
     protected function get running() : Boolean
     { return backend.running }
 
-    protected function get leftTimeText() : String
+    protected function get elapsedTimeText() : String
     { return getDurationByRatio(playheadRatio).mss }
 
-    protected function get rightTimeText() : String
+    protected function get remainingTimeText() : String
     { return getDurationByRatio(1 - playheadRatio).mss }
+
+    protected function get totalTimeText() : String
+    { return getDurationByRatio(1).mss }
 
     protected function getDurationByRatio(ratio : Number) : Duration
     { return Duration.seconds(backend.streamLengthSeconds * ratio) }

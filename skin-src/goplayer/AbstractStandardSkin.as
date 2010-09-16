@@ -69,8 +69,8 @@ package goplayer
       volumeSliderFill.y = volumeSliderFillMinY
         + volumeSliderFillMaxHeight * (1 - volume)
 
-      leftTimeField.text = leftTimeText
-      rightTimeField.text = rightTimeText
+      leftTimeField.text = elapsedTimeText
+      rightTimeField.text = totalTimeText
 
       seekBarBackground.width = seekBarWidth
       seekBarBuffer.width = seekBarWidth * bufferRatio
