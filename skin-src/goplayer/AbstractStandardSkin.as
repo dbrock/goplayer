@@ -2,6 +2,8 @@ package goplayer
 {
   import flash.display.DisplayObject
   import flash.display.Sprite
+  import flash.geom.Point
+  import flash.geom.Rectangle
   import flash.events.Event
   import flash.events.MouseEvent
   import flash.text.TextField
@@ -14,6 +16,7 @@ package goplayer
 
     private var hoveringChrome : Boolean = false
     private var showRemainingTime : Boolean = false
+    private var changingVolume : Boolean = false
 
     private var volumeSliderFillMaxHeight : Number
     private var volumeSliderFillMinY : Number
@@ -55,7 +58,7 @@ package goplayer
 
       chromeFader.targetAlpha = showChrome ? 1 : 0
 
-      if (chrome.alpha == 0)
+      if (!changingVolume && !hoveringVolumeControl)
         volumeSlider.visible = false
 
       playButton.visible = !playing
@@ -103,6 +106,24 @@ package goplayer
 
     private function get seekBarMouseRatio() : Number
     { return seekBar.mouseX / seekBarWidth }
+
+    private function get hoveringVolumeControl() : Boolean
+    { return volumeControlBounds.contains(mouseX, mouseY) }
+
+    private function get volumeControlBounds() : Rectangle
+    {
+      const result : Rectangle = $volumeControlBounds
+
+      result.inflate(10, 20)
+
+      return result
+    }
+
+    private function get $volumeControlBounds() : Rectangle
+    {
+      return muteButton.getBounds(this)
+        .union(volumeSlider.getBounds(this))
+    }
 
     // -----------------------------------------------------
 
@@ -164,6 +185,7 @@ package goplayer
 
     private function handleVolumeSliderMouseDown() : void
     {
+      changingVolume = true
       backend.handleUserSetVolume(volumeSliderMouseVolume)
       stage.addEventListener
         (MouseEvent.MOUSE_MOVE, handleVolumeSliderMouseMove);
@@ -190,8 +212,8 @@ package goplayer
         (MouseEvent.MOUSE_UP, handleVolumeSliderMouseUp);
       stage.removeEventListener
         (Event.MOUSE_LEAVE, handleVolumeSliderMouseLeftStage);
+      changingVolume = false
     }
-
 
     private function handleVolumeButtonRollOver() : void
     { volumeSlider.visible = true }
