@@ -18,6 +18,8 @@ package goplayer
     private var skin : Skin
     private var configuration : SkinnedPlayerViewConfiguration
 
+    private var _mousePointerVisible : Boolean = true
+
     public function SkinnedPlayerView
       (video : PlayerVideo,
        player : Player,
@@ -58,12 +60,24 @@ package goplayer
 
     public function handlePlayerVideoUpdated() : void
     {
-      if (showMousePointer)
+      mousePointerVisible = showMousePointer
+      skin.update()
+    }
+
+    private function set mousePointerVisible(value : Boolean) : void
+    {
+      if (value != _mousePointerVisible)
+        $mousePointerVisible = value
+    }
+
+    private function set $mousePointerVisible(value : Boolean) : void
+    {
+      _mousePointerVisible = value
+
+      if (value)
         Mouse.show()
       else
         Mouse.hide()
-
-      skin.update()
     }
 
     public function get showMousePointer() : Boolean
