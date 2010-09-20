@@ -11,6 +11,7 @@ package goplayer
       super.update()
 
       setPosition(largePlayButton, dimensions.center)
+      setPosition(bufferingIndicator, dimensions.center)
 
       titleBar.x = 0
       titleBar.y = 0
@@ -56,6 +57,8 @@ package goplayer
 
     override protected function get largePlayButton() : DisplayObject
     { return lookup("largePlayButton") }
+    override protected function get bufferingIndicator() : Sprite
+    { return lookup("bufferingIndicator") }
 
     override protected function get chrome() : Sprite
     { return lookup("chrome") }

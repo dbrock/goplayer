@@ -8,12 +8,9 @@ package goplayer
 
 	public class AbstractStandardSkin extends AbstractSkin
   {
-    private const bufferIndicator : BufferIndicator
-      = new BufferIndicator
-
     private var chromeFader : Fader
     private var largePlayButtonFader : Fader
-    private var bufferIndicatorFader : Fader
+    private var bufferingIndicatorFader : Fader
 
     private var hoveringChrome : Boolean = false
     private var showRemainingTime : Boolean = false
@@ -28,14 +25,14 @@ package goplayer
       chromeFader = new Fader(chrome, Duration.seconds(.3))
       largePlayButtonFader = new Fader
         (largePlayButton, Duration.seconds(1))
-      bufferIndicatorFader = new Fader
-        (bufferIndicator, Duration.seconds(.3))
+      bufferingIndicatorFader = new Fader
+        (bufferingIndicator, Duration.seconds(.3))
 
       seekBarTooltip.visible = false
       seekBar.mouseChildren = false
       seekBar.buttonMode = true
 
-      addChildAt(bufferIndicator, 0)
+      bufferingIndicator.mouseEnabled = false
 
       volumeSliderFillMaxHeight = volumeSliderFill.height
       volumeSliderFillMinY = volumeSliderFill.y
@@ -83,10 +80,7 @@ package goplayer
       seekBarTooltipField.text = seekTooltipText
 
       largePlayButtonFader.targetAlpha = running ? 0 : 1
-      bufferIndicatorFader.targetAlpha = bufferingUnexpectedly ? 1 : 0
-
-      if (bufferIndicator.visible)
-        bufferIndicator.ratio = bufferFillRatio
+      bufferingIndicatorFader.targetAlpha = bufferingUnexpectedly ? 1 : 0
     }
 
     override protected function get showChrome() : Boolean
@@ -209,6 +203,8 @@ package goplayer
 
     protected function get largePlayButton() : DisplayObject
     { return undefinedPart("largePlayButton") }
+    protected function get bufferingIndicator() : Sprite
+    { return undefinedPart("bufferingIndicator") }
 
     protected function get chrome() : Sprite
     { return undefinedPart("chrome") }
