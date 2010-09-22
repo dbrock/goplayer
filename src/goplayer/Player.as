@@ -1,6 +1,7 @@
 package goplayer
 {
   import flash.utils.getTimer
+  import flash.net.SharedObject
   
   import streamio.Stat
 
@@ -15,6 +16,8 @@ package goplayer
     private const SEEK_GRACE_TIME : Duration = Duration.seconds(2)
 
     private const finishingListeners : Array = []
+
+    private var sharedObject : SharedObject = null
 
     private var connection : FlashNetConnection
     private var _movie : Movie
@@ -32,7 +35,7 @@ package goplayer
     private var stream : FlashNetStream = null
     private var metadata : Object = null
 
-    private var _volume : Number = DEFAULT_VOLUME
+    private var _volume : Number = NaN
     private var savedVolume : Number = 0
     private var _paused : Boolean = false
     private var _buffering : Boolean = false
@@ -48,10 +51,20 @@ package goplayer
       _movie = movie
       this.bitratePolicy = bitratePolicy
       this.enableRTMP = enableRTMP
-      
-      Stat.view(movie.id)
 
       connection.listener = this
+
+      Stat.view(movie.id)
+
+      try
+        { sharedObject = SharedObject.getLocal("player") }
+      catch (error : Error)
+        {}
+
+      if (sharedObject && sharedObject.size > 0)
+        volume = sharedObject.data["volume"]
+      else
+        volume = DEFAULT_VOLUME
     }
 
     public function get movie() : Movie
@@ -349,8 +362,11 @@ package goplayer
     {
       _volume = Math.round(clamp(value, 0, 1) * 100) / 100
 
+      if (sharedObject)
+        sharedObject.data["volume"] = volume
+
       if (stream)
-        stream.volume = value
+        stream.volume = volume
     }
 
     public function changeVolumeBy(delta : Number) : void
