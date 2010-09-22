@@ -13,6 +13,8 @@ package goplayer
       setPosition(largePlayButton, dimensions.center)
       setPosition(bufferingIndicator, dimensions.center)
 
+      setDimensions(largePlayButton, dimensions.halved.innerSquare)
+
       titleBar.x = 0
       titleBar.y = 0
 
