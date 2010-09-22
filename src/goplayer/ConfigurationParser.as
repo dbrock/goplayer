@@ -96,7 +96,7 @@ package goplayer
         { return $$getBoolean(value) }
       catch (error : Error)
         {
-          reportInvalidParameter(name, value, ["on", "off"])
+          reportInvalidParameter(name, value, ["true", "false"])
           return fallback
         }
 
@@ -105,9 +105,9 @@ package goplayer
 
     private function $$getBoolean(value : String) : Boolean
     {
-      if (value == "on")
+      if (value == "true")
         return true
-      else if (value == "off")
+      else if (value == "false")
         return false
       else
         throw new Error
