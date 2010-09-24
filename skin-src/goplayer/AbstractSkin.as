@@ -37,6 +37,9 @@ package goplayer
     protected function get titleText() : String
     { return backend.title }
 
+    protected function get enableChrome() : Boolean
+    { return backend.enableChrome }
+
     protected function get showChrome() : Boolean
     { return backend.showChrome }
 

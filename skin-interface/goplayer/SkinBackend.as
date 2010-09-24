@@ -6,18 +6,23 @@ package goplayer
     function get skinHeight() : Number
     function get skinScale() : Number
 
-    function get title() : String
-    function get running() : Boolean
+    function get enableChrome() : Boolean
     function get showChrome() : Boolean
     function get showTitleBar() : Boolean
+
+    function get title() : String
+    function get volume() : Number
+
+    function get running() : Boolean
+    function get playing() : Boolean
+
     function get streamLengthSeconds() : Number
     function get playheadRatio() : Number
+
     function get bufferRatio() : Number
     function get bufferFillRatio() : Number
-    function get playing() : Boolean
     function get buffering() : Boolean
     function get bufferingUnexpectedly() : Boolean
-    function get volume() : Number
 
     function handleSkinPartMissing(name : String) : void
 

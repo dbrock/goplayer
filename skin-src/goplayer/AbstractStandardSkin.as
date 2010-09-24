@@ -46,6 +46,8 @@ package goplayer
 
       volumeSlider.visible = false
 
+      chrome.visible = enableChrome
+
       addEventListeners()
     }
 

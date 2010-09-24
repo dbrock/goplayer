@@ -84,7 +84,10 @@ package goplayer
     { return !player.playing || !userIdle }
 
     public function get showChrome() : Boolean
-    { return configuration.enableChrome && !userIdle }
+    { return enableChrome && !userIdle }
+
+    public function get enableChrome() : Boolean
+    { return configuration.enableChrome }
 
     private function get userIdle() : Boolean
     { return !userInteractionStopwatch.within(idleTime) }
