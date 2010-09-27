@@ -1,6 +1,7 @@
 package goplayer
 {
   import flash.display.DisplayObject
+  import flash.display.InteractiveObject
   import flash.display.Sprite
   import flash.text.TextField
 
@@ -57,9 +58,9 @@ package goplayer
     private function get controlBarRight() : Sprite
     { return lookup("chrome.controlBar.right") }
 
-    override protected function get largePlayButton() : DisplayObject
+    override protected function get largePlayButton() : InteractiveObject
     { return lookup("largePlayButton") }
-    override protected function get bufferingIndicator() : Sprite
+    override protected function get bufferingIndicator() : InteractiveObject
     { return lookup("bufferingIndicator") }
 
     override protected function get chrome() : Sprite

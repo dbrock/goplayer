@@ -1,11 +1,12 @@
 package goplayer
 {
   import flash.display.DisplayObject
+  import flash.display.InteractiveObject
   import flash.display.Sprite
-  import flash.geom.Point
-  import flash.geom.Rectangle
   import flash.events.Event
   import flash.events.MouseEvent
+  import flash.geom.Point
+  import flash.geom.Rectangle
   import flash.text.TextField
 
 	public class AbstractStandardSkin extends AbstractSkin
@@ -84,9 +85,14 @@ package goplayer
       seekBarTooltip.x = seekBar.mouseX
       seekBarTooltipField.text = seekTooltipText
 
-      largePlayButtonFader.targetAlpha = running ? 0 : 1
+      largePlayButtonFader.targetAlpha = showLargePlayButton ? 1 : 0
+      largePlayButton.mouseEnabled = showLargePlayButton
+
       bufferingIndicatorFader.targetAlpha = bufferingUnexpectedly ? 1 : 0
     }
+
+    private function get showLargePlayButton() : Boolean
+    { return !running }
 
     override protected function get showChrome() : Boolean
     { return super.showChrome || hoveringChrome }
@@ -225,9 +231,9 @@ package goplayer
     protected function get seekBarWidth() : Number
     { throw new Error }
 
-    protected function get largePlayButton() : DisplayObject
+    protected function get largePlayButton() : InteractiveObject
     { return undefinedPart("largePlayButton") }
-    protected function get bufferingIndicator() : Sprite
+    protected function get bufferingIndicator() : InteractiveObject
     { return undefinedPart("bufferingIndicator") }
 
     protected function get chrome() : Sprite
