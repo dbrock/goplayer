@@ -13,10 +13,10 @@ package goplayer
     {
       // XXX: Clean up the host stuff.
       result.host = parameters.host || "staging.streamio.se"
-      result.skinURL = parameters.skinUrl
+      result.skinURL = parameters.skin
         || "http://" + result.host + "/swfs/goplayer-black-skin.swf"
-      result.movieID = parameters.movieId
-      result.trackerID = parameters.trackerId || "global"
+      result.movieID = parameters.movie
+      result.trackerID = parameters.tracker || "global"
       result.bitratePolicy = getBitratePolicy("bitrate", BitratePolicy.BEST)
       result.enableRTMP = getBoolean("enableRtmp", true)
       result.enableAutoplay = getBoolean("enableAutoplay", false)
