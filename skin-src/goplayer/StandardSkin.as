@@ -16,16 +16,16 @@ package goplayer
 
       setDimensions(largePlayButton, dimensions.halved.innerSquare)
 
-      titleBar.x = 0
-      titleBar.y = 0
+      upperPanel.x = 0
+      upperPanel.y = 0
 
       Packer.packLeft
-        (titleBarLeft,
-         [titleBarMiddle, titleBarMiddleWidth],
-         titleBarRight)
+        (upperPanelLeft,
+         [upperPanelMiddle, upperPanelMiddleWidth],
+         upperPanelRight)
 
-      titleBarMiddleBackground.width = titleBarMiddleWidth
-      titleField.width = titleBarMiddleWidth
+      upperPanelMiddleBackground.width = upperPanelMiddleWidth
+      titleField.width = upperPanelMiddleWidth
 
       controlBar.x = 0
       controlBar.y = dimensions.height
@@ -36,22 +36,22 @@ package goplayer
          controlBarRight)
     }
 
-    private function get titleBarMiddleWidth() : Number
-    { return dimensions.width - titleBarLeft.width - titleBarRight.width }
+    private function get upperPanelMiddleWidth() : Number
+    { return dimensions.width - upperPanelLeft.width - upperPanelRight.width }
 
     override protected function get seekBarWidth() : Number
     { return dimensions.width - controlBarLeft.width - controlBarRight.width }
 
-    override protected function get titleBar() : Sprite
-    { return lookup("chrome.titleBar") }
-    private function get titleBarLeft() : Sprite
-    { return lookup("chrome.titleBar.left") }
-    private function get titleBarMiddle() : Sprite
-    { return lookup("chrome.titleBar.middle") }
-    private function get titleBarMiddleBackground() : Sprite
-    { return lookup("chrome.titleBar.middle.background") }
-    private function get titleBarRight() : Sprite
-    { return lookup("chrome.titleBar.right") }
+    override protected function get upperPanel() : Sprite
+    { return lookup("chrome.upperPanel") }
+    private function get upperPanelLeft() : Sprite
+    { return lookup("chrome.upperPanel.left") }
+    private function get upperPanelMiddle() : Sprite
+    { return lookup("chrome.upperPanel.middle") }
+    private function get upperPanelMiddleBackground() : Sprite
+    { return lookup("chrome.upperPanel.middle.background") }
+    private function get upperPanelRight() : Sprite
+    { return lookup("chrome.upperPanel.right") }
 
     private function get controlBarLeft() : Sprite
     { return lookup("chrome.controlBar.left") }
@@ -67,7 +67,7 @@ package goplayer
     { return lookup("chrome") }
 
     override protected function get titleField() : TextField
-    { return lookup("chrome.titleBar.middle.titleField") }
+    { return lookup("chrome.upperPanel.middle.titleField") }
 
     override protected function get controlBar() : Sprite
     { return lookup("chrome.controlBar") }

@@ -22,7 +22,7 @@ package goplayer
       result.enableAutoplay = getBoolean("autoplay", false)
       result.enableLooping = getBoolean("loop", false)
       result.enableChrome = getBoolean("chrome", true)
-      result.enableTitleBar = getBoolean("titleBar", true)
+      result.enableUpperPanel = getBoolean("upperPanel", true)
     }
 
     public static function parse(parameters : Object) : Configuration

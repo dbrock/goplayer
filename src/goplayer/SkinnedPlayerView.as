@@ -133,8 +133,8 @@ package goplayer
     public function get skinScale() : Number
     { return video.modernFullscreenEnabled ? 2 : 1 }
 
-    public function get showTitleBar() : Boolean
-    { return configuration.enableTitleBar }
+    public function get showUpperPanel() : Boolean
+    { return configuration.enableUpperPanel }
 
     public function get title() : String
     { return player.movie.title }

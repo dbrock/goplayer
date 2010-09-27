@@ -11,6 +11,6 @@ package goplayer
     public var enableAutoplay : Boolean
     public var enableLooping : Boolean
     public var enableChrome : Boolean
-    public var enableTitleBar : Boolean
+    public var enableUpperPanel : Boolean
   }
 }

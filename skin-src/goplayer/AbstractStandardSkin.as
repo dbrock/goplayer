@@ -56,10 +56,10 @@ package goplayer
     {
       super.update()
 
-      titleBar.visible = showTitleBar
-      titleField.text = titleText
-
       chromeFader.targetAlpha = showChrome ? 1 : 0
+
+      upperPanel.visible = showUpperPanel
+      titleField.text = titleText
 
       if (!changingVolume && !hoveringVolumeControl)
         volumeSlider.visible = false
@@ -239,8 +239,8 @@ package goplayer
     protected function get chrome() : Sprite
     { return undefinedPart("chrome") }
 
-    protected function get titleBar() : Sprite
-    { return undefinedPart("titleBar") }
+    protected function get upperPanel() : Sprite
+    { return undefinedPart("upperPanel") }
 
     protected function get titleField() : TextField
     { return undefinedPart("titleField") }
