@@ -18,11 +18,11 @@ package goplayer
       result.movieID = parameters.movieId
       result.trackerID = parameters.trackerId || "global"
       result.bitratePolicy = getBitratePolicy("bitrate", BitratePolicy.BEST)
-      result.enableRTMP = getBoolean("rtmp", true)
-      result.enableAutoplay = getBoolean("autoplay", false)
-      result.enableLooping = getBoolean("loop", false)
-      result.enableChrome = getBoolean("chrome", true)
-      result.enableUpperPanel = getBoolean("upperPanel", true)
+      result.enableRTMP = getBoolean("enableRtmp", true)
+      result.enableAutoplay = getBoolean("enableAutoplay", false)
+      result.enableLooping = getBoolean("enableLooping", false)
+      result.enableChrome = getBoolean("enableChrome", true)
+      result.enableUpperPanel = getBoolean("enableUpperPanel", true)
     }
 
     public static function parse(parameters : Object) : Configuration
