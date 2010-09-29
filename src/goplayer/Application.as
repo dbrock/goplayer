@@ -1,7 +1,6 @@
 package goplayer
 {
   import flash.ui.Keyboard
-  import streamio.Stat
 
   public class Application extends Component
     implements SkinSWFLoaderListener, MovieHandler, PlayerFinishingListener
@@ -22,10 +21,10 @@ package goplayer
     {
       this.configuration = configuration
 
-      api = new StreamioAPI(configuration.apiURL, new StandardHTTPFetcher)
-
-      Stat.apiURL = configuration.apiURL
-      Stat.trackerId = configuration.trackerID
+      api = new StreamioAPI
+        (configuration.apiURL,
+         new StandardHTTP,
+         configuration.trackerID)
 
       addChild(background)
     }
@@ -86,7 +85,7 @@ package goplayer
     private function createPlayer() : void
     {
       const kit : PlayerKit = new PlayerKit
-        (movie, configuration.bitratePolicy, configuration.enableRTMP)
+        (movie, configuration.bitratePolicy, configuration.enableRTMP, api)
 
       player = kit.player
       player.addFinishingListener(this)

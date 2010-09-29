@@ -3,8 +3,6 @@ package goplayer
   import flash.utils.getTimer
   import flash.net.SharedObject
   
-  import streamio.Stat
-
   public class Player
     implements FlashNetConnectionListener, FlashNetStreamListener
   {
@@ -23,6 +21,7 @@ package goplayer
     private var _movie : Movie
     private var bitratePolicy : BitratePolicy
     private var enableRTMP : Boolean
+    private var reporter : MovieEventReporter
 
     private var _started : Boolean = false
     private var _finished : Boolean = false
@@ -45,16 +44,18 @@ package goplayer
       (connection : FlashNetConnection,
        movie : Movie,
        bitratePolicy : BitratePolicy,
-       enableRTMP : Boolean)
+       enableRTMP : Boolean,
+       reporter : MovieEventReporter)
     {
       this.connection = connection
       _movie = movie
       this.bitratePolicy = bitratePolicy
       this.enableRTMP = enableRTMP
+      this.reporter = reporter
 
       connection.listener = this
 
-      Stat.view(movie.id)
+      reporter.reportMovieViewed(movie.id)
 
       try
         { sharedObject = SharedObject.getLocal("player") }
@@ -94,7 +95,7 @@ package goplayer
       else
         connectUsingHTTP()
         
-      Stat.play(movie.id)
+      reporter.reportMoviePlayed(movie.id)
     }
 
     public function handleConnectionFailed() : void
