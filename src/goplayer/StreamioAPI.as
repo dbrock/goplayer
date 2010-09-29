@@ -2,25 +2,23 @@ package goplayer
 {
   public class StreamioAPI
   {
-    static public var host : String = "staging.streamio.se"
+    private static const VERSION : String = "/v1"
 
-    static public function get baseURL() : String
-    { return "http://"+host+"/api/v1/" }
-
+    private var baseURL : String
     private var fetcher : JSONFetcher
 
-    public function StreamioAPI(fetcher : JSONFetcher)
-    { this.fetcher = fetcher }
+    public function StreamioAPI(baseURL : String, fetcher : JSONFetcher)
+    { this.baseURL = baseURL, this.fetcher = fetcher }
 
     public function fetchMovie
       (id : String, handler : MovieHandler) : void
     { fetch(getMovieURL(id), new MovieJSONHandler(handler)) }
 
     private function getMovieURL(id : String) : String
-    { return "movies/" + id + "/public_show.json" }
+    { return "/movies/" + id + "/public_show.json" }
 
     private function fetch(url : String, handler : JSONHandler) : void
-    { fetcher.fetchJSON(URL.parse(baseURL + url), handler) }
+    { fetcher.fetchJSON(URL.parse(baseURL + VERSION + url), handler) }
   }
 }
 

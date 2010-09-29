@@ -2,7 +2,7 @@ package goplayer
 {
   public class Configuration
   {
-    public var host : String
+    public var apiURL : String
     public var skinURL : String
     public var movieID : String
     public var trackerID : String

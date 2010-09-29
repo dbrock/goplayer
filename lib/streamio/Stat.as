@@ -9,7 +9,8 @@ package streamio
   
   public class Stat
   {
-    public static var trackerId:String = "global"
+    public static var apiURL : String
+    public static var trackerId : String
     
     public static function view(movieId:String) : void
     {
@@ -26,7 +27,8 @@ package streamio
       update(movieId, "heat", time)
     }
     
-    private static function update(movieId:String, event:String, time:Number = NaN) : void
+    private static function update
+      (movieId:String, event:String, time:Number = NaN) : void
     {
       var params:URLVariables = new URLVariables()
       params.movie_id = movieId
@@ -34,7 +36,7 @@ package streamio
       params.tracker_id = trackerId
       if(!isNaN(time)) params.time = time
       
-      var request:URLRequest = new URLRequest("http://"+StreamioAPI.host+"/stats")
+      var request:URLRequest = new URLRequest(apiURL + "/v1/stats")
       request.method = URLRequestMethod.POST
       request.data = params
       

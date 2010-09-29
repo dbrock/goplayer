@@ -8,10 +8,10 @@ package goplayer
   {
     private const background : Background
       = new Background(0x000000, 1)
-    private const api : StreamioAPI
-      = new StreamioAPI(new StandardHTTPFetcher)
 
     private var configuration : Configuration
+
+    private var api : StreamioAPI
 
     private var skinSWF : SkinSWF = null
     private var movie : Movie = null
@@ -22,7 +22,9 @@ package goplayer
     {
       this.configuration = configuration
 
-      StreamioAPI.host = configuration.host
+      api = new StreamioAPI(configuration.apiURL, new StandardHTTPFetcher)
+
+      Stat.apiURL = configuration.apiURL
       Stat.trackerId = configuration.trackerID
 
       addChild(background)
