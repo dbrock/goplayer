@@ -7,36 +7,62 @@ package goplayer
     public static const DEFAULT_SKIN_URL : String = "goplayer-skin.swf"
     public static const DEFAULT_TRACKER_ID : String = "global"
 
+    public static const VALID_PARAMETERS : Array = [
+      "api", "tracker", "skin", "movie", "bitrate",
+      "enablertmp", "enableautoplay", "enablelooping",
+      "enablechrome", "enableupperpanel" ]
+
     private const result : Configuration = new Configuration
 
     private var parameters : Object
+    private var originalParameterNames : Object
 
-    public function ConfigurationParser(parameters : Object)
-    { this.parameters = parameters }
+    public function ConfigurationParser
+      (parameters : Object, originalParameterNames : Object)
+    {
+      this.parameters = parameters
+      this.originalParameterNames = originalParameterNames
+    }
 
     public function execute() : void
     {
       result.apiURL = getString("api", DEFAULT_API_URL)
+      result.trackerID = getString("tracker", DEFAULT_TRACKER_ID)
       result.skinURL = getString("skin", DEFAULT_SKIN_URL)
       result.movieID = getString("movie", null)
-      result.trackerID = getString("tracker", DEFAULT_TRACKER_ID)
       result.bitratePolicy = getBitratePolicy("bitrate", BitratePolicy.BEST)
-      result.enableRTMP = getBoolean("enableRtmp", true)
-      result.enableAutoplay = getBoolean("enableAutoplay", false)
-      result.enableLooping = getBoolean("enableLooping", false)
-      result.enableChrome = getBoolean("enableChrome", true)
-      result.enableUpperPanel = getBoolean("enableUpperPanel", true)
+      result.enableRTMP = getBoolean("enablertmp", true)
+      result.enableAutoplay = getBoolean("enableautoplay", false)
+      result.enableLooping = getBoolean("enablelooping", false)
+      result.enableChrome = getBoolean("enablechrome", true)
+      result.enableUpperPanel = getBoolean("enableupperpanel", true)
     }
 
     public static function parse(parameters : Object) : Configuration
     {
-      const parser : ConfigurationParser
-        = new ConfigurationParser(parameters)
+      const normalizedParameters : Object = {}
+      const originalParameterNames : Object = {}
+
+      for (var name : String in parameters)
+        if (VALID_PARAMETERS.indexOf(normalize(name)) == -1)
+          reportUnknownParameter(name)
+        else
+          normalizedParameters[normalize(name)] = parameters[name],
+            originalParameterNames[normalize(name)] = name
+
+      const parser : ConfigurationParser = new ConfigurationParser
+        (normalizedParameters, originalParameterNames)
 
       parser.execute()
 
       return parser.result
     }
+
+    private static function normalize(name : String) : String
+    { return name.toLowerCase().replace(/[^a-z]/g, "") }
+
+    private static function reportUnknownParameter(name : String) : void
+    { debug("Error: Unknown parameter: " + name) }
 
     // -----------------------------------------------------
 
@@ -60,6 +86,7 @@ package goplayer
       catch (error : Error)
         {
           reportInvalidParameter(name, value, ["true", "false"])
+
           return fallback
         }
 
@@ -96,6 +123,7 @@ package goplayer
       catch (error : Error)
         {
           reportInvalidParameter(name, value, BITRATE_POLICY_VALUES)
+
           return fallback
         }
 
@@ -124,7 +152,8 @@ package goplayer
     private function reportInvalidParameter
       (name : String, value : String, validValues : Array) : void
     {
-      debug("Error: Invalid parameter: “" + name + "=" + value + "”; " +
+      debug("Error: Invalid parameter: " +
+            "“" + originalParameterNames[name] + "=" + value + "”; " +
             getInvalidParameterHint(validValues) + ".")
     }
 
