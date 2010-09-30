@@ -58,7 +58,7 @@ package goplayer
 
       chromeFader.targetAlpha = showChrome ? 1 : 0
 
-      upperPanel.visible = showUpperPanel
+      upperPanel.visible = showTitle
       titleField.text = titleText
 
       if (!changingVolume && !hoveringVolumeControl)

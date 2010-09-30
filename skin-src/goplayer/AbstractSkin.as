@@ -43,8 +43,8 @@ package goplayer
     protected function get showChrome() : Boolean
     { return backend.showChrome }
 
-    protected function get showUpperPanel() : Boolean
-    { return backend.showUpperPanel }
+    protected function get showTitle() : Boolean
+    { return backend.showTitle }
 
     protected function get playheadRatio() : Number
     { return backend.playheadRatio }

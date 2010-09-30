@@ -4,6 +4,6 @@ package goplayer
   {
     public var skin : Skin
     public var enableChrome : Boolean
-    public var enableUpperPanel : Boolean
+    public var enableTitle : Boolean
   }
 }

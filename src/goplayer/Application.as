@@ -105,7 +105,7 @@ package goplayer
 
       result.skin = skinSWF.getSkin()
       result.enableChrome = configuration.enableChrome
-      result.enableUpperPanel = configuration.enableUpperPanel
+      result.enableTitle = configuration.enableTitle
 
       return result
     }

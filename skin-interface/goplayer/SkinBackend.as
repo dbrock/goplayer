@@ -8,7 +8,7 @@ package goplayer
 
     function get enableChrome() : Boolean
     function get showChrome() : Boolean
-    function get showUpperPanel() : Boolean
+    function get showTitle() : Boolean
 
     function get title() : String
     function get volume() : Number

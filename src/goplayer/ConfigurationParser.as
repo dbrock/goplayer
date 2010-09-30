@@ -10,7 +10,7 @@ package goplayer
     public static const VALID_PARAMETERS : Array = [
       "api", "tracker", "skin", "movie", "bitrate",
       "enablertmp", "enableautoplay", "enablelooping",
-      "enablechrome", "enableupperpanel" ]
+      "enablechrome", "enabletitle" ]
 
     private const result : Configuration = new Configuration
 
@@ -35,7 +35,7 @@ package goplayer
       result.enableAutoplay = getBoolean("enableautoplay", false)
       result.enableLooping = getBoolean("enablelooping", false)
       result.enableChrome = getBoolean("enablechrome", true)
-      result.enableUpperPanel = getBoolean("enableupperpanel", true)
+      result.enableTitle = getBoolean("enabletitle", true)
     }
 
     public static function parse(parameters : Object) : Configuration
