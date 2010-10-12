@@ -54,7 +54,7 @@ package goplayer
     // -----------------------------------------------------
 
     private function getMoviePath(id : String) : String
-    { return "/movies/" + id + "/public_show.json" }
+    { return "/videos/" + id + "/public_show.json" }
 
     private function get statsPath() : String
     { return "/stats" }
