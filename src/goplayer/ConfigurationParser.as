@@ -10,7 +10,7 @@ package goplayer
     public static const VALID_PARAMETERS : Array = [
       "api", "tracker", "skin", "video", "bitrate",
       "enablertmp", "autoplay", "loop",
-      "enablechrome", "enabletitle" ]
+      "skin:showchrome", "skin:showtitle" ]
 
     private const result : Configuration = new Configuration
 
@@ -34,8 +34,8 @@ package goplayer
       result.enableRTMP = getBoolean("enablertmp", true)
       result.enableAutoplay = getBoolean("autoplay", false)
       result.enableLooping = getBoolean("loop", false)
-      result.enableChrome = getBoolean("enablechrome", true)
-      result.enableTitle = getBoolean("enabletitle", true)
+      result.enableChrome = getBoolean("skin:showchrome", true)
+      result.enableTitle = getBoolean("skin:showtitle", true)
     }
 
     public static function parse(parameters : Object) : Configuration
@@ -59,7 +59,7 @@ package goplayer
     }
 
     private static function normalize(name : String) : String
-    { return name.toLowerCase().replace(/[^a-z]/g, "") }
+    { return name.toLowerCase().replace(/[^a-z:]/g, "") }
 
     private static function reportUnknownParameter(name : String) : void
     { debug("Error: Unknown parameter: " + name) }
