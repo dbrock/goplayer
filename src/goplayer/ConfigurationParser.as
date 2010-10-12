@@ -8,7 +8,7 @@ package goplayer
     public static const DEFAULT_TRACKER_ID : String = "global"
 
     public static const VALID_PARAMETERS : Array = [
-      "api", "tracker", "skin", "movie", "bitrate",
+      "api", "tracker", "skin", "video", "bitrate",
       "enablertmp", "autoplay", "loop",
       "enablechrome", "enabletitle" ]
 
@@ -29,7 +29,7 @@ package goplayer
       result.apiURL = getString("api", DEFAULT_API_URL)
       result.trackerID = getString("tracker", DEFAULT_TRACKER_ID)
       result.skinURL = getString("skin", DEFAULT_SKIN_URL)
-      result.movieID = getString("movie", null)
+      result.movieID = getString("video", null)
       result.bitratePolicy = getBitratePolicy("bitrate", BitratePolicy.BEST)
       result.enableRTMP = getBoolean("enablertmp", true)
       result.enableAutoplay = getBoolean("autoplay", false)
