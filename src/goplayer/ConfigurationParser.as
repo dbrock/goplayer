@@ -9,7 +9,7 @@ package goplayer
 
     public static const VALID_PARAMETERS : Array = [
       "api", "tracker", "skin", "movie", "bitrate",
-      "enablertmp", "enableautoplay", "enablelooping",
+      "enablertmp", "autoplay", "loop",
       "enablechrome", "enabletitle" ]
 
     private const result : Configuration = new Configuration
@@ -32,8 +32,8 @@ package goplayer
       result.movieID = getString("movie", null)
       result.bitratePolicy = getBitratePolicy("bitrate", BitratePolicy.BEST)
       result.enableRTMP = getBoolean("enablertmp", true)
-      result.enableAutoplay = getBoolean("enableautoplay", false)
-      result.enableLooping = getBoolean("enablelooping", false)
+      result.enableAutoplay = getBoolean("autoplay", false)
+      result.enableLooping = getBoolean("loop", false)
       result.enableChrome = getBoolean("enablechrome", true)
       result.enableTitle = getBoolean("enabletitle", true)
     }
