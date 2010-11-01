@@ -2,13 +2,13 @@ package goplayer
 {
   public class ConfigurationParser
   {
-    public static const DEFAULT_API_URL : String
+    public static const DEFAULT_STREAMIO_API_URL : String
       = "http://staging.streamio.com/api"
     public static const DEFAULT_SKIN_URL : String = "goplayer-skin.swf"
     public static const DEFAULT_TRACKER_ID : String = "global"
 
     public static const VALID_PARAMETERS : Array = [
-      "api", "tracker", "skin", "video", "bitrate",
+      "streamio:api", "tracker", "skin", "video", "bitrate",
       "enablertmp", "autoplay", "loop",
       "skin:showchrome", "skin:showtitle" ]
 
@@ -26,7 +26,7 @@ package goplayer
 
     public function execute() : void
     {
-      result.apiURL = getString("api", DEFAULT_API_URL)
+      result.apiURL = getString("streamio:api", DEFAULT_STREAMIO_API_URL)
       result.trackerID = getString("tracker", DEFAULT_TRACKER_ID)
       result.skinURL = getString("skin", DEFAULT_SKIN_URL)
       result.movieID = getString("video", null)
