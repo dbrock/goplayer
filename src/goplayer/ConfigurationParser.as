@@ -3,7 +3,7 @@ package goplayer
   public class ConfigurationParser
   {
     public static const DEFAULT_API_URL : String
-      = "http://staging.streamio.se/api"
+      = "http://staging.streamio.com/api"
     public static const DEFAULT_SKIN_URL : String = "goplayer-skin.swf"
     public static const DEFAULT_TRACKER_ID : String = "global"
 
