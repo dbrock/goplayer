@@ -48,7 +48,7 @@ package goplayer
 
     private function lookUpMovie() : void
     {
-      debug("Looking up Streamio movie “" + configuration.movieID + "”...")
+      debug("Looking up Streamio video “" + configuration.movieID + "”...")
       api.fetchMovie(configuration.movieID, this)
     }
 

@@ -8,7 +8,7 @@ package goplayer
     public static const DEFAULT_STREAMIO_TRACKER_ID : String = "global"
 
     public static const VALID_PARAMETERS : Array
-      = ["skin", "video", "bitrate",
+      = ["skin", "src", "bitrate",
          "enablertmp", "autoplay", "loop",
          "skin:showchrome", "skin:showtitle",
          "streamio:api", "streamio:tracker"]
@@ -28,7 +28,7 @@ package goplayer
     public function execute() : void
     {
       result.skinURL = getString("skin", DEFAULT_SKIN_URL)
-      result.movieID = getString("video", null)
+      result.movieID = getStreamioVideoID()
       result.bitratePolicy = getBitratePolicy("bitrate", BitratePolicy.BEST)
       result.enableRTMP = getBoolean("enablertmp", true)
       result.enableAutoplay = getBoolean("autoplay", false)
@@ -39,6 +39,34 @@ package goplayer
         ("streamio:api", DEFAULT_STREAMIO_API_URL)
       result.trackerID = getString
         ("streamio:tracker", DEFAULT_STREAMIO_TRACKER_ID)
+    }
+
+    private function getStreamioVideoID() : String
+    {
+      if ("src" in parameters)
+        return $getStreamioVideoID()
+      else
+        {
+          debug("Error: Missing “src” parameter.")
+
+          return null
+        }
+    }
+
+    private function $getStreamioVideoID() : String
+    {
+      const src : String = parameters["src"]
+      const match : Array = src.match(/^streamio:video:(.*)$/)
+
+      if (match != null)
+        return match[1]
+      else
+        {
+          debug("Error: Unrecognized “src” value: “" + src + "”; " +
+                "must be “streamio:video:foo”.")
+
+          return null
+        }
     }
 
     public static function parse(parameters : Object) : Configuration
