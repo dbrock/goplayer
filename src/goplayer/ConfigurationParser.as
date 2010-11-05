@@ -4,7 +4,7 @@ package goplayer
   {
     public static const DEFAULT_SKIN_URL : String = "goplayer-skin.swf"
     public static const DEFAULT_STREAMIO_API_URL : String
-      = "http://staging.streamio.com/api"
+      = "http://streamio.com/api"
     public static const DEFAULT_STREAMIO_TRACKER_ID : String = "global"
 
     public static const VALID_PARAMETERS : Array
