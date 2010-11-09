@@ -45,7 +45,7 @@ package goplayer
       const result : Object = new Object
 
       result.tracker_id = trackerID
-      result.movie_id = movieID
+      result.video_id = movieID
       result.event = event
 
       for (var name : String in parameters)
