@@ -34,7 +34,10 @@ package goplayer
 
     private function reportMovieEvent
       (movieID : String, event : String, parameters : Object) : void
-    { post(statsPath, getStatsParameters(movieID, event, parameters)) }
+    {
+      if (trackerID != null && trackerID != "")
+        post(statsPath, getStatsParameters(movieID, event, parameters))
+    }
 
     private function getStatsParameters
       (movieID : String, event : String, parameters : Object) : Object
