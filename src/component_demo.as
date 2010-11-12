@@ -14,11 +14,14 @@ package
       stage.align = StageAlign.TOP_LEFT
 
       const player : GoPlayer = new GoPlayer({
-        "src": "streamio:video:4c8f8267b35ea84ef4000003"
+        src: "streamio:video:4c8f8267b35ea84ef4000003",
+        autoplay: true
       })
 
       player.width = 800
       player.height = 450
+
+      player.pause()
 
       addChild(player)
     }

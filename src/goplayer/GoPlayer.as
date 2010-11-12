@@ -32,5 +32,11 @@ package goplayer
 
     private function handleAddedToStage(event : Event) : void
     { onkeydown(stage, application.handleKeyDown) }
+
+    public function play() : void
+    { application.play() }
+
+    public function pause() : void
+    { application.pause() }
   }
 }

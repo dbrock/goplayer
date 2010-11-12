@@ -3,8 +3,10 @@ package goplayer
   import flash.utils.getTimer
   import flash.net.SharedObject
   
-  public class Player
-    implements FlashNetConnectionListener, FlashNetStreamListener
+  public class Player implements
+    FlashNetConnectionListener,
+    FlashNetStreamListener,
+    PlayerQueueListener
   {
     private const DEFAULT_VOLUME : Number = .8
 
@@ -22,6 +24,7 @@ package goplayer
     private var bitratePolicy : BitratePolicy
     private var enableRTMP : Boolean
     private var reporter : MovieEventReporter
+    private var queue : PlayerQueue
 
     private var _started : Boolean = false
     private var _finished : Boolean = false
@@ -45,15 +48,18 @@ package goplayer
        movie : Movie,
        bitratePolicy : BitratePolicy,
        enableRTMP : Boolean,
-       reporter : MovieEventReporter)
+       reporter : MovieEventReporter,
+       queue : PlayerQueue)
     {
       this.connection = connection
       _movie = movie
       this.bitratePolicy = bitratePolicy
       this.enableRTMP = enableRTMP
       this.reporter = reporter
+      this.queue = queue
 
       connection.listener = this
+      queue.listener = this
 
       reporter.reportMovieViewed(movie.id)
 
@@ -66,6 +72,8 @@ package goplayer
         volume = sharedObject.data["volume"]
       else
         volume = DEFAULT_VOLUME
+
+      processCommands()
     }
 
     public function get movie() : Movie
@@ -433,6 +441,27 @@ package goplayer
           result = stream.dimensions
 
       return result
+    }
+
+    // -----------------------------------------------------
+
+    public function handleCommandEnqueued() : void
+    { processCommands() }
+
+    private function processCommands() : void
+    {
+      while (!queue.empty)
+        processCommand(queue.dequeue())
+    }
+
+    private function processCommand(command : PlayerCommand) : void
+    {
+      if (command == PlayerCommand.PLAY)
+        paused = false
+      else if (command == PlayerCommand.PAUSE)
+        paused = true
+      else
+        throw new Error
     }
   }
 }

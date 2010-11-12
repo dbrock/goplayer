@@ -5,6 +5,7 @@ package goplayer
   public class Application extends Component
     implements SkinSWFLoaderListener, MovieHandler, PlayerFinishingListener
   {
+    private const queue : PlayerQueue = new PlayerQueue
     private const background : Background
       = new Background(0x000000, 1)
 
@@ -85,7 +86,8 @@ package goplayer
     private function createPlayer() : void
     {
       const kit : PlayerKit = new PlayerKit
-        (movie, configuration.bitratePolicy, configuration.enableRTMP, api)
+        (movie, configuration.bitratePolicy,
+         configuration.enableRTMP, api, queue)
 
       player = kit.player
       player.addFinishingListener(this)
@@ -135,5 +137,11 @@ package goplayer
       if (configuration.enableLooping)
         debug("Looping."), player.rewind()
     }
+
+    public function play() : void
+    { queue.play() }
+
+    public function pause() : void
+    { queue.pause() }
   }
 }
