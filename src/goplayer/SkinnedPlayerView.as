@@ -158,9 +158,6 @@ package goplayer
     public function get playing() : Boolean
     { return player.playing }
 
-    public function get buffering() : Boolean
-    { return player.buffering }
-
     public function get bufferingUnexpectedly() : Boolean
     { return player.bufferingUnexpectedly }
 

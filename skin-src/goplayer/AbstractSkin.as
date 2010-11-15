@@ -58,9 +58,6 @@ package goplayer
     protected function get playing() : Boolean
     { return backend.playing }
 
-    protected function get buffering() : Boolean
-    { return backend.buffering }
-
     protected function get bufferingUnexpectedly() : Boolean
     { return backend.bufferingUnexpectedly }
 
