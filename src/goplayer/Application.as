@@ -5,7 +5,6 @@ package goplayer
   public class Application extends Component
     implements SkinSWFLoaderListener, MovieHandler, PlayerFinishingListener
   {
-    private const queue : PlayerQueue = new PlayerQueue
     private const background : Background
       = new Background(0x000000, 1)
     private const contentLayer : Component
@@ -100,7 +99,7 @@ package goplayer
     {
       const kit : PlayerKit = new PlayerKit
         (movie, configuration.bitratePolicy,
-         configuration.enableRTMP, api, queue)
+         configuration.enableRTMP, api)
 
       player = kit.player
       player.addFinishingListener(this)
@@ -129,7 +128,7 @@ package goplayer
     {
       if (key.code == Keyboard.ENTER)
         debugLayer.visible = !debugLayer.visible
-      else if (player)
+      else if (player != null)
         $handleKeyDown(key)
     }
 
@@ -154,12 +153,29 @@ package goplayer
     }
 
     public function play() : void
-    { queue.play() }
+    {
+      if (player != null)
+        $play()
+    }
+
+    private function $play() : void
+    {
+      if (player.started)
+        player.paused = false
+      else
+        player.start()
+    }
 
     public function pause() : void
-    { queue.pause() }
+    {
+      if (player != null)
+        player.paused = true
+    }
 
     public function stop() : void
-    { queue.stop() }
+    {
+      if (player != null)
+        player.stop()
+    }
   }
 }

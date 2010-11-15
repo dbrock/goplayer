@@ -17,8 +17,7 @@ package goplayer
       (movie : Movie,
        bitratePolicy : BitratePolicy,
        enableRTMP : Boolean,
-       reporter : MovieEventReporter,
-       queue : PlayerQueue)
+       reporter : MovieEventReporter)
     {
       player = new Player
         (connection,
@@ -26,7 +25,6 @@ package goplayer
          bitratePolicy,
          enableRTMP,
          reporter,
-         queue,
          sharedVolumeVariable)
 
       video = new PlayerVideo(player, flashVideo)

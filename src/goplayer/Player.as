@@ -4,8 +4,7 @@ package goplayer
   
   public class Player implements
     FlashNetConnectionListener,
-    FlashNetStreamListener,
-    PlayerQueueListener
+    FlashNetStreamListener
   {
     private const DEFAULT_VOLUME : Number = .8
 
@@ -21,7 +20,6 @@ package goplayer
     private var bitratePolicy : BitratePolicy
     private var enableRTMP : Boolean
     private var reporter : MovieEventReporter
-    private var queue : PlayerQueue
     private var sharedVolumeVariable : SharedVariable
 
     private var _started : Boolean = false
@@ -47,7 +45,6 @@ package goplayer
        bitratePolicy : BitratePolicy,
        enableRTMP : Boolean,
        reporter : MovieEventReporter,
-       queue : PlayerQueue,
        sharedVolumeVariable : SharedVariable)
     {
       this.connection = connection
@@ -55,11 +52,9 @@ package goplayer
       this.bitratePolicy = bitratePolicy
       this.enableRTMP = enableRTMP
       this.reporter = reporter
-      this.queue = queue
       this.sharedVolumeVariable = sharedVolumeVariable
 
       connection.listener = this
-      queue.listener = this
 
       reporter.reportMovieViewed(movie.id)
 
@@ -205,8 +200,6 @@ package goplayer
 
       if (!usingRTMP)
         debug("Video file size: " + stream.httpFileSize)
-
-      maybeProcessCommands()
     }
 
     public function handleStreamingStarted() : void
@@ -443,33 +436,6 @@ package goplayer
           result = stream.dimensions
 
       return result
-    }
-
-    // -----------------------------------------------------
-    // XXX: Refactor this and remove queue.
-
-    public function handleCommandEnqueued() : void
-    { maybeProcessCommands() }
-
-    private function maybeProcessCommands() : void
-    { processCommands() }
-
-    private function processCommands() : void
-    {
-      while (!queue.empty)
-        processCommand(queue.dequeue())
-    }
-
-    private function processCommand(command : PlayerCommand) : void
-    {
-      if (command == PlayerCommand.PLAY)
-        started ? metadata != null && (paused = false) : start()
-      else if (command == PlayerCommand.PAUSE)
-        metadata != null && (paused = true)
-      else if (command == PlayerCommand.STOP)
-        stop()
-      else
-        throw new Error
     }
   }
 }
