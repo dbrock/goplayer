@@ -307,17 +307,13 @@ package goplayer
 
     public function set paused(value : Boolean) : void
     {
-      // Allow pausing before the stream has been created.
-      _paused = value
-
-      if (stream)
-        stream.paused = value
+      if (stream != null)
+        _paused = value, stream.paused = value
     }
 
     public function togglePaused() : void
     {
-      // Forbid pausing before the stream has been created.
-      if (stream)
+      if (stream != null)
         paused = !paused
     }
 
