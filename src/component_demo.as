@@ -25,6 +25,12 @@ package
       ExternalInterface.addCallback("play", player.play)
       ExternalInterface.addCallback("pause", player.pause)
       ExternalInterface.addCallback("stop", player.stop)
+      ExternalInterface.addCallback("getCurrentTime",
+        function () : Number { return player.currentTime })
+      ExternalInterface.addCallback("setCurrentTime",
+        function (value : Number) : void { player.currentTime = value })
+      ExternalInterface.addCallback("getDuration",
+        function () : Number { return player.duration })
 
       addChild(player)
     }

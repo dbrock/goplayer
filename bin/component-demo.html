@@ -18,6 +18,19 @@
 <div id="log-container">
   <ul id="log"></ul>
 </div>
-<button onclick="player.play()">Play</button>
-<button onclick="player.pause()">Pause</button>
-<button onclick="player.stop()">Stop</button>
+<div style="clear: both">
+  <button onclick="player.play()">Play</button>
+  <button onclick="player.pause()">Pause</button>
+  <button onclick="player.stop()">Stop</button>
+  <div>
+    Current time:
+    <input id="currentTime">
+    <button onclick="currentTime.value = player.getCurrentTime()">Get</button>
+    <button onclick="player.setCurrentTime(parseFloat(currentTime.value))">Set</button>
+  </div>
+  <div>
+    Duration:
+    <input id="duration">
+    <button onclick="duration.value = player.getDuration()">Get</button>
+  </div>
+</div>

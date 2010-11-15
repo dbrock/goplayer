@@ -177,5 +177,14 @@ package goplayer
       if (player != null)
         player.stop()
     }
+
+    public function get playheadPosition() : Duration
+    { return player.playheadPosition }
+
+    public function set playheadPosition(value : Duration) : void
+    { player.playheadPosition = value }
+
+    public function get streamLength() : Duration
+    { return player.streamLength }
   }
 }

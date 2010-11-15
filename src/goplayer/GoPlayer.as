@@ -36,5 +36,14 @@ package goplayer
 
     public function stop() : void
     { application.stop() }
+
+    public function get currentTime() : Number
+    { return application.playheadPosition.seconds }
+
+    public function set currentTime(value : Number) : void
+    { application.playheadPosition = Duration.seconds(value) }
+
+    public function get duration() : Number
+    { return application.streamLength.seconds }
   }
 }

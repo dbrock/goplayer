@@ -333,7 +333,7 @@ package goplayer
 
     public function set playheadPosition(value : Duration) : void
     {
-      if (stream)
+      if (stream != null)
         $playheadPosition = value
     }
 
