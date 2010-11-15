@@ -25,7 +25,7 @@ package goplayer
 
     private function setupExternalLogger() : void
     {
-      debugLogger = new ExternalLogger("log")
+      debugLogger = new ExternalLogger
       debug("Using external logging.")
     }
 

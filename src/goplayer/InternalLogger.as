@@ -10,6 +10,7 @@ package goplayer
   public class InternalLogger extends Component implements Logger
   {
     private const MARGIN : Number = 5
+    private const lines : Array = []
 
     private var nextY : Number = 0
 
@@ -18,17 +19,16 @@ package goplayer
 
     public function log(message : String) : void
     {
-      const line : DisplayObject = getLine(message)
-      
-      line.x = MARGIN
-      line.y = MARGIN + nextY
+      const line : TextField = getLine(message)
 
-      nextY += line.height + 2
+      if (dimensions != null)
+        layoutLine(line)
 
+      lines.push(line)
       addChild(line)
     }
 
-    public function getLine(text : String) : DisplayObject
+    public function getLine(text : String) : TextField
     {
       const result : TextField = new TextField
       const format : TextFormat = new TextFormat
@@ -37,7 +37,6 @@ package goplayer
       result.autoSize = TextFieldAutoSize.LEFT
       result.multiline = true
       result.wordWrap = true
-      result.width = dimensions.width - MARGIN * 2
 
       format.color = 0xffffff
       format.size = 11
@@ -47,6 +46,24 @@ package goplayer
       result.setTextFormat(format)
 
       return result
+    }
+
+    public function layoutLine(line : TextField) : void
+    {
+      line.x = MARGIN
+      line.y = MARGIN + nextY
+
+      line.width = dimensions.width - MARGIN * 2
+
+      nextY += line.height + 2
+    }
+
+    override public function update() : void
+    {
+      nextY = 0
+
+      for each (var line : TextField in lines)
+        layoutLine(line)
     }
   }
 }
