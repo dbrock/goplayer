@@ -13,8 +13,6 @@ package goplayer
     {
       application = new Application(ConfigurationParser.parse(parameters))
 
-      addEventListener(Event.ADDED_TO_STAGE, handleAddedToStage)
-
       addChild(application)
     }
 
@@ -29,9 +27,6 @@ package goplayer
       if (!isNaN(_width) && !isNaN(_height))
         dimensions = new Dimensions(_width, _height)
     }
-
-    private function handleAddedToStage(event : Event) : void
-    { onkeydown(stage, application.handleKeyDown) }
 
     public function play() : void
     { application.play() }

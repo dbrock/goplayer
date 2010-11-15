@@ -8,6 +8,10 @@ package goplayer
     private const queue : PlayerQueue = new PlayerQueue
     private const background : Background
       = new Background(0x000000, 1)
+    private const contentLayer : Component
+      = new Component
+    private const debugLayer : Component
+      = new EphemeralComponent
 
     private var configuration : Configuration
 
@@ -28,10 +32,19 @@ package goplayer
          configuration.trackerID)
 
       addChild(background)
+      addChild(contentLayer)
+      addChild(debugLayer)
+
+      installLogger()
     }
+
+    private function installLogger() : void
+    { new DebugLoggerInstaller(debugLayer).execute() }
 
     override protected function initialize() : void
     {
+      onkeydown(stage, handleKeyDown)
+
       if (configuration.skinURL)
         loadSkin()
       else
@@ -97,7 +110,7 @@ package goplayer
       else
         view = new SimplePlayerView(kit.video, player)
 
-      addChild(view)
+      contentLayer.addChild(view)
     }
 
     private function get viewConfiguration() : SkinnedPlayerViewConfiguration
@@ -114,7 +127,9 @@ package goplayer
 
     public function handleKeyDown(key : Key) : void
     {
-      if (player)
+      if (key.code == Keyboard.ENTER)
+        debugLayer.visible = !debugLayer.visible
+      else if (player)
         $handleKeyDown(key)
     }
 
