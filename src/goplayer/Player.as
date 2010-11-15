@@ -270,6 +270,8 @@ package goplayer
 
     public function handleStreamingStopped() : void
     {
+      _buffering = false
+
       if (finishedPlaying)
         handleFinishedPlaying()
     }
