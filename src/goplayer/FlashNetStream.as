@@ -26,5 +26,7 @@ package goplayer
 
     function get volume() : Number
     function set volume(value : Number) : void
+
+    function close() : void
   }
 }

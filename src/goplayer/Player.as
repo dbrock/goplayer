@@ -285,6 +285,13 @@ package goplayer
         listener.handleMovieFinishedPlaying()
     }
 
+    public function stop() : void
+    {
+      debug("Stopping.")
+      stream.close()
+      _started = false
+    }
+
     private function get finishedPlaying() : Boolean
     { return timeRemaining.seconds < 1 }
 
@@ -357,7 +364,7 @@ package goplayer
     { playheadPosition = Duration.ZERO }
 
     public function get playing() : Boolean
-    { return stream != null && !paused && !finished }
+    { return started && stream != null && !paused && !finished }
 
     // -----------------------------------------------------
 
@@ -463,6 +470,8 @@ package goplayer
         paused = false
       else if (command == PlayerCommand.PAUSE)
         paused = true
+      else if (command == PlayerCommand.STOP)
+        stop()
       else
         throw new Error
     }

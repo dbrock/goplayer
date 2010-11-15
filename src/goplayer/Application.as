@@ -158,5 +158,8 @@ package goplayer
 
     public function pause() : void
     { queue.pause() }
+
+    public function stop() : void
+    { queue.stop() }
   }
 }

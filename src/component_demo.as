@@ -3,6 +3,7 @@ package
   import flash.display.Sprite
   import flash.display.StageAlign
   import flash.display.StageScaleMode
+  import flash.external.ExternalInterface
 
   import goplayer.GoPlayer
 
@@ -21,7 +22,7 @@ package
       player.width = 800
       player.height = 450
 
-      player.pause()
+      ExternalInterface.addCallback("stop", player.stop)
 
       addChild(player)
     }

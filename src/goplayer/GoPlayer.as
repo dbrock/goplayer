@@ -33,5 +33,8 @@ package goplayer
 
     public function pause() : void
     { application.pause() }
+
+    public function stop() : void
+    { application.stop() }
   }
 }

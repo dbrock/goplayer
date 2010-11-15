@@ -7,7 +7,7 @@
   swfobject.addDomLoadEvent(function () {
     var flashvars = {}
     var params = { allowfullscreen: true }
-    swfobject.embedSWF
+    player = swfobject.embedSWF
       ("component-demo.swf", "player", 800, 450, "9.0.0", null,
        flashvars, params)
   })
@@ -18,3 +18,4 @@
 <div id="log-container">
   <ul id="log"></ul>
 </div>
+<button onclick="player.stop()">Stop</button>

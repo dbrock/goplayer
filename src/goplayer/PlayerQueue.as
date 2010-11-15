@@ -12,6 +12,9 @@ package goplayer
     public function pause() : void
     { enqueue(PlayerCommand.PAUSE) }
 
+    public function stop() : void
+    { enqueue(PlayerCommand.STOP) }
+
     private function enqueue(command : PlayerCommand) : void
     {
       queue.enqueue(command)
