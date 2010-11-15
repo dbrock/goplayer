@@ -1,6 +1,6 @@
 body
 { margin: 0; }
-#player, #log-container
+#player-container, #log-container
 { float: left;
   width: 800px;
   height: 450px; }
