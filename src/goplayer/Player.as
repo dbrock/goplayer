@@ -67,8 +67,6 @@ package goplayer
         volume = sharedVolumeVariable.value
       else
         volume = DEFAULT_VOLUME
-
-      processCommands()
     }
 
     public function get movie() : Movie
@@ -207,6 +205,8 @@ package goplayer
 
       if (!usingRTMP)
         debug("Video file size: " + stream.httpFileSize)
+
+      maybeProcessCommands()
     }
 
     public function handleStreamingStarted() : void
@@ -441,7 +441,13 @@ package goplayer
     // -----------------------------------------------------
 
     public function handleCommandEnqueued() : void
-    { processCommands() }
+    { maybeProcessCommands() }
+
+    private function maybeProcessCommands() : void
+    {
+      if (metadata != null)
+        processCommands()
+    }
 
     private function processCommands() : void
     {
