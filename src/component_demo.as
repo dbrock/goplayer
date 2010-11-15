@@ -22,6 +22,8 @@ package
       player.width = 800
       player.height = 450
 
+      ExternalInterface.addCallback("play", player.play)
+      ExternalInterface.addCallback("pause", player.pause)
       ExternalInterface.addCallback("stop", player.stop)
 
       addChild(player)

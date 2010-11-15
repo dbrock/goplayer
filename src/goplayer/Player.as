@@ -290,6 +290,8 @@ package goplayer
       debug("Stopping.")
       stream.close()
       _started = false
+      stream = null
+      metadata = null
     }
 
     private function get finishedPlaying() : Boolean
@@ -448,15 +450,13 @@ package goplayer
     }
 
     // -----------------------------------------------------
+    // XXX: Refactor this and remove queue.
 
     public function handleCommandEnqueued() : void
     { maybeProcessCommands() }
 
     private function maybeProcessCommands() : void
-    {
-      if (metadata != null)
-        processCommands()
-    }
+    { processCommands() }
 
     private function processCommands() : void
     {
@@ -467,9 +467,9 @@ package goplayer
     private function processCommand(command : PlayerCommand) : void
     {
       if (command == PlayerCommand.PLAY)
-        paused = false
+        started ? metadata != null && (paused = false) : start()
       else if (command == PlayerCommand.PAUSE)
-        paused = true
+        metadata != null && (paused = true)
       else if (command == PlayerCommand.STOP)
         stop()
       else
