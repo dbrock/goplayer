@@ -1,11 +1,20 @@
-<!DOCTYPE html>
+<!doctype html>
 <meta charset="utf-8">
-<script src="goplayer.js"></script>
 <link href="goplayer.css" rel="stylesheet">
-<object id="player" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
-  <param name="movie" value="component-demo.swf"/>
-  <param name="allowfullscreen" value="true">
-</object>
+<script src="swfobject.js"></script>
+<script src="goplayer.js"></script>
+<script>
+  swfobject.addDomLoadEvent(function () {
+    var flashvars = {}
+    var params = { allowfullscreen: true }
+    swfobject.embedSWF
+      ("component-demo.swf", "player", 800, 450, "9.0.0", null,
+       flashvars, params)
+  })
+</script>
+<div id="player-container">
+  <div id="player"></div>
+</div>
 <div id="log-container">
   <ul id="log"></ul>
 </div>
