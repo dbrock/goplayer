@@ -7,6 +7,8 @@ package goplayer
     private const flashVideo : Video = new Video
     private const connection : FlashNetConnection
       = new StandardFlashNetConnection(flashVideo)
+    private const sharedVolumeVariable : SharedVariable
+      = new SharedVariable("player", "volume")
 
     public var player : Player
     public var video : PlayerVideo
@@ -19,7 +21,14 @@ package goplayer
        queue : PlayerQueue)
     {
       player = new Player
-        (connection, movie, bitratePolicy, enableRTMP, reporter, queue)
+        (connection,
+         movie,
+         bitratePolicy,
+         enableRTMP,
+         reporter,
+         queue,
+         sharedVolumeVariable)
+
       video = new PlayerVideo(player, flashVideo)
     }
   }

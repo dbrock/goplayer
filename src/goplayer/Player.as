@@ -1,7 +1,6 @@
 package goplayer
 {
   import flash.utils.getTimer
-  import flash.net.SharedObject
   
   public class Player implements
     FlashNetConnectionListener,
@@ -17,14 +16,13 @@ package goplayer
 
     private const finishingListeners : Array = []
 
-    private var sharedObject : SharedObject = null
-
     private var connection : FlashNetConnection
     private var _movie : Movie
     private var bitratePolicy : BitratePolicy
     private var enableRTMP : Boolean
     private var reporter : MovieEventReporter
     private var queue : PlayerQueue
+    private var sharedVolumeVariable : SharedVariable
 
     private var _started : Boolean = false
     private var _finished : Boolean = false
@@ -49,7 +47,8 @@ package goplayer
        bitratePolicy : BitratePolicy,
        enableRTMP : Boolean,
        reporter : MovieEventReporter,
-       queue : PlayerQueue)
+       queue : PlayerQueue,
+       sharedVolumeVariable : SharedVariable)
     {
       this.connection = connection
       _movie = movie
@@ -57,19 +56,15 @@ package goplayer
       this.enableRTMP = enableRTMP
       this.reporter = reporter
       this.queue = queue
+      this.sharedVolumeVariable = sharedVolumeVariable
 
       connection.listener = this
       queue.listener = this
 
       reporter.reportMovieViewed(movie.id)
 
-      try
-        { sharedObject = SharedObject.getLocal("player") }
-      catch (error : Error)
-        {}
-
-      if (sharedObject && sharedObject.size > 0)
-        volume = sharedObject.data["volume"]
+      if (sharedVolumeVariable.hasValue)
+        volume = sharedVolumeVariable.value
       else
         volume = DEFAULT_VOLUME
 
@@ -371,8 +366,8 @@ package goplayer
     {
       _volume = Math.round(clamp(value, 0, 1) * 100) / 100
 
-      if (sharedObject)
-        sharedObject.data["volume"] = volume
+      if (sharedVolumeVariable.available)
+        sharedVolumeVariable.value = volume
 
       if (stream)
         stream.volume = volume
