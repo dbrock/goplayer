@@ -80,7 +80,7 @@ package goplayer
     { return getDurationByRatio(1).mss }
 
     protected function getDurationByRatio(ratio : Number) : Duration
-    { return Duration.seconds(backend.streamLengthSeconds * ratio) }
+    { return Duration.seconds(backend.duration * ratio) }
 
     protected function lookup(name : String) : *
     {

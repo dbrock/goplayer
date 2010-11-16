@@ -291,7 +291,7 @@ package goplayer
     { return timeRemaining.seconds < 1 }
 
     private function get timeRemaining() : Duration
-    { return streamLength.minus(currentTime) }
+    { return duration.minus(currentTime) }
 
     // -----------------------------------------------------
 
@@ -319,10 +319,10 @@ package goplayer
     }
 
     public function get playheadRatio() : Number
-    { return getRatio(currentTime.seconds, streamLength.seconds) }
+    { return getRatio(currentTime.seconds, duration.seconds) }
 
     public function get bufferRatio() : Number
-    { return getRatio(bufferPosition.seconds, streamLength.seconds) }
+    { return getRatio(bufferPosition.seconds, duration.seconds) }
 
     private function getRatio
       (numerator : Number, denominator : Number) : Number
@@ -346,7 +346,7 @@ package goplayer
     }
 
     public function set playheadRatio(value : Number) : void
-    { currentTime = streamLength.scaledBy(value) }
+    { currentTime = duration.scaledBy(value) }
 
     public function seekBy(delta : Duration) : void
     { currentTime = currentTime.plus(delta) }
@@ -408,7 +408,7 @@ package goplayer
     public function get bufferFillRatio() : Number
     { return getRatio(bufferLength.seconds, bufferTime.seconds) }
 
-    public function get streamLength() : Duration
+    public function get duration() : Duration
     {
       return metadata != null
         ? Duration.seconds(metadata.duration)

@@ -16,7 +16,7 @@ package goplayer
     function get running() : Boolean
     function get playing() : Boolean
 
-    function get streamLengthSeconds() : Number
+    function get duration() : Number
     function get playheadRatio() : Number
 
     function get bufferRatio() : Number

@@ -142,8 +142,8 @@ package goplayer
     public function get running() : Boolean
     { return player.running }
 
-    public function get streamLengthSeconds() : Number
-    { return player.streamLength.seconds }
+    public function get duration() : Number
+    { return player.duration.seconds }
 
     public function get playheadRatio() : Number
     { return player.playheadRatio }

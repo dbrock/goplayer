@@ -44,6 +44,6 @@ package goplayer
     { application.currentTime = Duration.seconds(value) }
 
     public function get duration() : Number
-    { return application.streamLength.seconds }
+    { return application.duration.seconds }
   }
 }

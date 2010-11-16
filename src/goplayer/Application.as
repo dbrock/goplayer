@@ -184,7 +184,7 @@ package goplayer
     public function set currentTime(value : Duration) : void
     { player.currentTime = value }
 
-    public function get streamLength() : Duration
-    { return player.streamLength }
+    public function get duration() : Duration
+    { return player.duration }
   }
 }
