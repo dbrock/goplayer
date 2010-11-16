@@ -178,11 +178,11 @@ package goplayer
         player.stop()
     }
 
-    public function get playheadPosition() : Duration
-    { return player.playheadPosition }
+    public function get currentTime() : Duration
+    { return player.currentTime }
 
-    public function set playheadPosition(value : Duration) : void
-    { player.playheadPosition = value }
+    public function set currentTime(value : Duration) : void
+    { player.currentTime = value }
 
     public function get streamLength() : Duration
     { return player.streamLength }

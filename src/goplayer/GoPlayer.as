@@ -38,10 +38,10 @@ package goplayer
     { application.stop() }
 
     public function get currentTime() : Number
-    { return application.playheadPosition.seconds }
+    { return application.currentTime.seconds }
 
     public function set currentTime(value : Number) : void
-    { application.playheadPosition = Duration.seconds(value) }
+    { application.currentTime = Duration.seconds(value) }
 
     public function get duration() : Number
     { return application.streamLength.seconds }

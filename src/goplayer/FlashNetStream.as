@@ -13,8 +13,8 @@ package goplayer
 
     function set paused(value : Boolean) : void
 
-    function get playheadPosition() : Duration
-    function set playheadPosition(value : Duration) : void
+    function get currentTime() : Duration
+    function set currentTime(value : Duration) : void
 
     function get bitrate() : Bitrate
     function get bandwidth() : Bitrate

@@ -117,13 +117,13 @@ package goplayer
         stream.resume()
     }
 
-    public function get playheadPosition() : Duration
+    public function get currentTime() : Duration
     {
       return isNaN(stream.time) ? null
         : Duration.seconds(stream.time)
     }
 
-    public function set playheadPosition(position : Duration) : void
+    public function set currentTime(position : Duration) : void
     { stream.seek(position.seconds) }
 
     public function get bandwidth() : Bitrate

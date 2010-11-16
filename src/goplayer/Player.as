@@ -291,7 +291,7 @@ package goplayer
     { return timeRemaining.seconds < 1 }
 
     private function get timeRemaining() : Duration
-    { return streamLength.minus(playheadPosition) }
+    { return streamLength.minus(currentTime) }
 
     // -----------------------------------------------------
 
@@ -312,14 +312,14 @@ package goplayer
 
     // -----------------------------------------------------
 
-    public function get playheadPosition() : Duration
+    public function get currentTime() : Duration
     {
-      return stream != null && stream.playheadPosition != null
-        ? stream.playheadPosition : Duration.ZERO
+      return stream != null && stream.currentTime != null
+        ? stream.currentTime : Duration.ZERO
     }
 
     public function get playheadRatio() : Number
-    { return getRatio(playheadPosition.seconds, streamLength.seconds) }
+    { return getRatio(currentTime.seconds, streamLength.seconds) }
 
     public function get bufferRatio() : Number
     { return getRatio(bufferPosition.seconds, streamLength.seconds) }
@@ -329,30 +329,30 @@ package goplayer
     { return Math.min(1, numerator / denominator) }
 
     private function get bufferPosition() : Duration
-    { return playheadPosition.plus(bufferLength) }
+    { return currentTime.plus(bufferLength) }
 
-    public function set playheadPosition(value : Duration) : void
+    public function set currentTime(value : Duration) : void
     {
       if (stream != null)
-        $playheadPosition = value
+        $currentTime = value
     }
 
-    private function set $playheadPosition(value : Duration) : void
+    private function set $currentTime(value : Duration) : void
     {
       _finished = false
       seekStopwatch.start()
       useStartBuffer()
-      stream.playheadPosition = value
+      stream.currentTime = value
     }
 
     public function set playheadRatio(value : Number) : void
-    { playheadPosition = streamLength.scaledBy(value) }
+    { currentTime = streamLength.scaledBy(value) }
 
     public function seekBy(delta : Duration) : void
-    { playheadPosition = playheadPosition.plus(delta) }
+    { currentTime = currentTime.plus(delta) }
 
     public function rewind() : void
-    { playheadPosition = Duration.ZERO }
+    { currentTime = Duration.ZERO }
 
     public function get playing() : Boolean
     { return started && stream != null && !paused && !finished }
