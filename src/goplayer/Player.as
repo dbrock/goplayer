@@ -306,7 +306,7 @@ package goplayer
 
     public function set paused(value : Boolean) : void
     {
-      if (stream != null)
+      if (stream != null && _paused != value)
         _paused = value, stream.paused = value
     }
 
