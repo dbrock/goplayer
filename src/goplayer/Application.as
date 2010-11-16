@@ -97,6 +97,9 @@ package goplayer
 
     private function createPlayer() : void
     {
+      if (player != null)
+        player.destroy()
+
       const kit : PlayerKit = new PlayerKit
         (movie, configuration.bitratePolicy,
          configuration.enableRTMP, api)

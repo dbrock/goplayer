@@ -210,6 +210,9 @@ package goplayer
     public function close() : void
     { stream.close() }
 
+    public function destroy() : void
+    { close() }
+
     private static const PLAYLIST_RESET : String
       = "NetStream.Play.Reset"
     private static const STREAMING_STARTED : String

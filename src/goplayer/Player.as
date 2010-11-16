@@ -82,6 +82,12 @@ package goplayer
 
     // -----------------------------------------------------
 
+    public function destroy() : void
+    {
+      if (stream != null)
+        stream.destroy()
+    }
+
     public function start() : void
     {
       _started = true
