@@ -3,7 +3,7 @@ package goplayer
   import flash.ui.Keyboard
 
   public class Application extends Component
-    implements SkinSWFLoaderListener, MovieHandler, PlayerFinishingListener
+    implements SkinSWFLoaderListener, MovieHandler, PlayerListener
   {
     private const background : Background
       = new Background(0x000000, 1)
@@ -21,6 +21,8 @@ package goplayer
     private var player : Player = null
     private var view : Component = null
 
+    private var _listener : ApplicationListener = null
+
     public function Application(parameters : Object)
     {
       this.configuration = ConfigurationParser.parse(parameters)
@@ -36,6 +38,9 @@ package goplayer
 
       installLogger()
     }
+
+    public function set listener(value : ApplicationListener) : void
+    { _listener = value }
 
     private function installLogger() : void
     { new DebugLoggerInstaller(debugLayer).execute() }
@@ -105,7 +110,7 @@ package goplayer
          configuration.enableRTMP, api)
 
       player = kit.player
-      player.addFinishingListener(this)
+      player.listener = this
 
       if (skinSWF)
         view = new SkinnedPlayerView(kit.video, player, viewConfiguration)
@@ -153,6 +158,14 @@ package goplayer
     {
       if (configuration.enableLooping)
         debug("Looping."), player.rewind()
+      else if (_listener != null)
+        _listener.handlePlaybackEnded()
+    }
+
+    public function handleCurrentTimeChanged() : void
+    {
+      if (_listener != null)
+        _listener.handleCurrentTimeChanged()
     }
 
     public function play() : void

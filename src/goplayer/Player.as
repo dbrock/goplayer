@@ -13,8 +13,6 @@ package goplayer
     private const LARGE_BUFFER : Duration = Duration.seconds(60)
     private const SEEK_GRACE_TIME : Duration = Duration.seconds(2)
 
-    private const finishingListeners : Array = []
-
     private var connection : FlashNetConnection
     private var _movie : Movie
     private var bitratePolicy : BitratePolicy
@@ -26,6 +24,7 @@ package goplayer
     private var _finished : Boolean = false
     private var triedStandardRTMP : Boolean = false
     private var _usingRTMP : Boolean = false
+    private var _listener : PlayerListener = null
 
     private var measuredBandwidth : Bitrate = null
     private var measuredLatency : Duration = null
@@ -67,9 +66,8 @@ package goplayer
     public function get movie() : Movie
     { return _movie }
 
-    public function addFinishingListener
-      (value : PlayerFinishingListener) : void
-    { finishingListeners.push(value) }
+    public function set listener(value : PlayerListener) : void
+    { _listener = value }
 
     public function get started() : Boolean
     { return _started }
@@ -280,8 +278,8 @@ package goplayer
       debug("Finished playing.")
       _finished = true
 
-      for each (var listener : PlayerFinishingListener in finishingListeners)
-        listener.handleMovieFinishedPlaying()
+      if (_listener != null)
+        _listener.handleMovieFinishedPlaying()
     }
 
     public function stop() : void
@@ -298,6 +296,12 @@ package goplayer
 
     private function get timeRemaining() : Duration
     { return duration.minus(currentTime) }
+
+    public function handleCurrentTimeChanged() : void
+    {
+      if (_listener != null)
+        _listener.handleCurrentTimeChanged()
+    }
 
     // -----------------------------------------------------
 

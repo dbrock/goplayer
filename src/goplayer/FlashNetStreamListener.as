@@ -7,5 +7,6 @@ package goplayer
     function handleBufferFilled() : void
     function handleBufferEmptied() : void
     function handleStreamingStopped() : void
+    function handleCurrentTimeChanged() : void
   }
 }

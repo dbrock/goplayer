@@ -4,6 +4,7 @@ package goplayer
   import com.adobe.fms.DynamicStreamItem
 
   import flash.events.AsyncErrorEvent
+  import flash.events.Event
   import flash.events.NetStatusEvent
   import flash.media.SoundTransform
   import flash.media.Video
@@ -12,13 +13,16 @@ package goplayer
   public class StandardFlashNetStream implements FlashNetStream
   {
     private var stream : DynamicStream
+    private var video : Video
 
     private var _listener : FlashNetStreamListener
+    private var lastCurrentTime : Duration = null
 
     public function StandardFlashNetStream
       (connection : NetConnection, video : Video)
     {
       stream = new DynamicStream(connection)
+      this.video = video
 
       video.attachNetStream(stream)
 
@@ -27,6 +31,22 @@ package goplayer
       stream.addEventListener
         (AsyncErrorEvent.ASYNC_ERROR, handleAsyncError)
       stream.client = { onMetaData: handleNetStreamMetadata }
+
+      addEventListeners()
+    }
+
+    private function addEventListeners() : void
+    { video.addEventListener(Event.ENTER_FRAME, handleEnterFrame) }
+
+    private function removeEventListeners() : void
+    { video.removeEventListener(Event.ENTER_FRAME, handleEnterFrame) }
+
+    private function handleEnterFrame(event : Event) : void
+    {
+      const value : Duration = currentTime
+
+      if (!Duration.equals(lastCurrentTime, value))
+        _listener.handleCurrentTimeChanged(), lastCurrentTime = value
     }
 
     private function handleNetStreamStatus
@@ -211,7 +231,10 @@ package goplayer
     { stream.close() }
 
     public function destroy() : void
-    { close() }
+    {
+      close()
+      removeEventListeners()
+    }
 
     private static const PLAYLIST_RESET : String
       = "NetStream.Play.Reset"

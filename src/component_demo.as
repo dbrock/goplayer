@@ -6,6 +6,7 @@ package
   import flash.external.ExternalInterface
 
   import goplayer.GoPlayer
+  import goplayer.debug
 
   public class component_demo extends Sprite
   {
@@ -31,6 +32,9 @@ package
         function (value : Number) : void { player.currentTime = value })
       ExternalInterface.addCallback("getDuration",
         function () : Number { return player.duration })
+
+      player.ontimeupdate = function () : void { debug(player.currentTime) }
+      player.onended = function () : void { debug("Recieved onended event.") }
 
       addChild(player)
     }

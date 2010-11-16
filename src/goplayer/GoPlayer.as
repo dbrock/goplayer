@@ -6,15 +6,20 @@ package goplayer
   import flash.display.Sprite
   import flash.events.Event
 
-  public class GoPlayer extends Component
+  public class GoPlayer extends Component implements ApplicationListener
   {
     private var application : Application
+
     private var _width : Number
     private var _height : Number
+
+    private var _ontimeupdate : Function = null
+    private var _onended : Function = null
 
     public function GoPlayer(parameters : Object)
     {
       application = new Application(parameters)
+      application.listener = this
       addChild(application)
     }
 
@@ -47,5 +52,23 @@ package goplayer
 
     public function get duration() : Number
     { return application.duration.seconds }
+
+    public function set ontimeupdate(value : Function) : void
+    { _ontimeupdate = value }
+
+    public function set onended(value : Function) : void
+    { _onended = value }
+
+    public function handleCurrentTimeChanged() : void
+    {
+      if (_ontimeupdate != null)
+        _ontimeupdate()
+    }
+
+    public function handlePlaybackEnded() : void
+    {
+      if (_onended != null)
+        _onended()
+    }
   }
 }
