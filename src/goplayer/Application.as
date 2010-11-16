@@ -21,9 +21,9 @@ package goplayer
     private var player : Player = null
     private var view : Component = null
 
-    public function Application(configuration : Configuration)
+    public function Application(parameters : Object)
     {
-      this.configuration = configuration
+      this.configuration = ConfigurationParser.parse(parameters)
 
       api = new StreamioAPI
         (configuration.apiURL,

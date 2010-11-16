@@ -11,8 +11,7 @@ package goplayer
 
     public function GoPlayer(parameters : Object)
     {
-      application = new Application(ConfigurationParser.parse(parameters))
-
+      application = new Application(parameters)
       addChild(application)
     }
 
