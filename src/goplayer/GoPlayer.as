@@ -1,3 +1,6 @@
+// This class is intended to be used for embedding Go Player as a
+// component in other ActionScript projects.
+
 package goplayer
 {
   import flash.display.Sprite
