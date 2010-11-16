@@ -269,8 +269,11 @@ package goplayer
     {
       _buffering = false
 
-      if (finishedPlaying)
-        handleFinishedPlaying()
+      // Wait one frame to make sure currentTime is updated.
+      later(function () : void {
+        if (finishedPlaying)
+          handleFinishedPlaying()
+      })
     }
 
     private function handleFinishedPlaying() : void
