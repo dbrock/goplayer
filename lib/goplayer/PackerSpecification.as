@@ -26,6 +26,11 @@ package goplayer
         specify(b.x).should.equal(2)
       })
 
+      it("should ignore null items", function () : void {
+        Packer.packLeft(NaN, null, b)
+        specify(b.x).should.equal(0)
+      })
+
       it("should give free space to flexible element", function () : void {
         Packer.packLeft(5, [a], b)
         specify(b.x).should.equal(4)

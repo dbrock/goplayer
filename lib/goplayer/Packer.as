@@ -65,7 +65,8 @@ class Importer
     const result : Array = []
 
     for each (var item : Object in items)
-      result.push(getItem(item))
+      if (item != null)
+        result.push(getItem(item))
 
     return result
   }
