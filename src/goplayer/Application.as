@@ -25,6 +25,8 @@ package goplayer
 
     public function Application(parameters : Object)
     {
+      installLogger()
+
       this.configuration = ConfigurationParser.parse(parameters)
 
       api = new StreamioAPI
@@ -35,8 +37,6 @@ package goplayer
       addChild(background)
       addChild(contentLayer)
       addChild(debugLayer)
-
-      installLogger()
     }
 
     public function set listener(value : ApplicationListener) : void
