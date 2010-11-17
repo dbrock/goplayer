@@ -8,6 +8,11 @@ package goplayer
   {
     override protected function execute() : void
     {
+      it("should allow packing nothing", function () : void {
+        specify(function () : void { Packer.packLeft(NaN) })
+          .should.not.throw_error
+      })
+
       const a : Sprite = getSquare(1)
       const b : Sprite = getSquare(1)
 
