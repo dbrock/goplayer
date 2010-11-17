@@ -19,10 +19,9 @@ package goplayer
       upperPanel.x = 0
       upperPanel.y = 0
 
-      Packer.packLeft
-        (NaN,
-         upperPanelLeft,
-         [upperPanelMiddle, upperPanelMiddleWidth],
+      packLeft
+        (upperPanelLeft,
+         [upperPanelMiddle],
          upperPanelRight)
 
       upperPanelMiddleBackground.width = upperPanelMiddleWidth
@@ -31,12 +30,14 @@ package goplayer
       controlBar.x = 0
       controlBar.y = dimensions.height
 
-      Packer.packLeft
-        (NaN,
-         controlBarLeft,
-         [seekBar, seekBarWidth],
+      packLeft
+        (controlBarLeft,
+         [seekBar],
          controlBarRight)
     }
+
+    private function packLeft(... items : Array) : void
+    { Packer.$packLeft(dimensions.width, items) }
 
     private function get upperPanelMiddleWidth() : Number
     { return dimensions.width - upperPanelLeft.width - upperPanelRight.width }

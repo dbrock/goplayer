@@ -19,12 +19,15 @@ package goplayer
     }
 
     public static function packLeft(space : Number, ... items : Array) : void
+    { $packLeft(space, items) }
+
+    public static function $packLeft(space : Number, items : Array) : void
     {
       if (items.length > 1)
-        $packLeft(new Importer(space, items).getItems())
+        $$packLeft(new Importer(space, items).getItems())
     }
 
-    private static function $packLeft(items : Array) : void
+    private static function $$packLeft(items : Array) : void
     { new Packer(items[0], items.slice(1)).execute() }
   }
 }
