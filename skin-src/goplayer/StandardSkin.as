@@ -32,17 +32,24 @@ package goplayer
       packLeft
         (showPlayPauseButton ? playPausePart : null,
          beforeLeftTimePart,
-         showElapsedTime ? leftTimePart : null,
+         showElapsedTime ? leftTimeBackgroundPart : null,
+         afterLeftTimePart,
          [seekBar, setSeekBarWidth],
-         showTotalTime ? rightTimePart : null,
+         beforeRightTimePart,
+         showTotalTime ? rightTimeBackgroundPart : null,
          afterRightTimePart,
          showVolumeControl ? volumePart : null,
          showFullscreenButton ? fullscreenPart : null)
 
+      leftTimeFieldPart.x = beforeLeftTimePart.x
+      rightTimeFieldPart.x = beforeRightTimePart.x
+
       playPausePart.visible = showPlayPauseButton
-      leftTimePart.visible = showElapsedTime
+      leftTimeBackgroundPart.visible = showElapsedTime
+      leftTimeFieldPart.visible = showElapsedTime
       seekBar.visible = showSeekBar
-      rightTimePart.visible = showTotalTime
+      rightTimeBackgroundPart.visible = showTotalTime
+      rightTimeFieldPart.visible = showTotalTime
       volumePart.visible = showVolumeControl
       fullscreenPart.visible = showFullscreenButton
     }
@@ -97,10 +104,15 @@ package goplayer
     private function get beforeLeftTimePart() : DisplayObject
     { return lookup("chrome.controlBar.beforeLeftTime") }
 
-    private function get leftTimePart() : TextField
+    private function get leftTimeBackgroundPart() : DisplayObject
+    { return lookup("chrome.controlBar.leftTimeBackground") }
+    private function get leftTimeFieldPart() : DisplayObject
     { return lookup("chrome.controlBar.leftTime") }
     override protected function get leftTimeField() : TextField
     { return lookup("chrome.controlBar.leftTime.field") }
+
+    private function get afterLeftTimePart() : DisplayObject
+    { return lookup("chrome.controlBar.afterLeftTime") }
 
     override protected function get seekBar() : Sprite
     { return lookup("chrome.controlBar.seekBar") }
@@ -115,7 +127,12 @@ package goplayer
     override protected function get seekBarTooltipField() : TextField
     { return lookup("chrome.controlBar.seekBar.tooltip.field") }
 
-    private function get rightTimePart() : DisplayObject
+    private function get beforeRightTimePart() : DisplayObject
+    { return lookup("chrome.controlBar.beforeRightTime") }
+
+    private function get rightTimeBackgroundPart() : DisplayObject
+    { return lookup("chrome.controlBar.rightTimeBackground") }
+    private function get rightTimeFieldPart() : DisplayObject
     { return lookup("chrome.controlBar.rightTime") }
     override protected function get rightTimeField() : TextField
     { return lookup("chrome.controlBar.rightTime.field") }
