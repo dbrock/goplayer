@@ -133,8 +133,30 @@ package goplayer
     public function get skinScale() : Number
     { return video.modernFullscreenEnabled ? 2 : 1 }
 
+    // -----------------------------------------------------
+
     public function get showTitle() : Boolean
     { return configuration.enableTitle }
+
+    public function get showPlayPauseButton() : Boolean
+    { return configuration.enablePlayPauseButton }
+
+    public function get showElapsedTime() : Boolean
+    { return configuration.enableElapsedTime }
+
+    public function get showSeekBar() : Boolean
+    { return configuration.enableSeekBar }
+
+    public function get showTotalTime() : Boolean
+    { return configuration.enableTotalTime }
+
+    public function get showVolumeControl() : Boolean
+    { return configuration.enableVolumeControl }
+
+    public function get showFullscreenButton() : Boolean
+    { return configuration.enableFullscreenButton }
+
+    // -----------------------------------------------------
 
     public function get title() : String
     { return player.movie.title }

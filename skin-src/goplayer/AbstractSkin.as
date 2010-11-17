@@ -40,11 +40,33 @@ package goplayer
     protected function get enableChrome() : Boolean
     { return backend.enableChrome }
 
+    // -----------------------------------------------------
+
     protected function get showChrome() : Boolean
     { return backend.showChrome }
 
     protected function get showTitle() : Boolean
     { return backend.showTitle }
+
+    protected function get showPlayPauseButton() : Boolean
+    { return backend.showPlayPauseButton }
+
+    protected function get showElapsedTime() : Boolean
+    { return backend.showElapsedTime }
+
+    protected function get showSeekBar() : Boolean
+    { return backend.showSeekBar }
+
+    protected function get showTotalTime() : Boolean
+    { return backend.showTotalTime }
+
+    protected function get showVolumeControl() : Boolean
+    { return backend.showVolumeControl }
+
+    protected function get showFullscreenButton() : Boolean
+    { return backend.showFullscreenButton }
+
+    // -----------------------------------------------------
 
     protected function get playheadRatio() : Number
     { return backend.playheadRatio }

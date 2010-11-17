@@ -8,10 +8,24 @@ package goplayer
     public static const DEFAULT_STREAMIO_TRACKER_ID : String = "global"
 
     public static const VALID_PARAMETERS : Array
-      = ["skin", "src", "bitrate",
-         "enablertmp", "autoplay", "loop",
-         "skin:showchrome", "skin:showtitle",
-         "streamio:api", "streamio:tracker"]
+      = ["skin",
+         "src",
+         "bitrate",
+         "enablertmp",
+         "autoplay",
+         "loop",
+
+         "skin:showchrome",
+         "skin:showtitle",
+         "skin:showplaypausebutton",
+         "skin:showelapsedtime",
+         "skin:showseekbar",
+         "skin:showtotaltime",
+         "skin:showvolumecontrol",
+         "skin:showfullscreenbutton",
+
+         "streamio:api",
+         "streamio:tracker"]
 
     private const result : Configuration = new Configuration
 
@@ -33,8 +47,24 @@ package goplayer
       result.enableRTMP = getBoolean("enablertmp", true)
       result.enableAutoplay = getBoolean("autoplay", false)
       result.enableLooping = getBoolean("loop", false)
-      result.enableChrome = getBoolean("skin:showchrome", true)
-      result.enableTitle = getBoolean("skin:showtitle", true)
+
+      result.enableChrome
+        = getBoolean("skin:showchrome", true)
+      result.enableTitle
+        = getBoolean("skin:showtitle", true)
+      result.enablePlayPauseButton
+        = getBoolean("skin:showplaypausebutton", true)
+      result.enableElapsedTime
+        = getBoolean("skin:showelapsedtime", true)
+      result.enableSeekBar
+        = getBoolean("skin:showseekbar", true)
+      result.enableTotalTime
+        = getBoolean("skin:showtotaltime", true)
+      result.enableVolumeControl
+        = getBoolean("skin:showvolumecontrol", true)
+      result.enableFullscreenButton
+        = getBoolean("skin:showfullscreenbutton", true)
+
       result.apiURL = getString
         ("streamio:api", DEFAULT_STREAMIO_API_URL)
       result.trackerID = getString

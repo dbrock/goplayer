@@ -128,6 +128,12 @@ package goplayer
       result.skin = skinSWF.getSkin()
       result.enableChrome = configuration.enableChrome
       result.enableTitle = configuration.enableTitle
+      result.enablePlayPauseButton = configuration.enablePlayPauseButton
+      result.enableElapsedTime = configuration.enableElapsedTime
+      result.enableSeekBar = configuration.enableSeekBar
+      result.enableTotalTime = configuration.enableTotalTime
+      result.enableVolumeControl = configuration.enableVolumeControl
+      result.enableFullscreenButton = configuration.enableFullscreenButton
 
       return result
     }

@@ -30,9 +30,21 @@ package goplayer
       controlBar.y = dimensions.height
 
       packLeft
-        (controlBarLeft,
+        (showPlayPauseButton ? playPausePart : null,
+         beforeLeftTimePart,
+         showElapsedTime ? leftTimePart : null,
          [seekBar, setSeekBarWidth],
-         controlBarRight)
+         showTotalTime ? rightTimePart : null,
+         afterRightTimePart,
+         showVolumeControl ? volumePart : null,
+         showFullscreenButton ? fullscreenPart : null)
+
+      playPausePart.visible = showPlayPauseButton
+      leftTimePart.visible = showElapsedTime
+      seekBar.visible = showSeekBar
+      rightTimePart.visible = showTotalTime
+      volumePart.visible = showVolumeControl
+      fullscreenPart.visible = showFullscreenButton
     }
 
     private function packLeft(... items : Array) : void
@@ -61,11 +73,6 @@ package goplayer
     private function get upperPanelRight() : Sprite
     { return lookup("chrome.upperPanel.right") }
 
-    private function get controlBarLeft() : Sprite
-    { return lookup("chrome.controlBar.left") }
-    private function get controlBarRight() : Sprite
-    { return lookup("chrome.controlBar.right") }
-
     override protected function get largePlayButton() : InteractiveObject
     { return lookup("largePlayButton") }
     override protected function get bufferingIndicator() : InteractiveObject
@@ -80,12 +87,20 @@ package goplayer
     override protected function get controlBar() : Sprite
     { return lookup("chrome.controlBar") }
 
-    override protected function get leftTimeField() : TextField
-    { return lookup("chrome.controlBar.left.timeField") }
+    private function get playPausePart() : DisplayObject
+    { return lookup("chrome.controlBar.playPause") }
     override protected function get playButton() : DisplayObject
-    { return lookup("chrome.controlBar.left.playButton") }
+    { return lookup("chrome.controlBar.playPause.playButton") }
     override protected function get pauseButton() : DisplayObject
-    { return lookup("chrome.controlBar.left.pauseButton") }
+    { return lookup("chrome.controlBar.playPause.pauseButton") }
+
+    private function get beforeLeftTimePart() : DisplayObject
+    { return lookup("chrome.controlBar.beforeLeftTime") }
+
+    private function get leftTimePart() : TextField
+    { return lookup("chrome.controlBar.leftTime") }
+    override protected function get leftTimeField() : TextField
+    { return lookup("chrome.controlBar.leftTime.field") }
 
     override protected function get seekBar() : Sprite
     { return lookup("chrome.controlBar.seekBar") }
@@ -100,23 +115,33 @@ package goplayer
     override protected function get seekBarTooltipField() : TextField
     { return lookup("chrome.controlBar.seekBar.tooltip.field") }
 
+    private function get rightTimePart() : DisplayObject
+    { return lookup("chrome.controlBar.rightTime") }
     override protected function get rightTimeField() : TextField
-    { return lookup("chrome.controlBar.right.timeField") }
-    override protected function get muteButton() : DisplayObject
-    { return lookup("chrome.controlBar.right.muteButton") }
-    override protected function get unmuteButton() : DisplayObject
-    { return lookup("chrome.controlBar.right.unmuteButton") }
-    override protected function get enableFullscreenButton() : DisplayObject
-    { return lookup("chrome.controlBar.right.enableFullscreenButton") }
+    { return lookup("chrome.controlBar.rightTime.field") }
 
+    private function get afterRightTimePart() : DisplayObject
+    { return lookup("chrome.controlBar.afterRightTime") }
+
+    private function get volumePart() : DisplayObject
+    { return lookup("chrome.controlBar.volume") }
+    override protected function get muteButton() : DisplayObject
+    { return lookup("chrome.controlBar.volume.muteButton") }
+    override protected function get unmuteButton() : DisplayObject
+    { return lookup("chrome.controlBar.volume.unmuteButton") }
     override protected function get volumeSlider() : Sprite
-    { return lookup("chrome.controlBar.right.volumeSlider") }
+    { return lookup("chrome.controlBar.volume.slider") }
     override protected function get volumeSliderThumb() : DisplayObject
-    { return lookup("chrome.controlBar.right.volumeSlider.thumb") }
+    { return lookup("chrome.controlBar.volume.slider.thumb") }
     override protected function get volumeSliderThumbGuide() : DisplayObject
-    { return lookup("chrome.controlBar.right.volumeSlider.thumbGuide") }
+    { return lookup("chrome.controlBar.volume.slider.thumbGuide") }
     override protected function get volumeSliderFill() : DisplayObject
-    { return lookup("chrome.controlBar.right.volumeSlider.fill") }
+    { return lookup("chrome.controlBar.volume.slider.fill") }
+
+    private function get fullscreenPart() : DisplayObject
+    { return lookup("chrome.controlBar.fullscreen") }
+    override protected function get enableFullscreenButton() : DisplayObject
+    { return lookup("chrome.controlBar.fullscreen.enableButton") }
 
     override protected function lookup(name : String) : *
     { return super.lookup("skinContent." + name) }

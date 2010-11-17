@@ -7,8 +7,15 @@ package goplayer
     function get skinScale() : Number
 
     function get enableChrome() : Boolean
+
     function get showChrome() : Boolean
     function get showTitle() : Boolean
+    function get showPlayPauseButton() : Boolean
+    function get showElapsedTime() : Boolean
+    function get showSeekBar() : Boolean
+    function get showTotalTime() : Boolean
+    function get showVolumeControl() : Boolean
+    function get showFullscreenButton() : Boolean
 
     function get title() : String
     function get volume() : Number
