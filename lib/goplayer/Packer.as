@@ -24,7 +24,18 @@ package goplayer
     public static function $packLeft(space : Number, items : Array) : void
     {
       if (items.length > 0)
-        $$packLeft(new Importer(space, items).getItems())
+        $$packLeft(new Importer(space, withoutNulls(items)).getItems())
+    }
+
+    private static function withoutNulls(array : Array) : Array
+    {
+      const result : Array = []
+
+      for each (var item : Object in array)
+        if (item !== null)
+          result.push(item)
+
+      return result
     }
 
     private static function $$packLeft(items : Array) : void
@@ -65,8 +76,7 @@ class Importer
     const result : Array = []
 
     for each (var item : Object in items)
-      if (item != null)
-        result.push(getItem(item))
+      result.push(getItem(item))
 
     return result
   }
