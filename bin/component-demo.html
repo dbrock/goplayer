@@ -6,7 +6,7 @@
 <script>
   swfobject.addDomLoadEvent(function () {
     var flashvars = {}
-    var params = { allowfullscreen: true }
+    var params = { allowfullscreen: true, allowscriptaccess: true }
     player = swfobject.embedSWF
       ("component-demo.swf", "player", 800, 450, "9.0.0", null,
        flashvars, params)
