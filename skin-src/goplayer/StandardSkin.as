@@ -7,6 +7,8 @@ package goplayer
 
 	public class StandardSkin extends AbstractStandardSkin
   {
+    private var _seekBarWidth : Number
+
     override public function update() : void
     {
       super.update()
@@ -21,29 +23,32 @@ package goplayer
 
       packLeft
         (upperPanelLeft,
-         [upperPanelMiddle],
+         [upperPanelMiddle, setUpperPanelWidth],
          upperPanelRight)
-
-      upperPanelMiddleBackground.width = upperPanelMiddleWidth
-      titleField.width = upperPanelMiddleWidth
 
       controlBar.x = 0
       controlBar.y = dimensions.height
 
       packLeft
         (controlBarLeft,
-         [seekBar],
+         [seekBar, setSeekBarWidth],
          controlBarRight)
     }
 
     private function packLeft(... items : Array) : void
     { Packer.$packLeft(dimensions.width, items) }
 
-    private function get upperPanelMiddleWidth() : Number
-    { return dimensions.width - upperPanelLeft.width - upperPanelRight.width }
+    private function setUpperPanelWidth(value : Number) : void
+    {
+      upperPanelMiddleBackground.width = value
+      titleField.width = value
+    }
+
+    private function setSeekBarWidth(value : Number) : void
+    { _seekBarWidth = value }
 
     override protected function get seekBarWidth() : Number
-    { return dimensions.width - controlBarLeft.width - controlBarRight.width }
+    { return _seekBarWidth }
 
     override protected function get upperPanel() : Sprite
     { return lookup("chrome.upperPanel") }
