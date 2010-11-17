@@ -25,6 +25,13 @@ package goplayer
         Packer.packLeft(5, [a], b)
         specify(b.x).should.equal(4)
       })
+
+      it("should call back with width of flexible element", function () : void {
+        var width : Number
+        function callback(value : Number) : void { width = value }
+        Packer.packLeft(2, [a, callback])
+        specify(width).should.equal(2)
+      })
     }
 
     private static function getSquare(side : Number) : Sprite

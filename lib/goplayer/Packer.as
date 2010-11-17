@@ -23,7 +23,7 @@ package goplayer
 
     public static function $packLeft(space : Number, items : Array) : void
     {
-      if (items.length > 1)
+      if (items.length > 0)
         $$packLeft(new Importer(space, items).getItems())
     }
 
@@ -71,7 +71,12 @@ class Importer
   }
 
   private function getItem(item : Object) : Item
-  { return new Item(getDisplayObject(item), getWidth(item)) }
+  {
+    if (isCallbackFlexible(item))
+      getCallback(item)(getWidth(item))
+
+    return new Item(getDisplayObject(item), getWidth(item))
+  }
 
   private function getDisplayObject(item : Object) : DisplayObject
   { return isImplicit(item) ? item as DisplayObject : (item as Array)[0] }
@@ -88,14 +93,29 @@ class Importer
       throw new Error
   }
 
-  private function isExplicit(item : Object) : Boolean
-  { return item is Array && (item as Array).length == 2 }
-
-  private function isFlexible(item : Object) : Boolean
-  { return item is Array && (item as Array).length == 1 }
-
   private function isImplicit(item : Object) : Boolean
   { return item is DisplayObject }
+
+  private function isIgnoredFlexible(item : Object) : Boolean
+  { return item is Array && !hasSecondEntry(item) }
+
+  private function isExplicit(item : Object) : Boolean
+  { return hasSecondEntry(item) && getSecondEntry(item) is Number }
+
+  private function isCallbackFlexible(item : Object) : Boolean
+  { return hasSecondEntry(item) && getSecondEntry(item) is Function }
+
+  private function getCallback(item : Object) : Function
+  { return getSecondEntry(item) as Function }
+
+  private function hasSecondEntry(item : Object) : Boolean
+  { return item is Array && (item as Array).length == 2 }
+
+  private function getSecondEntry(item : Object) : Object
+  { return (item as Array)[1] }
+
+  private function isFlexible(item : Object) : Boolean
+  { return isCallbackFlexible(item) || isIgnoredFlexible(item) }
 
   private function get flexibleWidth() : Number
   { return space / flexibleCount - totalStaticWidth }
