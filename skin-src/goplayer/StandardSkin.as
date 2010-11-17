@@ -20,7 +20,8 @@ package goplayer
       upperPanel.y = 0
 
       Packer.packLeft
-        (upperPanelLeft,
+        (NaN,
+         upperPanelLeft,
          [upperPanelMiddle, upperPanelMiddleWidth],
          upperPanelRight)
 
@@ -31,7 +32,8 @@ package goplayer
       controlBar.y = dimensions.height
 
       Packer.packLeft
-        (controlBarLeft,
+        (NaN,
+         controlBarLeft,
          [seekBar, seekBarWidth],
          controlBarRight)
     }

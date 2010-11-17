@@ -4,42 +4,24 @@ package goplayer
 
   public class Packer
   {
-    private var base : PackItem
+    private var base : Item
     private var items : Array
 
-    public function Packer(base : PackItem, items : Array)
+    public function Packer(base : Item, items : Array)
     { this.base = base, this.items = items }
 
     public function execute() : void
     {
-      var current : PackItem = base
+      var current : Item = base
 
-      for each (var item : PackItem in items)
+      for each (var item : Item in items)
         item.packLeft(current), current = item
     }
 
-    public static function packLeft(... items : Array) : void
+    public static function packLeft(space : Number, ... items : Array) : void
     {
       if (items.length > 1)
-        $packLeft(importItems(items))
-    }
-
-    private static function importItems(items : Array) : Array
-    {
-      const result : Array = []
-
-      for each (var item : Object in items)
-        result.push(importItem(item))
-
-      return result
-    }
-
-    private static function importItem(item : Object) : PackItem
-    {
-      if (item is Array)
-        return new PackItem((item as Array)[0], (item as Array)[1])
-      else
-        return new PackItem(DisplayObject(item))
+        $packLeft(new Importer(space, items).getItems())
     }
 
     private static function $packLeft(items : Array) : void
@@ -49,20 +31,91 @@ package goplayer
 
 import flash.display.DisplayObject
 
-class PackItem
+class Item
 {
   private var object : DisplayObject
   private var _width : Number
 
-  public function PackItem(object : DisplayObject, width : Number = NaN)
+  public function Item(object : DisplayObject, width : Number)
   { this.object = object, _width = width }
 
   public function get width() : Number
-  { return isNaN(_width) ? object.width : _width }
+  { return _width }
 
   public function get right() : Number
   { return object.x + width }
 
-  public function packLeft(base : PackItem) : void
+  public function packLeft(base : Item) : void
   { object.x = base.right }
+}
+
+class Importer
+{
+  private var space : Number
+  private var items : Array
+
+  public function Importer(space : Number, items : Array)
+  { this.space = space, this.items = items }
+
+  public function getItems() : Array
+  {
+    const result : Array = []
+
+    for each (var item : Object in items)
+      result.push(getItem(item))
+
+    return result
+  }
+
+  private function getItem(item : Object) : Item
+  { return new Item(getDisplayObject(item), getWidth(item)) }
+
+  private function getDisplayObject(item : Object) : DisplayObject
+  { return isImplicit(item) ? item as DisplayObject : (item as Array)[0] }
+
+  private function getWidth(item : Object) : Number
+  {
+    if (isExplicit(item))
+      return (item as Array)[1]
+    else if (isFlexible(item))
+      return flexibleWidth
+    else if (isImplicit(item))
+      return (item as DisplayObject).width
+    else
+      throw new Error
+  }
+
+  private function isExplicit(item : Object) : Boolean
+  { return item is Array && (item as Array).length == 2 }
+
+  private function isFlexible(item : Object) : Boolean
+  { return item is Array && (item as Array).length == 1 }
+
+  private function isImplicit(item : Object) : Boolean
+  { return item is DisplayObject }
+
+  private function get flexibleWidth() : Number
+  { return space / flexibleCount - totalStaticWidth }
+
+  private function get totalStaticWidth() : Number
+  {
+    var result : Number = 0
+
+    for each (var item : Object in items)
+      if (!isFlexible(item))
+        result += getWidth(item)
+
+    return result
+  }
+
+  private function get flexibleCount() : int
+  {
+    var result : int = 0
+
+    for each (var item : Object in items)
+      if (isFlexible(item))
+        ++result
+
+    return result
+  }
 }
