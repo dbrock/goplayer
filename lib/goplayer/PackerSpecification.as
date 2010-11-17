@@ -8,13 +8,17 @@ package goplayer
   {
     override protected function execute() : void
     {
-      it("should pack two static items correctly", function () : void {
-        const a : Sprite = getSquare(1)
-        const b : Sprite = getSquare(1)
+      const a : Sprite = getSquare(1)
+      const b : Sprite = getSquare(1)
 
+      it("should pack using internal widths", function () : void {
         Packer.packLeft(a, b)
-
         specify(b.x).should.equal(1)
+      })
+
+      it("should honor explicit widths", function () : void {
+        Packer.packLeft([a, 2], b)
+        specify(b.x).should.equal(2)
       })
     }
 
