@@ -7,6 +7,7 @@ package goplayer
     override protected function populate() : void
     {
       add(DimensionsSpecification)
+      add(PackerSpecification)
       add(URLSpecification)
     }
   }
