@@ -91,7 +91,7 @@ class Importer
     else if (isImplicit(item))
       return (item as DisplayObject).width
     else
-      throw new Error
+      throw new Error("Invalid item: " + item)
   }
 
   private function isImplicit(item : Object) : Boolean
