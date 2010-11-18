@@ -14,8 +14,10 @@ package goplayer
     {
       var current : Item = base
 
+      current.packLeft(0)
+
       for each (var item : Item in items)
-        item.packLeft(current), current = item
+        item.packLeft(current.right), current = item
     }
 
     public static function packLeft(space : Number, ... items : Array) : void
@@ -59,8 +61,8 @@ class Item
   public function get right() : Number
   { return object.x + width }
 
-  public function packLeft(base : Item) : void
-  { object.x = base.right }
+  public function packLeft(position : Number) : void
+  { object.x = position }
 }
 
 class Importer

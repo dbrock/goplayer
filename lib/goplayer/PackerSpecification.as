@@ -16,6 +16,9 @@ package goplayer
       const a : Sprite = getSquare(1)
       const b : Sprite = getSquare(1)
 
+      a.x = 2
+      b.x = 1
+
       it("should pack using internal widths", function () : void {
         Packer.packLeft(NaN, a, b)
         specify(b.x).should.equal(1)
