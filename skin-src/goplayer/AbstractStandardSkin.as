@@ -79,6 +79,7 @@ package goplayer
         ? remainingTimeText : totalTimeText
 
       seekBarBackground.width = seekBarWidth
+      seekBarGroove.width = seekBarWidth
       seekBarBuffer.width = seekBarWidth * bufferRatio
       seekBarPlayhead.width = seekBarWidth * playheadRatio
 
