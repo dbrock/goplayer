@@ -255,10 +255,13 @@ package goplayer
     protected function get pauseButton() : DisplayObject
     { return undefinedPart("pauseButton") }
 
-    protected function get seekBar() : Sprite
-    { return undefinedPart("seekBar") }
     protected function get seekBarBackground() : DisplayObject
     { return undefinedPart("seekBarBackground") }
+
+    protected function get seekBar() : Sprite
+    { return undefinedPart("seekBar") }
+    protected function get seekBarGroove() : DisplayObject
+    { return undefinedPart("seekBarGroove") }
     protected function get seekBarBuffer() : DisplayObject
     { return undefinedPart("seekBarBuffer") }
     protected function get seekBarPlayhead() : DisplayObject

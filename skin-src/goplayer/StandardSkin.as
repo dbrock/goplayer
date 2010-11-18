@@ -34,7 +34,7 @@ package goplayer
          beforeLeftTimePart,
          showElapsedTime ? leftTimeBackgroundPart : null,
          afterLeftTimePart,
-         [seekBar, setSeekBarWidth],
+         [seekBarBackground, setSeekBarWidth],
          beforeRightTimePart,
          showTotalTime ? rightTimeBackgroundPart : null,
          afterRightTimePart,
@@ -43,6 +43,7 @@ package goplayer
 
       leftTimeFieldPart.x = beforeLeftTimePart.x
       rightTimeFieldPart.x = beforeRightTimePart.x
+      seekBar.x = seekBarBackground.x
 
       playPausePart.visible = showPlayPauseButton
       leftTimeBackgroundPart.visible = showElapsedTime
@@ -114,10 +115,13 @@ package goplayer
     private function get afterLeftTimePart() : DisplayObject
     { return lookup("chrome.controlBar.afterLeftTime") }
 
+    override protected function get seekBarBackground() : DisplayObject
+    { return lookup("chrome.controlBar.seekBarBackground") }
+
     override protected function get seekBar() : Sprite
     { return lookup("chrome.controlBar.seekBar") }
-    override protected function get seekBarBackground() : DisplayObject
-    { return lookup("chrome.controlBar.seekBar.background") }
+    override protected function get seekBarGroove() : DisplayObject
+    { return lookup("chrome.controlBar.seekBar.groove") }
     override protected function get seekBarBuffer() : DisplayObject
     { return lookup("chrome.controlBar.seekBar.buffer") }
     override protected function get seekBarPlayhead() : DisplayObject
