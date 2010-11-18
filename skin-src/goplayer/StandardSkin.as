@@ -47,12 +47,7 @@ package goplayer
       playPausePart.visible = showPlayPauseButton
       leftTimeBackgroundPart.visible = showElapsedTime
       leftTimeFieldPart.visible = showElapsedTime
-
-      seekBarBuffer.visible = showSeekBar
-      seekBarPlayhead.visible = showSeekBar
-      seekBarTooltip.visible = showSeekBar
-      seekBarTooltipField.visible = showSeekBar
-
+      seekBar.visible = showSeekBar
       rightTimeBackgroundPart.visible = showTotalTime
       rightTimeFieldPart.visible = showTotalTime
       volumePart.visible = showVolumeControl
