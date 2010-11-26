@@ -48,6 +48,12 @@ package goplayer
     protected function get showTitle() : Boolean
     { return backend.showTitle }
 
+    protected function get showTwitterButton() : Boolean
+    { return backend.showTwitterButton }
+
+    protected function get showFacebookButton() : Boolean
+    { return backend.showFacebookButton }
+
     protected function get showPlayPauseButton() : Boolean
     { return backend.showPlayPauseButton }
 

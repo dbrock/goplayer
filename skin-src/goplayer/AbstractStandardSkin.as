@@ -42,9 +42,7 @@ package goplayer
       volumeSliderFillMinY = volumeSliderFill.y
       volumeSlider.mouseChildren = false
       volumeSlider.buttonMode = true
-
       volumeSliderThumbGuide.visible = false
-
       volumeSlider.visible = false
 
       chrome.visible = enableChrome
@@ -58,7 +56,6 @@ package goplayer
 
       chromeFader.targetAlpha = showChrome ? 1 : 0
 
-      upperPanel.visible = showTitle
       titleField.text = titleText
 
       if (!changingVolume && !hoveringVolumeControl)
@@ -139,21 +136,29 @@ package goplayer
     private function addEventListeners() : void
     {
       onclick(largePlayButton, handlePlayButtonClicked)
+
+      onrollover(chrome, handleChromeRollOver)
+      onrollout(chrome, handleChromeRollOut)
+
+      onclick(twitterButton, handleTwitterButtonClicked)
+      onclick(facebookButton, handleFacebookButtonClicked)
+
       onclick(playButton, handlePlayButtonClicked)
       onclick(pauseButton, handlePauseButtonClicked)
-      onclick(muteButton, handleMuteButtonClicked)
-      onclick(unmuteButton, handleUnmuteButtonClicked)
-      onclick(enableFullscreenButton, handleEnableFullscreenButtonClicked)
+
       onmousemove(seekBar, handleSeekBarMouseMove)
       onrollover(seekBar, handleSeekBarRollOver)
       onrollout(seekBar, handleSeekBarRollOut)
       onclick(seekBar, handleSeekBarClicked)
-      onmousedown(volumeSlider, handleVolumeSliderMouseDown)
+      onclick(rightTimeField, handleRightTimeFieldClicked)
+
+      onclick(muteButton, handleMuteButtonClicked)
+      onclick(unmuteButton, handleUnmuteButtonClicked)
       onrollover(muteButton, handleVolumeButtonRollOver)
       onrollover(unmuteButton, handleVolumeButtonRollOver)
-      onrollover(chrome, handleChromeRollOver)
-      onrollout(chrome, handleChromeRollOut)
-      onclick(rightTimeField, handleRightTimeFieldClicked)
+      onmousedown(volumeSlider, handleVolumeSliderMouseDown)
+
+      onclick(enableFullscreenButton, handleEnableFullscreenButtonClicked)
     }
 
     private function handleChromeRollOver() : void
@@ -162,8 +167,15 @@ package goplayer
     private function handleChromeRollOut() : void
     { hoveringChrome = false, update() }
 
-    private function handleRightTimeFieldClicked() : void
-    { showRemainingTime = !showRemainingTime }
+    // -----------------------------------------------------
+
+    private function handleTwitterButtonClicked() : void
+    { backend.handleUserShareViaTwitter() }
+
+    private function handleFacebookButtonClicked() : void
+    { backend.handleUserShareViaFacebook() }
+
+    // -----------------------------------------------------
 
     private function handlePlayButtonClicked() : void
     { backend.handleUserPlay() }
@@ -171,14 +183,7 @@ package goplayer
     private function handlePauseButtonClicked() : void
     { backend.handleUserPause() }
 
-    private function handleMuteButtonClicked() : void
-    { backend.handleUserMute() }
-
-    private function handleUnmuteButtonClicked() : void
-    { backend.handleUserUnmute() }
-
-    private function handleEnableFullscreenButtonClicked() : void
-    { backend.handleUserToggleFullscreen() }
+    // -----------------------------------------------------
 
     private function handleSeekBarMouseMove() : void
     { update() }
@@ -191,6 +196,20 @@ package goplayer
 
     private function handleSeekBarClicked() : void
     { backend.handleUserSeek(seekBarMouseRatio) }
+
+    private function handleRightTimeFieldClicked() : void
+    { showRemainingTime = !showRemainingTime }
+
+    // -----------------------------------------------------
+
+    private function handleMuteButtonClicked() : void
+    { backend.handleUserMute() }
+
+    private function handleUnmuteButtonClicked() : void
+    { backend.handleUserUnmute() }
+
+    private function handleVolumeButtonRollOver() : void
+    { volumeSlider.visible = true }
 
     private function handleVolumeSliderMouseDown() : void
     {
@@ -213,6 +232,8 @@ package goplayer
     private function handleVolumeSliderMouseLeftStage(event : Event) : void
     { removeVolumeSliderEventListeners() }
 
+    // -----------------------------------------------------
+
     private function removeVolumeSliderEventListeners() : void
     {
       stage.removeEventListener
@@ -224,8 +245,10 @@ package goplayer
       changingVolume = false
     }
 
-    private function handleVolumeButtonRollOver() : void
-    { volumeSlider.visible = true }
+    // -----------------------------------------------------
+
+    private function handleEnableFullscreenButtonClicked() : void
+    { backend.handleUserToggleFullscreen() }
 
     // -----------------------------------------------------
 
@@ -240,14 +263,12 @@ package goplayer
     protected function get chrome() : Sprite
     { return undefinedPart("chrome") }
 
-    protected function get upperPanel() : Sprite
-    { return undefinedPart("upperPanel") }
-
     protected function get titleField() : TextField
     { return undefinedPart("titleField") }
-
-    protected function get controlBar() : Sprite
-    { return undefinedPart("controlBar") }
+    protected function get twitterButton() : DisplayObject
+    { return undefinedPart("twitterButton") }
+    protected function get facebookButton() : DisplayObject
+    { return undefinedPart("facebookButton") }
 
     protected function get leftTimeField() : TextField
     { return undefinedPart("leftTimeField") }

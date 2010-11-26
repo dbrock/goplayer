@@ -4,9 +4,10 @@ package goplayer
     implements Movie
   {
     private var json : Object
+    private var api : StreamioAPI
 
-    public function StreamioMovie(json : Object)
-    { this.json = json }
+    public function StreamioMovie(json : Object, api : StreamioAPI)
+    { this.json = json, this.api = api }
 
     public function get id() : String
     { return json.id }
@@ -29,6 +30,9 @@ package goplayer
       else
         return null
     }
+
+    public function get shareURL() : URL
+    { return api.getShareMovieURL(id) }
 
     public function get httpURL() : URL
     { return hasTranscodings ? bestTranscoding.httpURL : null }

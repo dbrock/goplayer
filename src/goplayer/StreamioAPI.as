@@ -20,7 +20,10 @@ package goplayer
 
     public function fetchMovie
       (id : String, handler : MovieHandler) : void
-    { fetch(getMoviePath(id), new MovieJSONHandler(handler)) }
+    { fetch(getJSONMoviePath(id), new MovieJSONHandler(handler, this)) }
+
+    public function getShareMovieURL(id : String) : URL
+    { return getURL(getMoviePath(id)) }
     
     public function reportMovieViewed(movieID : String) : void
     { reportMovieEvent(movieID, "views", {}) }
@@ -57,7 +60,10 @@ package goplayer
     // -----------------------------------------------------
 
     private function getMoviePath(id : String) : String
-    { return "/videos/" + id + "/public_show.json" }
+    { return "/videos/" + id + "/public_show" }
+
+    private function getJSONMoviePath(id : String) : String
+    { return getMoviePath(id) + ".json" }
 
     private function get statsPath() : String
     { return "/stats" }
@@ -80,12 +86,14 @@ import goplayer.*
 class MovieJSONHandler implements JSONHandler
 {
   private var handler : MovieHandler
+  private var api : StreamioAPI
 
-  public function MovieJSONHandler(handler : MovieHandler)
-  { this.handler = handler }
+  public function MovieJSONHandler
+    (handler : MovieHandler, api : StreamioAPI)
+  { this.handler = handler, this.api = api }
   
   public function handleJSON(json : Object) : void
-  { handler.handleMovie(new StreamioMovie(json)) }
+  { handler.handleMovie(new StreamioMovie(json, api)) }
 }
 
 class NullHTTPHandler implements HTTPResponseHandler

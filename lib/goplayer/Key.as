@@ -11,5 +11,8 @@ package goplayer
 
     public function get code() : uint
     { return event.keyCode }
+
+    public function get character() : uint
+    { return event.charCode }
   }
 }

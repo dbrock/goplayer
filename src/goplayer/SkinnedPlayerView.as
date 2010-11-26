@@ -122,6 +122,12 @@ package goplayer
     public function handleUserToggleFullscreen() : void
     { video.toggleFullscreen() }
 
+    public function handleUserShareViaTwitter() : void
+    { player.openTwitter() }
+
+    public function handleUserShareViaFacebook() : void
+    { player.openFacebook() }
+
     // -----------------------------------------------------
 
     public function get skinWidth() : Number
@@ -137,6 +143,12 @@ package goplayer
 
     public function get showTitle() : Boolean
     { return configuration.enableTitle }
+
+    public function get showTwitterButton() : Boolean
+    { return configuration.enableTwitterButton }
+
+    public function get showFacebookButton() : Boolean
+    { return configuration.enableFacebookButton }
 
     public function get showPlayPauseButton() : Boolean
     { return configuration.enablePlayPauseButton }

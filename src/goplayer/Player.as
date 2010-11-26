@@ -1,5 +1,7 @@
 package goplayer
 {
+  import flash.net.URLRequest
+  import flash.net.navigateToURL
   import flash.utils.getTimer
   
   public class Player implements
@@ -450,5 +452,39 @@ package goplayer
 
       return result
     }
+
+    // -----------------------------------------------------
+
+    public function openTwitter() : void
+    { openURL(twitterURL) }
+
+    public function openFacebook() : void
+    { openURL(facebookURL) }
+
+    private function get twitterURL() : String
+    {
+      return "http://twitter.com/share?"
+        + "url=" + encodeURIComponent(shareURL) + "&"
+        + "text=" + encodeURIComponent(twitterText)
+    }
+
+    private function get twitterText() : String
+    { return "Check out this video: " + movieTitle }
+
+    private function get facebookURL() : String
+    {
+      return "http://www.facebook.com/sharer.php?"
+        + "u=" + encodeURIComponent(shareURL) + "&"
+        + "t=" + encodeURIComponent(movieTitle)
+    }
+
+    private function get movieTitle() : String
+    { return movie == null ? "" : movie.title }
+
+    private function get shareURL() : String
+    { return movie.shareURL.toString() }
+
+    private function openURL(url : String) : void
+    { navigateToURL(new URLRequest(url)) }
   }
 }

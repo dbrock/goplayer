@@ -17,6 +17,8 @@ package goplayer
 
          "skin:showchrome",
          "skin:showtitle",
+         "skin:showtwitterbutton",
+         "skin:showfacebookbutton",
          "skin:showplaypausebutton",
          "skin:showelapsedtime",
          "skin:showseekbar",
@@ -52,6 +54,10 @@ package goplayer
         = getBoolean("skin:showchrome", true)
       result.enableTitle
         = getBoolean("skin:showtitle", true)
+      result.enableTwitterButton
+        = getBoolean("skin:showtwitterbutton", true)
+      result.enableFacebookButton
+        = getBoolean("skin:showfacebookbutton", true)
       result.enablePlayPauseButton
         = getBoolean("skin:showplaypausebutton", true)
       result.enableElapsedTime

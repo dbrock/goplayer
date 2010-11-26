@@ -10,6 +10,8 @@ package goplayer
 
     function get showChrome() : Boolean
     function get showTitle() : Boolean
+    function get showTwitterButton() : Boolean
+    function get showFacebookButton() : Boolean
     function get showPlayPauseButton() : Boolean
     function get showElapsedTime() : Boolean
     function get showSeekBar() : Boolean
@@ -39,5 +41,8 @@ package goplayer
     function handleUserUnmute() : void
     function handleUserSetVolume(volume : Number) : void
     function handleUserToggleFullscreen() : void
+
+    function handleUserShareViaTwitter() : void
+    function handleUserShareViaFacebook() : void
   }
 }

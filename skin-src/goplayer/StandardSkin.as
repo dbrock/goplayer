@@ -18,14 +18,41 @@ package goplayer
 
       setDimensions(largePlayButton, dimensions.halved.innerSquare)
 
+      if (chrome.visible)
+        layoutChrome()
+    }
+
+    private function layoutChrome() : void
+    {
+      upperPanel.visible = showUpperPanel
+      controlBar.visible = showControlBar
+
+      if (upperPanel.visible)
+        layoutUpperPanel()
+
+      if (controlBar.visible)
+        layoutControlBar()
+    }
+
+    private function layoutUpperPanel() : void
+    {
       upperPanel.x = 0
       upperPanel.y = 0
 
       packLeft
         (upperPanelLeft,
-         [upperPanelMiddle, setUpperPanelWidth],
+         [upperPanelMiddle, setUpperPanelMiddleWidth],
+         showTwitterButton ? twitterButtonPart : null,
+         showFacebookButton ? facebookButtonPart : null,
          upperPanelRight)
 
+      titleField.visible = showTitle
+      twitterButtonPart.visible = showTwitterButton
+      facebookButtonPart.visible = showFacebookButton
+    }
+
+    private function layoutControlBar() : void
+    {
       controlBar.x = 0
       controlBar.y = dimensions.height
 
@@ -60,7 +87,7 @@ package goplayer
     private function packLeft(... items : Array) : void
     { Packer.$packLeft(dimensions.width, items) }
 
-    private function setUpperPanelWidth(value : Number) : void
+    private function setUpperPanelMiddleWidth(value : Number) : void
     {
       upperPanelMiddleBackground.width = value
       titleField.width = value
@@ -72,16 +99,28 @@ package goplayer
     override protected function get seekBarWidth() : Number
     { return _seekBarWidth }
 
-    override protected function get upperPanel() : Sprite
-    { return lookup("chrome.upperPanel") }
-    private function get upperPanelLeft() : Sprite
-    { return lookup("chrome.upperPanel.left") }
-    private function get upperPanelMiddle() : Sprite
-    { return lookup("chrome.upperPanel.middle") }
-    private function get upperPanelMiddleBackground() : Sprite
-    { return lookup("chrome.upperPanel.middle.background") }
-    private function get upperPanelRight() : Sprite
-    { return lookup("chrome.upperPanel.right") }
+    // -----------------------------------------------------
+
+    private function get showUpperPanel() : Boolean
+    {
+      return false
+        || showTitle
+        || showTwitterButton
+        || showFacebookButton
+    }
+
+    private function get showControlBar() : Boolean
+    {
+      return false
+        || showPlayPauseButton
+        || showElapsedTime
+        || showSeekBar
+        || showTotalTime
+        || showVolumeControl
+        || showFullscreenButton
+    }
+
+    // -----------------------------------------------------
 
     override protected function get largePlayButton() : InteractiveObject
     { return lookup("largePlayButton") }
@@ -91,11 +130,37 @@ package goplayer
     override protected function get chrome() : Sprite
     { return lookup("chrome") }
 
+    private function get upperPanel() : Sprite
+    { return lookup("chrome.upperPanel") }
+    private function get controlBar() : Sprite
+    { return lookup("chrome.controlBar") }
+
+    // -----------------------------------------------------
+
+    private function get upperPanelLeft() : Sprite
+    { return lookup("chrome.upperPanel.left") }
+
+    private function get upperPanelMiddle() : Sprite
+    { return lookup("chrome.upperPanel.middle") }
+    private function get upperPanelMiddleBackground() : Sprite
+    { return lookup("chrome.upperPanel.middle.background") }
     override protected function get titleField() : TextField
     { return lookup("chrome.upperPanel.middle.titleField") }
 
-    override protected function get controlBar() : Sprite
-    { return lookup("chrome.controlBar") }
+    private function get twitterButtonPart() : DisplayObject
+    { return lookup("chrome.upperPanel.twitter") }
+    override protected function get twitterButton() : DisplayObject
+    { return lookup("chrome.upperPanel.twitter.button") }
+
+    private function get facebookButtonPart() : DisplayObject
+    { return lookup("chrome.upperPanel.facebook") }
+    override protected function get facebookButton() : DisplayObject
+    { return lookup("chrome.upperPanel.facebook.button") }
+
+    private function get upperPanelRight() : Sprite
+    { return lookup("chrome.upperPanel.right") }
+
+    // -----------------------------------------------------
 
     private function get playPausePart() : DisplayObject
     { return lookup("chrome.controlBar.playPause") }
@@ -103,6 +168,8 @@ package goplayer
     { return lookup("chrome.controlBar.playPause.playButton") }
     override protected function get pauseButton() : DisplayObject
     { return lookup("chrome.controlBar.playPause.pauseButton") }
+
+    // -----------------------------------------------------
 
     private function get beforeLeftTimePart() : DisplayObject
     { return lookup("chrome.controlBar.beforeLeftTime") }
@@ -116,6 +183,8 @@ package goplayer
 
     private function get afterLeftTimePart() : DisplayObject
     { return lookup("chrome.controlBar.afterLeftTime") }
+
+    // -----------------------------------------------------
 
     override protected function get seekBarBackground() : DisplayObject
     { return lookup("chrome.controlBar.seekBarBackground") }
@@ -133,6 +202,8 @@ package goplayer
     override protected function get seekBarTooltipField() : TextField
     { return lookup("chrome.controlBar.seekBar.tooltip.field") }
 
+    // -----------------------------------------------------
+
     private function get beforeRightTimePart() : DisplayObject
     { return lookup("chrome.controlBar.beforeRightTime") }
 
@@ -145,6 +216,8 @@ package goplayer
 
     private function get afterRightTimePart() : DisplayObject
     { return lookup("chrome.controlBar.afterRightTime") }
+
+    // -----------------------------------------------------
 
     private function get volumePart() : DisplayObject
     { return lookup("chrome.controlBar.volume") }
@@ -165,6 +238,8 @@ package goplayer
     { return lookup("chrome.controlBar.fullscreen") }
     override protected function get enableFullscreenButton() : DisplayObject
     { return lookup("chrome.controlBar.fullscreen.enableButton") }
+
+    // -----------------------------------------------------
 
     override protected function lookup(name : String) : *
     { return super.lookup("skinContent." + name) }
