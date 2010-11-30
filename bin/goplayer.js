@@ -55,4 +55,4 @@ block(function () {
   
     lastTime = currentTime
   }
-})()
+})
