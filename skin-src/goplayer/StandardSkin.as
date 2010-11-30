@@ -7,15 +7,23 @@ package goplayer
 
 	public class StandardSkin extends AbstractStandardSkin
   {
+    private const _bufferingIndicator : BufferingIndicator
+      = new BufferingIndicator
+
     private var _seekBarWidth : Number
 
+    override protected function initialize() : void
+    {
+      super.initialize()
+
+      addChild(bufferingIndicator)
+    }
+    
     override public function update() : void
     {
       super.update()
 
       setPosition(largePlayButton, dimensions.center)
-      setPosition(bufferingIndicator, dimensions.center)
-
       setDimensions(largePlayButton, dimensions.halved.innerSquare)
 
       if (chrome.visible)
@@ -125,7 +133,7 @@ package goplayer
     override protected function get largePlayButton() : InteractiveObject
     { return lookup("largePlayButton") }
     override protected function get bufferingIndicator() : InteractiveObject
-    { return lookup("bufferingIndicator") }
+    { return _bufferingIndicator }
 
     override protected function get chrome() : Sprite
     { return lookup("chrome") }

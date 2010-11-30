@@ -36,8 +36,6 @@ package goplayer
       seekBar.mouseChildren = false
       seekBar.buttonMode = true
 
-      bufferingIndicator.mouseEnabled = false
-
       volumeSliderFillMaxHeight = volumeSliderFill.height
       volumeSliderFillMinY = volumeSliderFill.y
       volumeSlider.mouseChildren = false
