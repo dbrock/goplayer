@@ -5,8 +5,11 @@
 <script src="goplayer.js"></script>
 <script>
   swfobject.addDomLoadEvent(function () {
-    var flashvars = { src: "streamio:video:4c8f8267b35ea84ef4000003" }
     var params = { allowfullscreen: true }
+    var flashvars = { src: "streamio:video:4c8f8267b35ea84ef4000003" }
+
+    goplayer.parseQueryString(location.search, flashvars)
+
     swfobject.embedSWF
       ("goplayer.swf", "player", 800, 450, "9.0.0", null,
        flashvars, params)

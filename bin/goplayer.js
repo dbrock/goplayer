@@ -55,4 +55,25 @@ block(function () {
 
     lastTime = currentTime
   }
+
+  goplayer.parseQueryString = function (query, result)
+  {
+    var pairs = query.replace(/^\?/, "").split("&")
+
+    for (var i = 0; i < pairs.length; ++i)
+      {
+        var pair = pairs[i]
+        var match = pair.match(/^([^=]*)=(.*)$/)
+
+        if (match == null)
+          result[pair] = null
+        else
+          {
+            var key = decodeURIComponent(match[1])
+            var value = decodeURIComponent(match[2])
+
+            result[key] = value
+          }
+      }
+  }
 })
