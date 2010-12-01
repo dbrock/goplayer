@@ -25,9 +25,11 @@ package goplayer
 
     public function Application(parameters : Object)
     {
-      installLogger()
-
       this.configuration = ConfigurationParser.parse(parameters)
+
+      if (configuration.externalLoggingFunctionName !== "")
+        // Parse the parameters again for logging purposes.
+        installLogger(), ConfigurationParser.parse(parameters)
 
       api = new StreamioAPI
         (configuration.apiURL,
@@ -43,7 +45,10 @@ package goplayer
     { _listener = value }
 
     private function installLogger() : void
-    { new DebugLoggerInstaller(debugLayer).execute() }
+    {
+      new DebugLoggerInstaller
+        (configuration.externalLoggingFunctionName, debugLayer).execute()
+    }
 
     override protected function initialize() : void
     {

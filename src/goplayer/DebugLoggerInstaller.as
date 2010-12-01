@@ -2,20 +2,14 @@ package goplayer
 {
   public class DebugLoggerInstaller
   {
+    private var functionName : String
     private var debugLayer : Component
 
-    public function DebugLoggerInstaller(debugLayer : Component)
-    { this.debugLayer = debugLayer }
+    public function DebugLoggerInstaller
+      (functionName : String, debugLayer : Component)
+    { this.functionName = functionName, this.debugLayer = debugLayer }
 
     public function execute() : void
-    {
-      if (ExternalLogger.available)
-        trySetupExternalLogger()
-      else
-        setupInternalLogger()
-    }
-
-    private function trySetupExternalLogger() : void
     {
       try
         { setupExternalLogger() }
@@ -25,7 +19,7 @@ package goplayer
 
     private function setupExternalLogger() : void
     {
-      debugLogger = new ExternalLogger
+      debugLogger = new ExternalLogger(functionName)
       debug("Using external logging.")
     }
 

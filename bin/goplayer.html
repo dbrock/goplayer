@@ -6,7 +6,10 @@
 <script>
   swfobject.addDomLoadEvent(function () {
     var params = { allowfullscreen: true }
-    var flashvars = { src: "streamio:video:4c8f8267b35ea84ef4000003" }
+    var flashvars = {
+      src: "streamio:video:4c8f8267b35ea84ef4000003",
+      "external-logging-function": "goplayer.log"
+    }
 
     goplayer.parseQueryString(location.search, flashvars)
 

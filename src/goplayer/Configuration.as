@@ -8,6 +8,7 @@ package goplayer
     public var enableRTMP : Boolean
     public var enableAutoplay : Boolean
     public var enableLooping : Boolean
+    public var externalLoggingFunctionName : String
 
     public var enableChrome : Boolean
     public var enableTitle : Boolean

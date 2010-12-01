@@ -3,8 +3,6 @@ function block(callback) { callback() }
 var goplayer = {}
 
 block(function () {
-  goplayer.available = function () { return true }
-
   function getTimestamp(date)
   {
     function pad(number, places)

@@ -4,13 +4,12 @@ package goplayer
 
   public class ExternalLogger implements Logger
   {
-    public function log(message : String) : void
-    { ExternalInterface.call("goplayer.log", message) }
+    private var name : String
 
-    public static function get available() : Boolean
-    {
-      return ExternalInterface.available
-        && ExternalInterface.call("goplayer.available") === true
-    }
+    public function ExternalLogger(name : String)
+    { this.name = name }
+
+    public function log(message : String) : void
+    { ExternalInterface.call(name, message) }
   }
 }

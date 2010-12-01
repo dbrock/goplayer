@@ -14,6 +14,7 @@ package goplayer
          "enablertmp",
          "autoplay",
          "loop",
+         "externalloggingfunction",
 
          "skin:showchrome",
          "skin:showtitle",
@@ -49,6 +50,8 @@ package goplayer
       result.enableRTMP = getBoolean("enablertmp", true)
       result.enableAutoplay = getBoolean("autoplay", false)
       result.enableLooping = getBoolean("loop", false)
+      result.externalLoggingFunctionName
+        = getString("externalloggingfunction", "")
 
       result.enableChrome
         = getBoolean("skin:showchrome", true)
