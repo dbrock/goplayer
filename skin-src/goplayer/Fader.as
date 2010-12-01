@@ -36,7 +36,7 @@ package goplayer
     }
 
     private function get ended() : Boolean
-    { return phase == 1 }
+    { return phase === 1 }
 
     public function get targetAlpha() : Number
     { return _targetAlpha }
@@ -45,17 +45,23 @@ package goplayer
     {
       // First time around, set the alpha immediately.
       if (isNaN(targetAlpha))
-        object.alpha = value
+        alpha = value
 
-      if (value != targetAlpha)
+      if (value !== targetAlpha)
         $targetAlpha = value
+    }
+
+    private function set alpha(value : Number) : void
+    {
+      object.alpha = value
+      object.visible = value > 0
     }
 
     private function set $targetAlpha(value : Number) : void
     {
       _targetAlpha = value
 
-      if (targetAlpha != object.alpha)
+      if (targetAlpha !== object.alpha)
         startFading()
     }
 
@@ -68,7 +74,7 @@ package goplayer
     }
 
     private function update() : void
-    { object.alpha = startAlpha + deltaAlpha * phase }
+    { alpha = startAlpha + deltaAlpha * phase }
 
     private function get deltaAlpha() : Number
     { return targetAlpha - startAlpha }
