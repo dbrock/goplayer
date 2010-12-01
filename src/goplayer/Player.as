@@ -485,6 +485,6 @@ package goplayer
     { return movie.shareURL.toString() }
 
     private function openURL(url : String) : void
-    { navigateToURL(new URLRequest(url)) }
+    { callJavascript("window.open", url, "share") }
   }
 }
