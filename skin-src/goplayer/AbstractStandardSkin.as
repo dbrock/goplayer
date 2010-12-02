@@ -195,21 +195,23 @@ package goplayer
     // -----------------------------------------------------
 
     private function handleShareButtonClicked() : void
-    { showPopup(sharePopup) }
+    { shareLinkCopiedMessage.visible = false, showPopup(sharePopup) }
 
     private function handleEmbedButtonClicked() : void
-    { showPopup(embedPopup) }
+    { embedCodeCopiedMessage.visible = false, showPopup(embedPopup) }
 
     private function handleCopyShareLinkButtonClicked() : void
     {
       selectTextField(shareLinkField)
       backend.handleUserCopyShareURL()
+      shareLinkCopiedMessage.visible = true
     }
 
     private function handleCopyEmbedCodeButtonClicked() : void
     {
       selectTextField(embedCodeField)
       backend.handleUserCopyEmbedCode()
+      embedCodeCopiedMessage.visible = true
     }
 
     private function selectTextField(field : TextField) : void
@@ -317,6 +319,8 @@ package goplayer
     { return undefinedPart("shareLinkField") }
     protected function get copyShareLinkButton() : DisplayObject
     { return undefinedPart("copyShareLinkButton") }
+    protected function get shareLinkCopiedMessage() : DisplayObject
+    { return undefinedPart("shareLinkCopiedMessage") }
     protected function get twitterButton() : DisplayObject
     { return undefinedPart("twitterButton") }
     protected function get facebookButton() : DisplayObject
@@ -328,6 +332,8 @@ package goplayer
     { return undefinedPart("embedCodeField") }
     protected function get copyEmbedCodeButton() : DisplayObject
     { return undefinedPart("copyEmbedCodeButton") }
+    protected function get embedCodeCopiedMessage() : DisplayObject
+    { return undefinedPart("embedCodeCopiedMessage") }
 
     protected function get chrome() : Sprite
     { return undefinedPart("chrome") }

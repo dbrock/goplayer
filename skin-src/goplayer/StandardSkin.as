@@ -152,6 +152,8 @@ package goplayer
     { return lookup("sharePopup.linkField") }
     override protected function get copyShareLinkButton() : DisplayObject
     { return lookup("sharePopup.copyLinkButton") }
+    override protected function get shareLinkCopiedMessage() : DisplayObject
+    { return lookup("sharePopup.linkCopiedMessage") }
     override protected function get twitterButton() : DisplayObject
     { return lookup("sharePopup.twitterButton") }
     override protected function get facebookButton() : DisplayObject
@@ -161,6 +163,8 @@ package goplayer
     { return lookup("embedPopup.codeField") }
     override protected function get copyEmbedCodeButton() : DisplayObject
     { return lookup("embedPopup.copyCodeButton") }
+    override protected function get embedCodeCopiedMessage() : DisplayObject
+    { return lookup("embedPopup.codeCopiedMessage") }
 
     override protected function get chrome() : Sprite
     { return lookup("chrome") }
