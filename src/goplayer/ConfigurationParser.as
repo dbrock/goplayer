@@ -19,6 +19,7 @@ package goplayer
          "skin:showchrome",
          "skin:showtitle",
          "skin:showsharebutton",
+         "skin:showembedbutton",
          "skin:showplaypausebutton",
          "skin:showelapsedtime",
          "skin:showseekbar",
@@ -58,6 +59,8 @@ package goplayer
         = getBoolean("skin:showtitle", true)
       result.enableShareButton
         = getBoolean("skin:showsharebutton", false)
+      result.enableEmbedButton
+        = getBoolean("skin:showembedbutton", false)
       result.enablePlayPauseButton
         = getBoolean("skin:showplaypausebutton", true)
       result.enableElapsedTime

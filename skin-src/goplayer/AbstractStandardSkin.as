@@ -58,6 +58,7 @@ package goplayer
 
       titleField.text = titleText
       shareLinkField.text = shareLinkText
+      embedCodeField.text = embedCodeText
 
       if (!changingVolume && !hoveringVolumeControl)
         volumeSlider.visible = false
@@ -100,6 +101,7 @@ package goplayer
     {
       popupBackground.visible = false
       sharePopup.visible = false
+      embedPopup.visible = false
     }
 
     private function showPopup(popup : DisplayObject) : void
@@ -155,10 +157,13 @@ package goplayer
       onclick(twitterButton, handleTwitterButtonClicked)
       onclick(facebookButton, handleFacebookButtonClicked)
 
+      onclick(copyEmbedCodeButton, handleCopyEmbedCodeButtonClicked)
+
       onrollover(chrome, handleChromeRollOver)
       onrollout(chrome, handleChromeRollOut)
 
       onclick(shareButton, handleShareButtonClicked)
+      onclick(embedButton, handleEmbedButtonClicked)
 
       onclick(playButton, handlePlayButtonClicked)
       onclick(pauseButton, handlePauseButtonClicked)
@@ -192,11 +197,25 @@ package goplayer
     private function handleShareButtonClicked() : void
     { showPopup(sharePopup) }
 
+    private function handleEmbedButtonClicked() : void
+    { showPopup(embedPopup) }
+
     private function handleCopyShareLinkButtonClicked() : void
     {
-      stage.focus = shareLinkField
-      shareLinkField.setSelection(0, shareLinkField.length)
+      selectTextField(shareLinkField)
       backend.handleUserCopyShareURL()
+    }
+
+    private function handleCopyEmbedCodeButtonClicked() : void
+    {
+      selectTextField(embedCodeField)
+      backend.handleUserCopyEmbedCode()
+    }
+
+    private function selectTextField(field : TextField) : void
+    {
+      stage.focus = field
+      field.setSelection(0, field.length)
     }
 
     private function handleTwitterButtonClicked() : void
@@ -291,12 +310,24 @@ package goplayer
     { return undefinedPart("bufferingIndicator") }
     protected function get popupBackground() : InteractiveObject
     { return undefinedPart("popupBackground") }
+
     protected function get sharePopup() : InteractiveObject
     { return undefinedPart("sharePopup") }
     protected function get shareLinkField() : TextField
     { return undefinedPart("shareLinkField") }
     protected function get copyShareLinkButton() : DisplayObject
     { return undefinedPart("copyShareLinkButton") }
+    protected function get twitterButton() : DisplayObject
+    { return undefinedPart("twitterButton") }
+    protected function get facebookButton() : DisplayObject
+    { return undefinedPart("facebookButton") }
+
+    protected function get embedPopup() : InteractiveObject
+    { return undefinedPart("embedPopup") }
+    protected function get embedCodeField() : TextField
+    { return undefinedPart("embedCodeField") }
+    protected function get copyEmbedCodeButton() : DisplayObject
+    { return undefinedPart("copyEmbedCodeButton") }
 
     protected function get chrome() : Sprite
     { return undefinedPart("chrome") }
@@ -305,10 +336,8 @@ package goplayer
     { return undefinedPart("titleField") }
     protected function get shareButton() : DisplayObject
     { return undefinedPart("shareButton") }
-    protected function get twitterButton() : DisplayObject
-    { return undefinedPart("twitterButton") }
-    protected function get facebookButton() : DisplayObject
-    { return undefinedPart("facebookButton") }
+    protected function get embedButton() : DisplayObject
+    { return undefinedPart("embedButton") }
 
     protected function get leftTimeField() : TextField
     { return undefinedPart("leftTimeField") }

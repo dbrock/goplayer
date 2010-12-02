@@ -1,10 +1,5 @@
 package goplayer
 {
-  import flash.net.URLRequest
-  import flash.net.navigateToURL
-  import flash.system.System
-  import flash.utils.getTimer
-  
   public class Player implements
     FlashNetConnectionListener,
     FlashNetStreamListener
@@ -22,6 +17,7 @@ package goplayer
     private var enableRTMP : Boolean
     private var reporter : MovieEventReporter
     private var sharedVolumeVariable : SharedVariable
+    private var shareEmbed : ShareEmbed
 
     private var _started : Boolean = false
     private var _finished : Boolean = false
@@ -47,7 +43,8 @@ package goplayer
        bitratePolicy : BitratePolicy,
        enableRTMP : Boolean,
        reporter : MovieEventReporter,
-       sharedVolumeVariable : SharedVariable)
+       sharedVolumeVariable : SharedVariable,
+       shareEmbed : ShareEmbed)
     {
       this.connection = connection
       _movie = movie
@@ -55,6 +52,7 @@ package goplayer
       this.enableRTMP = enableRTMP
       this.reporter = reporter
       this.sharedVolumeVariable = sharedVolumeVariable
+      this.shareEmbed = shareEmbed
 
       connection.listener = this
 
@@ -457,38 +455,21 @@ package goplayer
     // -----------------------------------------------------
 
     public function openTwitter() : void
-    { openURL(twitterURL) }
+    { shareEmbed.openTwitter() }
 
     public function openFacebook() : void
-    { openURL(facebookURL) }
-
-    private function get twitterURL() : String
-    {
-      return "http://twitter.com/share?"
-        + "url=" + encodeURIComponent(shareURL) + "&"
-        + "text=" + encodeURIComponent(twitterText)
-    }
-
-    private function get twitterText() : String
-    { return "Check out this video: " + movieTitle }
-
-    private function get facebookURL() : String
-    {
-      return "http://www.facebook.com/sharer.php?"
-        + "u=" + encodeURIComponent(shareURL) + "&"
-        + "t=" + encodeURIComponent(movieTitle)
-    }
-
-    private function get movieTitle() : String
-    { return movie == null ? "" : movie.title }
-
-    public function get shareURL() : String
-    { return movie.shareURL.toString() }
+    { shareEmbed.openFacebook() }
 
     public function copyShareURL() : void
-    { System.setClipboard(shareURL) }
+    { shareEmbed.copyShareURL() }
 
-    private function openURL(url : String) : void
-    { callJavascript("window.open", url, "share") }
+    public function copyEmbedCode() : void
+    { shareEmbed.copyEmbedCode() }
+
+    public function get shareURL() : String
+    { return shareEmbed.shareURL }
+
+    public function get embedCode() : String
+    { return shareEmbed.embedCode }
   }
 }

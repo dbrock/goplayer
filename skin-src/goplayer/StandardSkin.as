@@ -30,6 +30,7 @@ package goplayer
       setDimensions(popupBackground, dimensions)
 
       setPosition(sharePopup, dimensions.center)
+      setPosition(embedPopup, dimensions.center)
 
       if (chrome.visible)
         layoutChrome()
@@ -56,10 +57,12 @@ package goplayer
         (upperPanelLeft,
          [upperPanelMiddle, setUpperPanelMiddleWidth],
          showShareButton ? shareButtonPart : null,
+         showEmbedButton ? embedButtonPart : null,
          upperPanelRight)
 
       titleField.visible = showTitle
       shareButtonPart.visible = showShareButton
+      embedButtonPart.visible = showEmbedButton
     }
 
     private function layoutControlBar() : void
@@ -117,6 +120,7 @@ package goplayer
       return false
         || showTitle
         || showShareButton
+        || showEmbedButton
     }
 
     private function get showControlBar() : Boolean
@@ -141,6 +145,8 @@ package goplayer
     { return lookup("popupBackground") }
     override protected function get sharePopup() : InteractiveObject
     { return lookup("sharePopup") }
+    override protected function get embedPopup() : InteractiveObject
+    { return lookup("embedPopup") }
 
     override protected function get shareLinkField() : TextField
     { return lookup("sharePopup.linkField") }
@@ -150,6 +156,11 @@ package goplayer
     { return lookup("sharePopup.twitterButton") }
     override protected function get facebookButton() : DisplayObject
     { return lookup("sharePopup.facebookButton") }
+
+    override protected function get embedCodeField() : TextField
+    { return lookup("embedPopup.codeField") }
+    override protected function get copyEmbedCodeButton() : DisplayObject
+    { return lookup("embedPopup.copyCodeButton") }
 
     override protected function get chrome() : Sprite
     { return lookup("chrome") }
@@ -175,6 +186,11 @@ package goplayer
     { return lookup("chrome.upperPanel.share") }
     override protected function get shareButton() : DisplayObject
     { return lookup("chrome.upperPanel.share.button") }
+
+    private function get embedButtonPart() : DisplayObject
+    { return lookup("chrome.upperPanel.embed") }
+    override protected function get embedButton() : DisplayObject
+    { return lookup("chrome.upperPanel.embed.button") }
 
     private function get upperPanelRight() : Sprite
     { return lookup("chrome.upperPanel.right") }

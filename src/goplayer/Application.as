@@ -112,7 +112,7 @@ package goplayer
 
       const kit : PlayerKit = new PlayerKit
         (movie, configuration.bitratePolicy,
-         configuration.enableRTMP, api)
+         configuration.enableRTMP, api, dimensions)
 
       player = kit.player
       player.listener = this
@@ -134,6 +134,7 @@ package goplayer
       result.enableChrome = configuration.enableChrome
       result.enableTitle = configuration.enableTitle
       result.enableShareButton = configuration.enableShareButton
+      result.enableEmbedButton = configuration.enableEmbedButton
       result.enablePlayPauseButton = configuration.enablePlayPauseButton
       result.enableElapsedTime = configuration.enableElapsedTime
       result.enableSeekBar = configuration.enableSeekBar

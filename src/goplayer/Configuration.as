@@ -13,6 +13,7 @@ package goplayer
     public var enableChrome : Boolean
     public var enableTitle : Boolean
     public var enableShareButton : Boolean
+    public var enableEmbedButton : Boolean
     public var enablePlayPauseButton : Boolean
     public var enableElapsedTime : Boolean
     public var enableSeekBar : Boolean

@@ -17,7 +17,8 @@ package goplayer
       (movie : Movie,
        bitratePolicy : BitratePolicy,
        enableRTMP : Boolean,
-       reporter : MovieEventReporter)
+       reporter : MovieEventReporter,
+       dimensions : Dimensions)
     {
       player = new Player
         (connection,
@@ -25,7 +26,8 @@ package goplayer
          bitratePolicy,
          enableRTMP,
          reporter,
-         sharedVolumeVariable)
+         sharedVolumeVariable,
+         new ShareEmbed(movie, dimensions))
 
       video = new PlayerVideo(player, flashVideo)
     }

@@ -131,6 +131,9 @@ package goplayer
     public function handleUserShareViaFacebook() : void
     { player.openFacebook() }
 
+    public function handleUserCopyEmbedCode() : void
+    { player.copyEmbedCode() }
+
     // -----------------------------------------------------
 
     public function get skinWidth() : Number
@@ -149,6 +152,9 @@ package goplayer
 
     public function get showShareButton() : Boolean
     { return configuration.enableShareButton }
+
+    public function get showEmbedButton() : Boolean
+    { return configuration.enableEmbedButton }
 
     public function get showPlayPauseButton() : Boolean
     { return configuration.enablePlayPauseButton }
@@ -175,6 +181,9 @@ package goplayer
 
     public function get shareURL() : String
     { return player.shareURL }
+
+    public function get embedCode() : String
+    { return player.embedCode }
 
     public function get running() : Boolean
     { return player.running }

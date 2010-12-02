@@ -11,6 +11,7 @@ package goplayer
     function get showChrome() : Boolean
     function get showTitle() : Boolean
     function get showShareButton() : Boolean
+    function get showEmbedButton() : Boolean
     function get showPlayPauseButton() : Boolean
     function get showElapsedTime() : Boolean
     function get showSeekBar() : Boolean
@@ -20,6 +21,8 @@ package goplayer
 
     function get title() : String
     function get shareURL() : String
+    function get embedCode() : String
+
     function get volume() : Number
 
     function get running() : Boolean
@@ -45,5 +48,6 @@ package goplayer
     function handleUserCopyShareURL() : void
     function handleUserShareViaTwitter() : void
     function handleUserShareViaFacebook() : void
+    function handleUserCopyEmbedCode() : void
   }
 }

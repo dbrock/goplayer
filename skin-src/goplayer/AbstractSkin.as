@@ -40,6 +40,9 @@ package goplayer
     protected function get shareLinkText() : String
     { return backend.shareURL }
 
+    protected function get embedCodeText() : String
+    { return backend.embedCode }
+
     protected function get enableChrome() : Boolean
     { return backend.enableChrome }
 
@@ -53,6 +56,9 @@ package goplayer
 
     protected function get showShareButton() : Boolean
     { return backend.showShareButton }
+
+    protected function get showEmbedButton() : Boolean
+    { return backend.showEmbedButton }
 
     protected function get showPlayPauseButton() : Boolean
     { return backend.showPlayPauseButton }
