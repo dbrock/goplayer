@@ -45,6 +45,8 @@ package goplayer
 
       chrome.visible = enableChrome
 
+      hidePopups()
+
       addEventListeners()
     }
 
@@ -55,6 +57,7 @@ package goplayer
       chromeFader.targetAlpha = showChrome ? 1 : 0
 
       titleField.text = titleText
+      shareLinkField.text = shareLinkText
 
       if (!changingVolume && !hoveringVolumeControl)
         volumeSlider.visible = false
@@ -92,6 +95,18 @@ package goplayer
 
     override protected function get showChrome() : Boolean
     { return super.showChrome || hoveringChrome }
+
+    private function hidePopups() : void
+    {
+      popupBackground.visible = false
+      sharePopup.visible = false
+    }
+
+    private function showPopup(popup : DisplayObject) : void
+    {
+      popupBackground.visible = true
+      popup.visible = true
+    }
 
     private function get volumeSliderMouseVolume() : Number
     {
@@ -134,12 +149,16 @@ package goplayer
     private function addEventListeners() : void
     {
       onclick(largePlayButton, handlePlayButtonClicked)
+      onclick(popupBackground, handlePopupBackgroundClicked)
+
+      onclick(copyShareLinkButton, handleCopyShareLinkButtonClicked)
+      onclick(twitterButton, handleTwitterButtonClicked)
+      onclick(facebookButton, handleFacebookButtonClicked)
 
       onrollover(chrome, handleChromeRollOver)
       onrollout(chrome, handleChromeRollOut)
 
-      onclick(twitterButton, handleTwitterButtonClicked)
-      onclick(facebookButton, handleFacebookButtonClicked)
+      onclick(shareButton, handleShareButtonClicked)
 
       onclick(playButton, handlePlayButtonClicked)
       onclick(pauseButton, handlePauseButtonClicked)
@@ -159,6 +178,9 @@ package goplayer
       onclick(enableFullscreenButton, handleEnableFullscreenButtonClicked)
     }
 
+    private function handlePopupBackgroundClicked() : void
+    { hidePopups() }
+    
     private function handleChromeRollOver() : void
     { hoveringChrome = true, update() }
 
@@ -166,6 +188,16 @@ package goplayer
     { hoveringChrome = false, update() }
 
     // -----------------------------------------------------
+
+    private function handleShareButtonClicked() : void
+    { showPopup(sharePopup) }
+
+    private function handleCopyShareLinkButtonClicked() : void
+    {
+      stage.focus = shareLinkField
+      shareLinkField.setSelection(0, shareLinkField.length)
+      backend.handleUserCopyShareURL()
+    }
 
     private function handleTwitterButtonClicked() : void
     { backend.handleUserShareViaTwitter() }
@@ -257,12 +289,22 @@ package goplayer
     { return undefinedPart("largePlayButton") }
     protected function get bufferingIndicator() : InteractiveObject
     { return undefinedPart("bufferingIndicator") }
+    protected function get popupBackground() : InteractiveObject
+    { return undefinedPart("popupBackground") }
+    protected function get sharePopup() : InteractiveObject
+    { return undefinedPart("sharePopup") }
+    protected function get shareLinkField() : TextField
+    { return undefinedPart("shareLinkField") }
+    protected function get copyShareLinkButton() : DisplayObject
+    { return undefinedPart("copyShareLinkButton") }
 
     protected function get chrome() : Sprite
     { return undefinedPart("chrome") }
 
     protected function get titleField() : TextField
     { return undefinedPart("titleField") }
+    protected function get shareButton() : DisplayObject
+    { return undefinedPart("shareButton") }
     protected function get twitterButton() : DisplayObject
     { return undefinedPart("twitterButton") }
     protected function get facebookButton() : DisplayObject

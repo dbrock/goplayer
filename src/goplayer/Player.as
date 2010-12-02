@@ -2,6 +2,7 @@ package goplayer
 {
   import flash.net.URLRequest
   import flash.net.navigateToURL
+  import flash.system.System
   import flash.utils.getTimer
   
   public class Player implements
@@ -481,8 +482,11 @@ package goplayer
     private function get movieTitle() : String
     { return movie == null ? "" : movie.title }
 
-    private function get shareURL() : String
+    public function get shareURL() : String
     { return movie.shareURL.toString() }
+
+    public function copyShareURL() : void
+    { System.setClipboard(shareURL) }
 
     private function openURL(url : String) : void
     { callJavascript("window.open", url, "share") }

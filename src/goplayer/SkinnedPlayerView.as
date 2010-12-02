@@ -122,6 +122,9 @@ package goplayer
     public function handleUserToggleFullscreen() : void
     { video.toggleFullscreen() }
 
+    public function handleUserCopyShareURL() : void
+    { player.copyShareURL() }
+
     public function handleUserShareViaTwitter() : void
     { player.openTwitter() }
 
@@ -144,11 +147,8 @@ package goplayer
     public function get showTitle() : Boolean
     { return configuration.enableTitle }
 
-    public function get showTwitterButton() : Boolean
-    { return configuration.enableTwitterButton }
-
-    public function get showFacebookButton() : Boolean
-    { return configuration.enableFacebookButton }
+    public function get showShareButton() : Boolean
+    { return configuration.enableShareButton }
 
     public function get showPlayPauseButton() : Boolean
     { return configuration.enablePlayPauseButton }
@@ -172,6 +172,9 @@ package goplayer
 
     public function get title() : String
     { return player.movie.title }
+
+    public function get shareURL() : String
+    { return player.shareURL }
 
     public function get running() : Boolean
     { return player.running }

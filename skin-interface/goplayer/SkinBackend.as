@@ -10,8 +10,7 @@ package goplayer
 
     function get showChrome() : Boolean
     function get showTitle() : Boolean
-    function get showTwitterButton() : Boolean
-    function get showFacebookButton() : Boolean
+    function get showShareButton() : Boolean
     function get showPlayPauseButton() : Boolean
     function get showElapsedTime() : Boolean
     function get showSeekBar() : Boolean
@@ -20,6 +19,7 @@ package goplayer
     function get showFullscreenButton() : Boolean
 
     function get title() : String
+    function get shareURL() : String
     function get volume() : Number
 
     function get running() : Boolean
@@ -42,6 +42,7 @@ package goplayer
     function handleUserSetVolume(volume : Number) : void
     function handleUserToggleFullscreen() : void
 
+    function handleUserCopyShareURL() : void
     function handleUserShareViaTwitter() : void
     function handleUserShareViaFacebook() : void
   }

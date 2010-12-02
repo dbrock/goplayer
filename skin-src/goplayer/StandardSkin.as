@@ -26,6 +26,11 @@ package goplayer
       setPosition(largePlayButton, dimensions.center)
       setDimensions(largePlayButton, dimensions.halved.innerSquare)
 
+      setPosition(popupBackground, new Position(0, 0))
+      setDimensions(popupBackground, dimensions)
+
+      setPosition(sharePopup, dimensions.center)
+
       if (chrome.visible)
         layoutChrome()
     }
@@ -50,13 +55,11 @@ package goplayer
       packLeft
         (upperPanelLeft,
          [upperPanelMiddle, setUpperPanelMiddleWidth],
-         showTwitterButton ? twitterButtonPart : null,
-         showFacebookButton ? facebookButtonPart : null,
+         showShareButton ? shareButtonPart : null,
          upperPanelRight)
 
       titleField.visible = showTitle
-      twitterButtonPart.visible = showTwitterButton
-      facebookButtonPart.visible = showFacebookButton
+      shareButtonPart.visible = showShareButton
     }
 
     private function layoutControlBar() : void
@@ -113,8 +116,7 @@ package goplayer
     {
       return false
         || showTitle
-        || showTwitterButton
-        || showFacebookButton
+        || showShareButton
     }
 
     private function get showControlBar() : Boolean
@@ -134,6 +136,20 @@ package goplayer
     { return lookup("largePlayButton") }
     override protected function get bufferingIndicator() : InteractiveObject
     { return _bufferingIndicator }
+
+    override protected function get popupBackground() : InteractiveObject
+    { return lookup("popupBackground") }
+    override protected function get sharePopup() : InteractiveObject
+    { return lookup("sharePopup") }
+
+    override protected function get shareLinkField() : TextField
+    { return lookup("sharePopup.linkField") }
+    override protected function get copyShareLinkButton() : DisplayObject
+    { return lookup("sharePopup.copyLinkButton") }
+    override protected function get twitterButton() : DisplayObject
+    { return lookup("sharePopup.twitterButton") }
+    override protected function get facebookButton() : DisplayObject
+    { return lookup("sharePopup.facebookButton") }
 
     override protected function get chrome() : Sprite
     { return lookup("chrome") }
@@ -155,15 +171,10 @@ package goplayer
     override protected function get titleField() : TextField
     { return lookup("chrome.upperPanel.middle.titleField") }
 
-    private function get twitterButtonPart() : DisplayObject
-    { return lookup("chrome.upperPanel.twitter") }
-    override protected function get twitterButton() : DisplayObject
-    { return lookup("chrome.upperPanel.twitter.button") }
-
-    private function get facebookButtonPart() : DisplayObject
-    { return lookup("chrome.upperPanel.facebook") }
-    override protected function get facebookButton() : DisplayObject
-    { return lookup("chrome.upperPanel.facebook.button") }
+    private function get shareButtonPart() : DisplayObject
+    { return lookup("chrome.upperPanel.share") }
+    override protected function get shareButton() : DisplayObject
+    { return lookup("chrome.upperPanel.share.button") }
 
     private function get upperPanelRight() : Sprite
     { return lookup("chrome.upperPanel.right") }

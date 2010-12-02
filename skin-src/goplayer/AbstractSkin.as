@@ -37,6 +37,9 @@ package goplayer
     protected function get titleText() : String
     { return backend.title }
 
+    protected function get shareLinkText() : String
+    { return backend.shareURL }
+
     protected function get enableChrome() : Boolean
     { return backend.enableChrome }
 
@@ -48,11 +51,8 @@ package goplayer
     protected function get showTitle() : Boolean
     { return backend.showTitle }
 
-    protected function get showTwitterButton() : Boolean
-    { return backend.showTwitterButton }
-
-    protected function get showFacebookButton() : Boolean
-    { return backend.showFacebookButton }
+    protected function get showShareButton() : Boolean
+    { return backend.showShareButton }
 
     protected function get showPlayPauseButton() : Boolean
     { return backend.showPlayPauseButton }
