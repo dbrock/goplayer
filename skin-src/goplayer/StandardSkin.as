@@ -16,7 +16,7 @@ package goplayer
     {
       super.initialize()
 
-      addChild(bufferingIndicator)
+      addChildAt(bufferingIndicator, 0)
     }
     
     override public function update() : void

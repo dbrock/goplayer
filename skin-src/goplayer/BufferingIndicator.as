@@ -19,6 +19,7 @@ package goplayer
       mouseEnabled = false
       mouseChildren = false
 
+      addChild(new Background(0x000000, 0.5))
       addChild(canvas)
 
       addEventListener(Event.ENTER_FRAME, handleEnterFrame)
