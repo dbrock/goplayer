@@ -56,9 +56,9 @@ package goplayer
       packLeft
         (upperPanelLeft,
          [upperPanelMiddle, setUpperPanelMiddleWidth],
+         upperPanelRight,
          showShareButton ? shareButtonPart : null,
-         showEmbedButton ? embedButtonPart : null,
-         upperPanelRight)
+         showEmbedButton ? embedButtonPart : null)
 
       titleField.visible = showTitle
       shareButtonPart.visible = showShareButton
