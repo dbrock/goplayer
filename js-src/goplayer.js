@@ -1,8 +1,12 @@
+// You might want to customize these.
+var goplayer_enable_by_default = true
 var goplayer_swf_url = "goplayer.swf"
-var goplayer_class_name = "goplayer"
+var goplayer_params = { allowfullscreen: true, allowscriptaccess: true }
+
+var goplayer_enable_class_name = "goplayer"
+var goplayer_disable_class_name = "no-goplayer"
 var goplayer_flash_version = "9.0.0"
 var goplayer_express_install_swf_url = null
-var goplayer_params = { allowfullscreen: true, allowscriptaccess: true }
 
 if (typeof swfobject === "undefined")
   alert("Please load swfobject.js before goplayer.js.")
@@ -19,8 +23,11 @@ else if (swfobject.hasFlashPlayerVersion(goplayer_flash_version))
     }
 
     function is_goplayer_element(element) {
-      return element.className.split(/\s+/).
-        indexOf(goplayer_class_name) !== -1
+      var classes = element.className.split(/\s+/)
+
+      return goplayer_enable_by_default
+        ? classes.indexOf(goplayer_disable_class_name) === -1
+        : classes.indexOf(goplayer_enable_class_name) !== -1
     }
 
     function get_data_attribute(attribute, result) {
