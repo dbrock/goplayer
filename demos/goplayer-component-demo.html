@@ -1,15 +1,16 @@
 <!doctype html>
 <meta charset="utf-8">
-<link href="goplayer.css" rel="stylesheet">
+<link href="goplayer-demo.css" rel="stylesheet">
 <script src="swfobject.js"></script>
-<script src="goplayer.js"></script>
+<script src="goplayer-demo.js"></script>
 <script>
   swfobject.addDomLoadEvent(function () {
     var flashvars = {}
     var params = { allowfullscreen: true, allowscriptaccess: true }
+
     player = swfobject.embedSWF
-      ("component-demo.swf", "player", 800, 450, "9.0.0", null,
-       flashvars, params)
+      ("component-demo.swf", "player", 800, 450,
+       "9.0.0", null, flashvars, params)
   })
 </script>
 <div id="player-container">

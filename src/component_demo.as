@@ -17,6 +17,7 @@ package
 
       const player : GoPlayer = new GoPlayer({
         src: "streamio:video:4c8f8267b35ea84ef4000003",
+        "external-logging-function": "goplayer_demo_log",
         autoplay: true
       })
 

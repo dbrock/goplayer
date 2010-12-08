@@ -1,21 +1,21 @@
 <!doctype html>
 <meta charset="utf-8">
-<link href="goplayer.css" rel="stylesheet">
+<link href="goplayer-demo.css" rel="stylesheet">
 <script src="swfobject.js"></script>
-<script src="goplayer.js"></script>
+<script src="goplayer-demo.js"></script>
 <script>
   swfobject.addDomLoadEvent(function () {
     var params = { allowfullscreen: true }
     var flashvars = {
       src: "streamio:video:4c8f8267b35ea84ef4000003",
-      "external-logging-function": "goplayer.log"
+      "external-logging-function": "goplayer_demo_log"
     }
 
-    goplayer.parseQueryString(location.search, flashvars)
+    goplayer_demo_parse_query_string(location.search, flashvars)
 
     swfobject.embedSWF
-      ("goplayer.swf", "player", 800, 450, "9.0.0", null,
-       flashvars, params)
+      ("goplayer.swf", "player", 800, 450,
+       "9.0.0", null, flashvars, params)
   })
 </script>
 <div id="player-container">
