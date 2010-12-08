@@ -7,10 +7,13 @@ asautotest.sh
   hacking on the player engine.  Start here if you want to work with
   the player engine code.
 
-bin/
+demos/
   The web framework used for demoing and debugging the player.
-  Before running goplayer.html, you need to create goplayer.swf,
+  Before running the demos, you need to compile the SWF files,
   preferably using the asautotest.sh script.
+
+bin/
+  Compiled SWFs are placed here (except for skin SWFs).
 
 src/
   The source code for the player engine.
@@ -19,13 +22,14 @@ skin-interface/
   The interfaces used for player-skin-communication.
 
 skins/
-  Skin FLA files and any skin-specific code.  Start here if you only
-  want to work with skins.
+  Skin FLA files.  Start here if you only want to work with skins.
 
 skin-src/
-  Low-level, generic skin code.  When creating a new skin, you may
-  want to inherit from one of the abstract base classes here.
+  Source code used in skin FLA files.
 
 lib/
   Generic utility functions and classes, used in both the player
   engine code and the skin code.
+
+js-src/
+  Contains goplayer.js, used for HTML5 <video> replacement.
