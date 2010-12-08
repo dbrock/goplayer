@@ -16,19 +16,19 @@ package goplayer
          "loop",
          "externalloggingfunction",
 
-         "skin:showchrome",
-         "skin:showtitle",
-         "skin:showsharebutton",
-         "skin:showembedbutton",
-         "skin:showplaypausebutton",
-         "skin:showelapsedtime",
-         "skin:showseekbar",
-         "skin:showtotaltime",
-         "skin:showvolumecontrol",
-         "skin:showfullscreenbutton",
+         "skinshowchrome",
+         "skinshowtitle",
+         "skinshowsharebutton",
+         "skinshowembedbutton",
+         "skinshowplaypausebutton",
+         "skinshowelapsedtime",
+         "skinshowseekbar",
+         "skinshowtotaltime",
+         "skinshowvolumecontrol",
+         "skinshowfullscreenbutton",
 
-         "streamio:api",
-         "streamio:tracker"]
+         "streamioapi",
+         "streamiotracker"]
 
     private const result : Configuration = new Configuration
 
@@ -54,30 +54,30 @@ package goplayer
         = getString("externalloggingfunction", "")
 
       result.enableChrome
-        = getBoolean("skin:showchrome", true)
+        = getBoolean("skinshowchrome", true)
       result.enableTitle
-        = getBoolean("skin:showtitle", true)
+        = getBoolean("skinshowtitle", true)
       result.enableShareButton
-        = getBoolean("skin:showsharebutton", false)
+        = getBoolean("skinshowsharebutton", false)
       result.enableEmbedButton
-        = getBoolean("skin:showembedbutton", false)
+        = getBoolean("skinshowembedbutton", false)
       result.enablePlayPauseButton
-        = getBoolean("skin:showplaypausebutton", true)
+        = getBoolean("skinshowplaypausebutton", true)
       result.enableElapsedTime
-        = getBoolean("skin:showelapsedtime", true)
+        = getBoolean("skinshowelapsedtime", true)
       result.enableSeekBar
-        = getBoolean("skin:showseekbar", true)
+        = getBoolean("skinshowseekbar", true)
       result.enableTotalTime
-        = getBoolean("skin:showtotaltime", true)
+        = getBoolean("skinshowtotaltime", true)
       result.enableVolumeControl
-        = getBoolean("skin:showvolumecontrol", true)
+        = getBoolean("skinshowvolumecontrol", true)
       result.enableFullscreenButton
-        = getBoolean("skin:showfullscreenbutton", true)
+        = getBoolean("skinshowfullscreenbutton", true)
 
       result.apiURL = getString
-        ("streamio:api", DEFAULT_STREAMIO_API_URL)
+        ("streamioapi", DEFAULT_STREAMIO_API_URL)
       result.trackerID = getString
-        ("streamio:tracker", DEFAULT_STREAMIO_TRACKER_ID)
+        ("streamiotracker", DEFAULT_STREAMIO_TRACKER_ID)
     }
 
     private function getStreamioVideoID() : String
@@ -129,7 +129,7 @@ package goplayer
     }
 
     private static function normalize(name : String) : String
-    { return name.toLowerCase().replace(/[^a-z:]/g, "") }
+    { return name.toLowerCase().replace(/[^a-z0-9]/g, "") }
 
     private static function reportUnknownParameter(name : String) : void
     { debug("Error: Unknown parameter: " + name) }
