@@ -55,7 +55,8 @@ function goplayer_initialize() {
         var flashvars = {
           src: element.src,
           autoplay: element.autoplay,
-          loop: element.loop
+          loop: element.loop,
+          "skin-show-chrome": element.controls
         }
 
         get_dataset(element, flashvars)
