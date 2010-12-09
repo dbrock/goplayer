@@ -44,6 +44,10 @@ function goplayer_initialize() {
           parent.appendChild(child)
       }
 
+      function has_attribute(element, name) {
+        return element.getAttribute(name) !== null
+      }
+
       function install_player(element) {
         var html5_supported = "videoWidth" in element
         var width = html5_supported
@@ -53,10 +57,10 @@ function goplayer_initialize() {
           ? element.offsetHeight
           : element.getAttribute("height")
         var flashvars = {
-          src: element.src,
-          autoplay: element.autoplay,
-          loop: element.loop,
-          "skin-show-chrome": element.controls
+          src: element.getAttribute("src"),
+          autoplay: has_attribute(element, "autoplay"),
+          loop: has_attribute(element, "loop"),
+          "skin-show-chrome": has_attribute(element, "controls")
         }
 
         get_dataset(element, flashvars)
