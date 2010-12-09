@@ -93,6 +93,7 @@ function goplayer_initialize() {
 
   define("goplayer_enable_by_default", true)
   define("goplayer_swf_url", "goplayer.swf")
+  define("goplayer_swfobject_url", "swfobject.js")
   define("goplayer_load_swfobject", true)
   define("goplayer_params", {
     allowfullscreen: true,
@@ -120,7 +121,7 @@ function goplayer_initialize() {
   }
 
   if (goplayer_load_swfobject)
-    load("swfobject.js", goplayer_initialize)
+    load(goplayer_swfobject_url, goplayer_initialize)
   else
     goplayer_initialize()
 })()
