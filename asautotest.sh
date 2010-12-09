@@ -11,7 +11,7 @@ while true ; do
   asautotest src/goplayer.as -o bin/goplayer.swf -I skin-interface \
      -- src/goplayer_spec.as --test --asspec-adapter-source -I "$ASSPEC_SRC" \
      -- src/component_demo.as -I skin-interface -o bin/component-demo.swf \
-     --- -I lib --static-typing
+     --- -I lib --static-typing "$@"
   [ $? == 200 ] && exit
   which growlnotify > /dev/null && growlnotify ASAutotest -m Restarting...
 done
