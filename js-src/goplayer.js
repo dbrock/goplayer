@@ -15,8 +15,16 @@ function goplayer_initialize() {
         var classes = element.className.split(/\s+/)
 
         return goplayer_enable_by_default
-          ? classes.indexOf(goplayer_disable_class_name) === -1
-          : classes.indexOf(goplayer_enable_class_name) !== -1
+          ? !contains(classes, goplayer_disable_class_name)
+          : contains(classes, goplayer_enable_class_name)
+      }
+
+      function contains(array, element) {
+        for (var i = 0; i < array.length; ++i)
+          if (array[i] === element)
+            return true
+
+        return false
       }
 
       function get_data_attribute(attribute, result) {
@@ -29,11 +37,21 @@ function goplayer_initialize() {
             get_data_attribute(element.attributes[i], result)
       }
 
+      function prepend_child(parent, child) {
+        if (parent.hasChildNodes())
+          parent.insertBefore(child, parent.firstChild)
+        else
+          parent.appendChild(child)
+      }
+
       function install_player(element) {
-        var div = document.createElement("div")
-        var id = "goplayer-" + Math.random()
-        var width = element.offsetWidth
-        var height = element.offsetHeight
+        var html5_supported = "videoWidth" in element
+        var width = html5_supported
+          ? element.offsetWidth
+          : element.getAttribute("width")
+        var height = html5_supported
+          ? element.offsetHeight
+          : element.getAttribute("height")
         var flashvars = {
           src: element.src,
           autoplay: element.autoplay,
@@ -42,13 +60,18 @@ function goplayer_initialize() {
 
         get_dataset(element, flashvars)
 
-        div.id = id
-        element.parentNode.replaceChild(div, element)
+        // This can happen in non-HTML5 browsers when the <body> tag
+        // is left out and the <video> tag is the first element.
+        if (element.parentNode.tagName === "HEAD")
+          prepend_child(document.body, element)
+
+        element.id = element.id || "goplayer-" + Math.random()
 
         swfobject.embedSWF
           (goplayer_swf_url,
-           id,
-           width, height,
+           element.id,
+           element.getAttribute("width"),
+           element.getAttribute("height"),
            goplayer_flash_version,
            goplayer_express_install_swf_url,
            flashvars,
@@ -76,9 +99,23 @@ function goplayer_initialize() {
   define("goplayer_flash_version", "9.0.0")
   define("goplayer_express_install_swf_url", null)
 
+  function load(src, callback) {
+    var script = document.createElement("script")
+
+    if (script.addEventListener)
+      script.addEventListener("load", callback, false)
+    else
+      script.onreadystatechange = function () {
+        if (script.readyState == "loaded")
+          callback()
+      }
+    
+    script.src = src
+    document.getElementsByTagName("head")[0].appendChild(script)
+  }
+
   if (goplayer_load_swfobject)
-    document.write('<' + 'script src="swfobject.js" ' +
-                   'onload="goplayer_initialize()"></' + 'script>')
+    load("swfobject.js", goplayer_initialize)
   else
     goplayer_initialize()
 })()
