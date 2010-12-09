@@ -27,6 +27,12 @@ package goplayer
 
     private function handleEnterFrame(event : Event) : void
     {
+      if (dimensions != null)
+        $handleEnterFrame()
+    }
+
+    private function $handleEnterFrame() : void
+    {
       elapsedTime = Duration.milliseconds(getTimer())
       
       if (currentState != lastState)
