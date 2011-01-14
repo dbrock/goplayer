@@ -71,7 +71,7 @@ package goplayer
     // -----------------------------------------------------
 
     private function fetch(path : String, handler : JSONHandler) : void
-    { http.fetchJSON(getURL(path), handler) }
+    { http.fetch(getURL(path), new JSONAdapter(handler)) }
 
     private function post(path : String, parameters : Object) : void
     { http.post(getURL(path), parameters, new NullHTTPHandler) }
@@ -81,7 +81,23 @@ package goplayer
   }
 }
 
+import com.adobe.serialization.json.JSON
+
 import goplayer.*
+
+class JSONAdapter implements HTTPResponseHandler
+{
+  private var handler : JSONHandler
+
+  public function JSONAdapter(handler : JSONHandler)
+  { this.handler = handler }
+
+  public function handleHTTPResponse(text : String) : void
+  { handler.handleJSON(JSON.decode(text)) }
+
+  public function handleHTTPError(message : String) : void
+  { debug("Error: HTTP request failed: " + message) }
+}
 
 class MovieJSONHandler implements JSONHandler
 {
@@ -97,4 +113,7 @@ class MovieJSONHandler implements JSONHandler
 }
 
 class NullHTTPHandler implements HTTPResponseHandler
-{ public function handleHTTPResponse(text : String) : void {} }
+{
+  public function handleHTTPResponse(text : String) : void {}
+  public function handleHTTPError(message : String) : void {}
+}
